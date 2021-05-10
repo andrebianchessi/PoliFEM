@@ -4,11 +4,11 @@ export class Angle {
         this.radians = radians
     }
 
-    cos (): number {
+    c (): number {
         return Math.cos(this.radians)
     }
 
-    sin (): number {
+    s (): number {
         return Math.sin(this.radians)
     }
 }

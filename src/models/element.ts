@@ -8,17 +8,20 @@ export class Element {
     private static all= new Map<number, Element>()
     static count = 0
 
+    type: 'Beam'|'Truss'|'Frame'
     n1: Node
     n2: Node
     properties: BeamProperties | TrussProperties | FrameProperties
     angle: Angle
 
-    constructor (n1:Node, n2:Node, properties: BeamProperties | TrussProperties| FrameProperties) {
+    constructor (type: 'Beam'|'Truss'|'Frame', n1:Node, n2:Node, properties: BeamProperties | TrussProperties| FrameProperties) {
         Element.count += 1
+        this.type = type
         this.n1 = n1
         this.n2 = n2
         this.properties = properties
         this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))
+
         Element.all.set(Element.count, this)
     }
 

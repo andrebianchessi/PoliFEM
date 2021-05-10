@@ -14,7 +14,7 @@ export class Line {
         this.angle = new Angle(Math.atan(deltaY / deltaX))
     }
 
-    distance ():number {
+    length ():number {
         const deltaX = this.n2.x - this.n1.x
         const deltaY = this.n2.y - this.n1.y
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY)

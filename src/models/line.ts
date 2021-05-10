@@ -14,4 +14,6 @@ export class Line {
         const deltaY = this.n2.y - this.n1.y
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY)
     }
+
+    horizontalAngle
 }

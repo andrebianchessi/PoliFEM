@@ -5,6 +5,7 @@ import { Node } from './node'
 import { Layout, plot, Plot } from 'nodeplotlib'
 import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
+import { Annotations } from 'plotly.js'
 
 export class Problem {
     nodes: Map<number, Map<number, Node>>
@@ -76,6 +77,10 @@ export class Problem {
         const xd = []
         const yd = []
         const displacements = []
+        const arrows:Partial<Annotations>[] = []
+        const bcsX = []
+        const bcsY = []
+        const bcsText = []
         for (const [, e] of this.elements) {
             let dx = this.U!.get([e.n1.uIndex, 0])
             let dy = this.U!.get([e.n1.vIndex, 0])
@@ -93,9 +98,45 @@ export class Problem {
             yd.push(e.n2.y + dy * displacementScaleFactor)
             displacements.push('dx: ' + dx + '\ndy: ' + dy)
         }
-        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'x+y', marker: { size: 11 } }, { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }]
+        const arrowsLength = 100
+        for (const l of this.loads) {
+            const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
+            const arrowX = -l.x * scalingFactor
+            const arrowY = -l.y * scalingFactor
+            arrows.push(
+                {
+                    text: Math.sqrt(l.x * l.x + l.y * l.y).toString(),
+                    x: l.node.x,
+                    y: l.node.y,
+                    xref: 'x',
+                    yref: 'y',
+                    showarrow: true,
+                    arrowhead: 5,
+                    ax: arrowX,
+                    ay: arrowY,
+                    arrowcolor: 'red',
+                    font: { color: 'red', size: 17 }
+                }
+            )
+        }
+        for (const b of this.boundaryConditions) {
+            bcsX.push(b.node.x)
+            bcsY.push(b.node.y)
+            if (b.value) {
+                bcsText.push(b.type + ' : ' + b.value)
+            } else {
+                bcsText.push(b.type)
+            }
+        }
+
+        const data: Plot[] = [
+            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { size: 15 }, mode: 'markers', type: 'scatter' },
+            { x, y, name: 'Undeformed Structure', hoverinfo: 'x+y', marker: { size: 10, color: 'black' } },
+            { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }
+        ]
         const layout:Layout = {
-            hovermode: 'closest'
+            hovermode: 'closest',
+            annotations: arrows
         }
         plot(data, layout)
     }

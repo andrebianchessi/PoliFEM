@@ -8,13 +8,13 @@ export class Element {
     private static all= new Map<number, Element>()
     static count = 0
 
-    type: 'Beam'|'Truss'|'Frame'
+    type: 'Frame'
     n1: Node
     n2: Node
     properties: BeamProperties | TrussProperties | FrameProperties
     angle: Angle
 
-    constructor (type: 'Beam'|'Truss'|'Frame', n1:Node, n2:Node, properties: BeamProperties | TrussProperties| FrameProperties) {
+    constructor (type: 'Frame', n1:Node, n2:Node, properties: BeamProperties | TrussProperties| FrameProperties) {
         Element.count += 1
         this.type = type
         this.n1 = n1

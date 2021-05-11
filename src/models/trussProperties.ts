@@ -1,3 +1,4 @@
 export type TrussProperties = {
-    E:number
+    E: number
+    A: number
 }

@@ -4,6 +4,7 @@ import { math } from './math'
 import { Node } from './node'
 import { plot, Plot } from 'nodeplotlib'
 import { Load } from './load'
+import { BoundaryCondition } from './boundaryCondition'
 
 export class Problem {
     nodes: Map<number, Map<number, Node>>
@@ -11,6 +12,7 @@ export class Problem {
     elements: Map<number, Element>
     elementCount: number
     loads: Load[]
+    boundaryConditions: BoundaryCondition[]
     K?: Matrix
     U?: Matrix
     F?: Matrix
@@ -21,6 +23,7 @@ export class Problem {
         this.elements = new Map<number, Element>()
         this.elementCount = 0
         this.loads = []
+        this.boundaryConditions = []
     }
 
     build () {

@@ -2,7 +2,7 @@ import { Matrix } from 'mathjs'
 import { Element } from './element'
 import { math, replaceRowAndColByZeros } from './math'
 import { Node } from './node'
-import { plot, Plot } from 'nodeplotlib'
+import { Layout, plot, Plot } from 'nodeplotlib'
 import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
 
@@ -93,7 +93,10 @@ export class Problem {
             yd.push(e.n2.y + dy * displacementScaleFactor)
             displacements.push('dx: ' + dx + '\ndy: ' + dy)
         }
-        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'none' }, { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }]
-        plot(data)
+        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'x+y' }, { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }]
+        const layout:Layout = {
+            hovermode: 'closest'
+        }
+        plot(data, layout)
     }
 }

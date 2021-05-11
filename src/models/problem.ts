@@ -78,6 +78,9 @@ export class Problem {
         const yd = []
         const displacements = []
         const arrows:Partial<Annotations>[] = []
+        const momentsX = []
+        const momentsY = []
+        const momentsText = []
         const bcsX = []
         const bcsY = []
         const bcsText = []
@@ -102,7 +105,7 @@ export class Problem {
         for (const l of this.loads) {
             const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
             const arrowX = -l.x * scalingFactor
-            const arrowY = -l.y * scalingFactor
+            const arrowY = l.y * scalingFactor
             arrows.push(
                 {
                     text: Math.sqrt(l.x * l.x + l.y * l.y).toString(),
@@ -118,6 +121,11 @@ export class Problem {
                     font: { color: 'red', size: 17 }
                 }
             )
+            if (l.w !== 0) {
+                momentsX.push(l.node.x)
+                momentsY.push(l.node.y)
+                momentsText.push(l.w.toString())
+            }
         }
         for (const b of this.boundaryConditions) {
             bcsX.push(b.node.x)
@@ -130,9 +138,10 @@ export class Problem {
         }
 
         const data: Plot[] = [
-            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { size: 15 }, mode: 'markers', type: 'scatter' },
-            { x, y, name: 'Undeformed Structure', hoverinfo: 'x+y', marker: { size: 10, color: 'black' } },
-            { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }
+            { x: momentsX, y: momentsY, showlegend: false, text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
+            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { size: 13 }, mode: 'markers', type: 'scatter' },
+            { x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' } },
+            { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'green' } }
         ]
         const layout:Layout = {
             hovermode: 'closest',

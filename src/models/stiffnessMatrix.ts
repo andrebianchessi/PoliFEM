@@ -22,7 +22,6 @@ export class StiffnessMatrix {
                 [0, 0, 0, 0, 0, 1]
             ]
         )
-        console.log(t.toString())
 
         this.type = type
         switch (type) {

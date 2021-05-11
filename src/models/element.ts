@@ -20,7 +20,11 @@ export class Element {
         this.n1 = n1
         this.n2 = n2
         this.properties = properties
-        this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))
+        if (n2.x !== n1.x) {
+            this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))
+        } else {
+            this.angle = new Angle(-Math.PI / 2)
+        }
         this.K = (new StiffnessMatrix(this, type))
 
         Element.all.set(Element.count, this)

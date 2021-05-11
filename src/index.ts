@@ -6,6 +6,8 @@ import { Element } from './models/element'
 import { Node } from './models/node'
 
 const n1 = Node.get(0, 0)
-const n2 = Node.get(1, 0)
+const n2 = Node.get(0, 3)
 
-const e = new Element('Frame', n1, n2, { E: 1, I: 1, A: 1 })
+const e = new Element('Frame', n1, n2, { E: 21 * 1000000000, I: 4.21875 / 100000, A: 0.0225 })
+console.log(e.K.k.toString())
+console.log()

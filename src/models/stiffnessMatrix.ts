@@ -22,6 +22,7 @@ export class StiffnessMatrix {
                 [0, 0, 0, 0, 0, 1]
             ]
         )
+        console.log(t.toString())
 
         this.type = type
         switch (type) {
@@ -33,9 +34,9 @@ export class StiffnessMatrix {
             const l3 = l * l * l
             const l2 = l * l
 
-            const EAl = E * A * l
+            const EAl = E * A / l
             const EI12l3 = E * I * 12 / l3
-            const EI6l2 = E * I / l2
+            const EI6l2 = E * I * 6 / l2
             const EI4l = E * I * 4 / l
             const EI2l = E * I * 2 / l
             this.kLocal = math.matrix!([
@@ -71,6 +72,7 @@ export class StiffnessMatrix {
         //     break
         // }
         }
+        console.log(this.kLocal.toString())
         this.k = math.multiply!(math.multiply!(math.transpose!(t), this.kLocal), t)
     }
 }

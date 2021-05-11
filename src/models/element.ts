@@ -24,7 +24,8 @@ export class Element {
         }
         this.K = (new StiffnessMatrix(this, type))
 
-        p.elements.set(p.elements.size, this)
+        p.elements.set(p.elementCount, this)
+        p.elementCount += 1
     }
 
     length ():number {

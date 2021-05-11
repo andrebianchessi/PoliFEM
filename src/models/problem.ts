@@ -6,20 +6,36 @@ import { plot, Plot } from 'nodeplotlib'
 
 export class Problem {
     nodes: Map<number, Map<number, Node>>
+    nodeCount: number
     elements: Map<number, Element>
+    elementCount: number
     K?: Matrix
     U?: Matrix
     F?: Matrix
 
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
+        this.nodeCount = 0
         this.elements = new Map<number, Element>()
+        this.elementCount = 0
     }
 
     build () {
         this.K = math.zeros!([this.nodes.size * 6, this.nodes.size * 6], 'sparse') as Matrix
         this.U = math.zeros!([this.nodes.size * 6, 1], 'sparse') as Matrix
         this.F = math.zeros!([this.nodes.size * 6, 1], 'sparse') as Matrix
+
+        for (const [, e] of this.elements) {
+            const localIndices = [0, 1, 2, 3, 4, 5]
+            const globalIndices = [e.n1.uIndex, e.n1.vIndex, e.n1.wIndex, e.n2.uIndex, e.n2.vIndex, e.n2.wIndex]
+            for (const i of localIndices) {
+                for (const j of localIndices) {
+                    const initialVal = this.K!.get([globalIndices[i], globalIndices[j]])!
+                    this.K!.set([globalIndices[i], globalIndices[j]], initialVal + e.K.k.get([i, j]))
+                }
+            }
+        }
+        console.log(this.K.toString())
     }
 
     plot () {

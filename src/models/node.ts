@@ -23,9 +23,10 @@ export class Node {
                 return p.nodes.get(x)!.get(y)!
             }
         }
-        const n = new Node(x, y, p.nodes.size)
+        const n = new Node(x, y, p.nodeCount)
         p.nodes.set(x, new Map<number, Node>())
         p.nodes.get(x)!.set(y, n)
+        p.nodeCount += 1
         return n
     }
 }

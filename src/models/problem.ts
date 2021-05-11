@@ -138,10 +138,10 @@ export class Problem {
         }
 
         const data: Plot[] = [
-            { x: momentsX, y: momentsY, showlegend: false, text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
-            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { size: 13 }, mode: 'markers', type: 'scatter' },
+            { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
+            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' },
             { x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' } },
-            { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'green' } }
+            { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' } }
         ]
         const layout:Layout = {
             hovermode: 'closest',

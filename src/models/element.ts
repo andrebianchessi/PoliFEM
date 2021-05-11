@@ -1,12 +1,10 @@
 import { Angle } from './angleInRadians'
 import { FrameProperties } from './frameProperties'
 import { Node } from './node'
+import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class Element {
-    static all= new Map<number, Element>()
-    static count = 0
-
     type: 'Frame'
     n1: Node
     n2: Node
@@ -14,8 +12,7 @@ export class Element {
     angle: Angle
     K: StiffnessMatrix
 
-    constructor (type: 'Frame', n1:Node, n2:Node, properties: FrameProperties) {
-        Element.count += 1
+    constructor (type: 'Frame', n1:Node, n2:Node, properties: FrameProperties, p: Problem) {
         this.type = type
         this.n1 = n1
         this.n2 = n2
@@ -27,7 +24,7 @@ export class Element {
         }
         this.K = (new StiffnessMatrix(this, type))
 
-        Element.all.set(Element.count, this)
+        p.elements.set(p.elements.size, this)
     }
 
     length ():number {

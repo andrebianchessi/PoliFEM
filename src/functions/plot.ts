@@ -1,9 +1,9 @@
-import { Element } from '../models/element'
 import { plot, Plot } from 'nodeplotlib'
-export function plotElements () {
+import { Problem } from '../models/problem'
+export function plotElements (p:Problem) {
     const x = []
     const y = []
-    for (const [, e] of Element.all) {
+    for (const [, e] of p.elements) {
         x.push(e.n1.x)
         y.push(e.n1.y)
         x.push(e.n2.x)

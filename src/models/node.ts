@@ -1,6 +1,6 @@
+import { Problem } from './problem'
+
 export class Node {
-    static count = 0
-    static all= new Map<number, Map<number, Node>>()
     x: number;
     y: number;
     index: number;
@@ -12,21 +12,20 @@ export class Node {
         this.x = x
         this.y = y
         this.index = index
-        this.uIndex = (index - 1) * 3
-        this.vIndex = (index - 1) * 3 + 1
-        this.wIndex = (index - 1) * 3 + 2
+        this.uIndex = index * 3
+        this.vIndex = index * 3 + 1
+        this.wIndex = index * 3 + 2
     }
 
-    static get (x:number, y:number): Node {
-        if (Node.all.get(x) != null) {
-            if (Node.all.get(x)!.get(y) != null) {
-                return Node.all.get(x)!.get(y)!
+    static get (x:number, y:number, p:Problem): Node {
+        if (p.nodes.get(x) != null) {
+            if (p.nodes.get(x)!.get(y) != null) {
+                return p.nodes.get(x)!.get(y)!
             }
         }
-        Node.count += 1
-        const n = new Node(x, y, Node.count)
-        Node.all.set(x, new Map<number, Node>())
-        Node.all.get(x)!.set(y, n)
+        const n = new Node(x, y, p.nodes.size)
+        p.nodes.set(x, new Map<number, Node>())
+        p.nodes.get(x)!.set(y, n)
         return n
     }
 }

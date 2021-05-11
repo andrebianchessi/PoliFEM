@@ -93,7 +93,7 @@ export class Problem {
             yd.push(e.n2.y + dy * displacementScaleFactor)
             displacements.push('dx: ' + dx + '\ndy: ' + dy)
         }
-        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'x+y' }, { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }]
+        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'x+y', marker: { size: 11 } }, { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }]
         const layout:Layout = {
             hovermode: 'closest'
         }

@@ -16,6 +16,15 @@ export class Element {
         this.type = type
         this.n1 = n1
         this.n2 = n2
+        if (type === 'Frame') {
+            this.n1.uIndex = n1.index * 3
+            this.n1.vIndex = n1.index * 3 + 1
+            this.n1.wIndex = n1.index * 3 + 2
+
+            this.n2.uIndex = n2.index * 3
+            this.n2.vIndex = n2.index * 3 + 1
+            this.n2.wIndex = n2.index * 3 + 2
+        }
         this.properties = properties
         if (n2.x !== n1.x) {
             this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))

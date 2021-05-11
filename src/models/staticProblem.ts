@@ -33,9 +33,15 @@ export class StaticProblem extends Problem {
 
         // Build load vector
         for (const l of this.loads) {
-            this.F!.set([l.node.uIndex!, 0], this.F!.get([l.node.uIndex!, 0]) + l.x)
-            this.F!.set([l.node.vIndex!, 0], this.F!.get([l.node.vIndex!, 0]) + l.y)
-            this.F!.set([l.node.wIndex!, 0], this.F!.get([l.node.wIndex!, 0]) + l.w)
+            if (l.node.uIndex != null) {
+                this.F!.set([l.node.uIndex!, 0], this.F!.get([l.node.uIndex!, 0]) + l.x)
+            }
+            if (l.node.vIndex != null) {
+                this.F!.set([l.node.vIndex!, 0], this.F!.get([l.node.vIndex!, 0]) + l.y)
+            }
+            if (l.node.wIndex != null) {
+                this.F!.set([l.node.wIndex!, 0], this.F!.get([l.node.wIndex!, 0]) + l.w)
+            }
         }
 
         // Apply BC's

@@ -43,6 +43,13 @@ export class Problem {
                 }
             }
         }
+
+        // Build load vector
+        for (const l of this.loads) {
+            this.F!.set([l.node.uIndex, 1], l.x)
+            this.F!.set([l.node.vIndex, 1], l.y)
+            this.F!.set([l.node.wIndex, 1], l.w)
+        }
     }
 
     plot () {

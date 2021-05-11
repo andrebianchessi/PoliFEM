@@ -29,7 +29,6 @@ export class Problem {
     build () {
         // Initialize vectors and matrix
         this.K = math.zeros!([this.nodes.size * 6, this.nodes.size * 6], 'sparse') as Matrix
-        this.U = math.zeros!([this.nodes.size * 6, 1], 'sparse') as Matrix
         this.F = math.zeros!([this.nodes.size * 6, 1], 'sparse') as Matrix
 
         // Build stiffness matrix
@@ -63,6 +62,9 @@ export class Problem {
             }
             }
         }
+
+        // Solve linear system
+        this.U = math.usolve!(this.K!, this.F!) as Matrix
     }
 
     plot () {

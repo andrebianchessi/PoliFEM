@@ -72,21 +72,19 @@ export class StaticProblem extends Problem {
         const bcsY = []
         const bcsText = []
         for (const [, e] of this.elements) {
-            let dx = this.U!.get([e.n1.uIndex!, 0])
-            let dy = this.U!.get([e.n1.vIndex!, 0])
-            x.push(e.n1.x)
-            y.push(e.n1.y)
-            xd.push(e.n1.x + dx * displacementScaleFactor)
-            yd.push(e.n1.y + dy * displacementScaleFactor)
-            displacements.push('dx: ' + dx + '\ndy: ' + dy)
-
-            dx = this.U!.get([e.n2.uIndex!, 0])
-            dy = this.U!.get([e.n2.vIndex!, 0])
-            x.push(e.n2.x)
-            y.push(e.n2.y)
-            xd.push(e.n2.x + dx * displacementScaleFactor)
-            yd.push(e.n2.y + dy * displacementScaleFactor)
-            displacements.push('dx: ' + dx + '\ndy: ' + dy)
+            for (const n of [e.n1, e.n2]) {
+                const dx = this.U!.get([n.uIndex!, 0])
+                const dy = this.U!.get([n.vIndex!, 0])
+                x.push(n.x)
+                y.push(n.y)
+                xd.push(n.x + dx * displacementScaleFactor)
+                yd.push(n.y + dy * displacementScaleFactor)
+                if (n.wIndex == null) {
+                    displacements.push('dx: ' + dx + '\ndy: ' + dy)
+                } else {
+                    displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
+                }
+            }
         }
         const arrowsLength = 100
         for (const l of this.loads) {

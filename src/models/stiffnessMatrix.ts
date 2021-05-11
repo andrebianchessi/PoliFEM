@@ -1,6 +1,7 @@
-import math, { Matrix } from 'mathjs'
+import { Matrix } from 'mathjs'
 import { Element } from './element'
 import { FrameProperties } from './frameProperties'
+import { math } from './math'
 
 export class StiffnessMatrix {
     type: 'Frame'
@@ -8,10 +9,10 @@ export class StiffnessMatrix {
     k: Matrix
     kLocal:Matrix
 
-    constructor (type: 'Frame', element: Element) {
+    constructor (element: Element, type: 'Frame') {
         const c = element.angle.c()
         const s = element.angle.s()
-        const t = math.matrix(
+        const t = math.matrix!(
             [
                 [c, s, 0, 0, 0, 0],
                 [-s, c, 0, 0, 0, 0],
@@ -37,7 +38,7 @@ export class StiffnessMatrix {
             const EI6l2 = E * I / l2
             const EI4l = E * I * 4 / l
             const EI2l = E * I * 2 / l
-            this.kLocal = math.matrix([
+            this.kLocal = math.matrix!([
                 [EAl, 0, 0, -EAl, 0, 0],
                 [0, EI12l3, EI6l2, 0, -EI12l3, EI6l2],
                 [0, EI6l2, EI4l, 0, -EI6l2, EI2l],
@@ -70,6 +71,6 @@ export class StiffnessMatrix {
         //     break
         // }
         }
-        this.k = math.multiply(math.multiply(math.transpose(t), this.kLocal), t)
+        this.k = math.multiply!(math.multiply!(math.transpose!(t), this.kLocal), t)
     }
 }

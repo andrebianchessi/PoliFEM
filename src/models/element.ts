@@ -1,8 +1,7 @@
 import { Angle } from './angleInRadians'
-import { BeamProperties } from './beamProperties'
 import { FrameProperties } from './frameProperties'
 import { Node } from './node'
-import { TrussProperties } from './trussProperties'
+import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class Element {
     private static all= new Map<number, Element>()
@@ -11,16 +10,18 @@ export class Element {
     type: 'Frame'
     n1: Node
     n2: Node
-    properties: BeamProperties | TrussProperties | FrameProperties
+    properties: FrameProperties
     angle: Angle
+    K: StiffnessMatrix
 
-    constructor (type: 'Frame', n1:Node, n2:Node, properties: BeamProperties | TrussProperties| FrameProperties) {
+    constructor (type: 'Frame', n1:Node, n2:Node, properties: FrameProperties) {
         Element.count += 1
         this.type = type
         this.n1 = n1
         this.n2 = n2
         this.properties = properties
         this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))
+        this.K = (new StiffnessMatrix(this, type))
 
         Element.all.set(Element.count, this)
     }

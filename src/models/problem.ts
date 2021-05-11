@@ -45,9 +45,9 @@ export class Problem {
 
         // Build load vector
         for (const l of this.loads) {
-            this.F!.set([l.node.uIndex, 0], l.x)
-            this.F!.set([l.node.vIndex, 0], l.y)
-            this.F!.set([l.node.wIndex, 0], l.w)
+            this.F!.set([l.node.uIndex, 0], this.F!.get([l.node.uIndex, 0]) + l.x)
+            this.F!.set([l.node.vIndex, 0], this.F!.get([l.node.vIndex, 0]) + l.y)
+            this.F!.set([l.node.wIndex, 0], this.F!.get([l.node.wIndex, 0]) + l.w)
         }
 
         // Apply BC's
@@ -57,6 +57,7 @@ export class Problem {
                 for (const i of [b.node.uIndex, b.node.vIndex, b.node.wIndex]) {
                     replaceRowAndColByZeros(this.K!, i)
                     this.K!.set([i, i], 1)
+                    this.F!.set([i, 0], 0)
                 }
                 break
             }
@@ -65,6 +66,7 @@ export class Problem {
 
         // Solve linear system
         this.U = math.usolve!(this.K!, this.F!) as Matrix
+        console.log(this.U.toString())
     }
 
     plot () {

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-new */
 import { Element } from './models/element'
 import { Node } from './models/node'

@@ -4,9 +4,9 @@ import { BoundaryCondition } from './models/boundaryCondition'
 import { Element } from './models/element'
 import { Load } from './models/load'
 import { Node } from './models/node'
-import { Problem } from './models/problem'
+import { StaticProblem } from './models/staticProblem'
 
-const p = new Problem()
+const p = new StaticProblem()
 
 const properties = { E: 21 * 1000, I: 4.21875 / 100000, A: 0.0225 }
 
@@ -24,5 +24,5 @@ new BoundaryCondition(n1, 'Fix', p)
 new BoundaryCondition(n3, 'Fix', p)
 new BoundaryCondition(n4, 'Fix', p)
 
-p.build()
+p.solve()
 p.plot()

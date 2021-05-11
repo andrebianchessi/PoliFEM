@@ -6,7 +6,7 @@ export class BoundaryCondition {
     type: 'Fix'
     value?: number
 
-    constructor (node: Node, type: 'Fix', p:Problem) {
+    constructor (node: Node, type: 'Fix', p: Problem) {
         this.node = node
         this.type = type
         p.boundaryConditions.push(this)

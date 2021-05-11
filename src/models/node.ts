@@ -18,6 +18,11 @@ export class Node {
         if (p.nodes.get(x) != null) {
             if (p.nodes.get(x)!.get(y) != null) {
                 return p.nodes.get(x)!.get(y)!
+            } else {
+                const n = new Node(x, y, p.nodeCount)
+                p.nodes.get(x)!.set(y, n)
+                p.nodeCount += 1
+                return n
             }
         }
         const n = new Node(x, y, p.nodeCount)

@@ -19,4 +19,22 @@ export class Problem {
         this.loads = []
         this.boundaryConditions = []
     }
+
+    getDegreesOfFreedom ():number {
+        let dof = 0
+        for (const [, map] of this.nodes) {
+            for (const [, node] of map) {
+                if (node.uIndex != null) {
+                    dof += 1
+                }
+                if (node.vIndex != null) {
+                    dof += 1
+                }
+                if (node.wIndex != null) {
+                    dof += 1
+                }
+            }
+        }
+        return dof
+    }
 }

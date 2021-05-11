@@ -10,9 +10,10 @@ export class StaticProblem extends Problem {
     F?: Matrix
 
     solve () {
+        const dof = this.getDegreesOfFreedom()
         // Initialize vectors and matrix
-        this.K = math.zeros!([this.nodes.size * 6, this.nodes.size * 6], 'sparse') as Matrix
-        this.F = math.zeros!([this.nodes.size * 6, 1], 'sparse') as Matrix
+        this.K = math.zeros!([dof, dof], 'sparse') as Matrix
+        this.F = math.zeros!([dof, 1], 'sparse') as Matrix
 
         // Build stiffness matrix
         for (const [, e] of this.elements) {
@@ -20,8 +21,10 @@ export class StaticProblem extends Problem {
             const globalIndices = [e.n1.uIndex, e.n1.vIndex, e.n1.wIndex, e.n2.uIndex, e.n2.vIndex, e.n2.wIndex]
             for (const i of localIndices) {
                 for (const j of localIndices) {
-                    const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
-                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([i, j]))
+                    if (globalIndices[i] != null && globalIndices[j] != null) {
+                        const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
+                        this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([i, j]))
+                    }
                 }
             }
         }

@@ -74,19 +74,21 @@ export class Problem {
         const y = []
         const xd = []
         const yd = []
+        const displacements = []
         for (const [, e] of this.elements) {
             x.push(e.n1.x)
             y.push(e.n1.y)
             xd.push(e.n1.x + this.U!.get([e.n1.uIndex, 0]))
             yd.push(e.n1.y + this.U!.get([e.n1.vIndex, 0]))
+            displacements.push('dx: ' + this.U!.get([e.n1.uIndex, 0]) + '\ndy: ' + this.U!.get([e.n1.vIndex, 0]))
 
             x.push(e.n2.x)
             y.push(e.n2.y)
             xd.push(e.n2.x + this.U!.get([e.n2.uIndex, 0]))
             yd.push(e.n2.y + this.U!.get([e.n2.vIndex, 0]))
+            displacements.push('dx: ' + this.U!.get([e.n2.uIndex, 0]) + '\ndy: ' + this.U!.get([e.n2.vIndex, 0]))
         }
-        // const data: Plot[] = [{ x: [1, 3, 4, 5], y: [3, 12, 1, 4], text: ['a', 'b', 'c', 'd'], hoverinfo: 'text' }]
-        const data: Plot[] = [{ x, y, name: 'Undeformed Structure' }, { x: xd, y: yd, name: 'Deformed Structure' }]
+        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'none' }, { x: xd, y: yd, name: 'Deformed Structure', text: displacements, hoverinfo: 'text' }]
         plot(data)
     }
 }

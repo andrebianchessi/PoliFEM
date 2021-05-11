@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-new */
+import { BoundaryCondition } from './models/boundaryCondition'
 import { Element } from './models/element'
 import { Load } from './models/load'
 import { Node } from './models/node'
@@ -17,6 +18,9 @@ const e1 = new Element('Frame', n1, n2, properties, p)
 const e2 = new Element('Frame', n2, n3, properties, p)
 const e3 = new Element('Frame', n2, n4, properties, p)
 new Load(50, 0, 0, n2, p)
+new BoundaryCondition(n1, 'Fix', p)
+new BoundaryCondition(n3, 'Fix', p)
+new BoundaryCondition(n4, 'Fix', p)
 
 p.build()
 p.plot()

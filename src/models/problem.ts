@@ -1,6 +1,6 @@
 import { Matrix } from 'mathjs'
 import { Element } from './element'
-import { math } from './math'
+import { math, replaceRowAndColByZeros } from './math'
 import { Node } from './node'
 import { plot, Plot } from 'nodeplotlib'
 import { Load } from './load'
@@ -52,6 +52,17 @@ export class Problem {
         }
 
         // Apply BC's
+        for (const b of this.boundaryConditions) {
+            switch (b.type) {
+            case 'Fix': {
+                for (const i of [b.node.uIndex, b.node.vIndex, b.node.wIndex]) {
+                    replaceRowAndColByZeros(this.K!, i)
+                    this.K!.set([i, i], 1)
+                }
+                break
+            }
+            }
+        }
     }
 
     plot () {

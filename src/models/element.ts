@@ -4,7 +4,7 @@ import { Node } from './node'
 import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class Element {
-    private static all= new Map<number, Element>()
+    static all= new Map<number, Element>()
     static count = 0
 
     type: 'Frame'

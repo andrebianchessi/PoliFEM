@@ -1,6 +1,6 @@
 export class Node {
-    private static count = 0
-    private static all= new Map<number, Map<number, Node>>()
+    static count = 0
+    static all= new Map<number, Map<number, Node>>()
     x: number;
     y: number;
     index: number;
@@ -12,9 +12,9 @@ export class Node {
         this.x = x
         this.y = y
         this.index = index
-        this.uIndex = index
-        this.vIndex = index + 1
-        this.wIndex = index + 2
+        this.uIndex = (index - 1) * 3
+        this.vIndex = (index - 1) * 3 + 1
+        this.wIndex = (index - 1) * 3 + 2
     }
 
     static get (x:number, y:number): Node {

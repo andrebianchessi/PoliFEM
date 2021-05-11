@@ -72,7 +72,6 @@ export class StiffnessMatrix {
         //     break
         // }
         }
-        console.log(this.kLocal.toString())
         this.k = math.multiply!(math.multiply!(math.transpose!(t), this.kLocal), t)
     }
 }

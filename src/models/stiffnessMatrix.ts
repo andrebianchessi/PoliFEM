@@ -2,30 +2,32 @@ import { Matrix } from 'mathjs'
 import { Element } from './element'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'
+import { TrussProperties } from './trussProperties'
 
 export class StiffnessMatrix {
-    type: 'Frame'
+    type: 'Frame' | 'Truss'
 
     k: Matrix
     kLocal:Matrix
 
-    constructor (element: Element, type: 'Frame') {
+    constructor (element: Element, type: 'Frame' | 'Truss') {
         const c = element.angle.c()
         const s = element.angle.s()
-        const t = math.matrix!(
-            [
-                [c, s, 0, 0, 0, 0],
-                [-s, c, 0, 0, 0, 0],
-                [0, 0, 1, 0, 0, 0],
-                [0, 0, 0, c, s, 0],
-                [0, 0, 0, -s, c, 0],
-                [0, 0, 0, 0, 0, 1]
-            ]
-        )
+        let t
 
         this.type = type
         switch (type) {
         case 'Frame': {
+            t = math.matrix!(
+                [
+                    [c, s, 0, 0, 0, 0],
+                    [-s, c, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0],
+                    [0, 0, 0, c, s, 0],
+                    [0, 0, 0, -s, c, 0],
+                    [0, 0, 0, 0, 0, 1]
+                ]
+            )
             const E = element.properties.E
             const I = (element.properties as FrameProperties).I
             const A = (element.properties as FrameProperties).A
@@ -48,28 +50,24 @@ export class StiffnessMatrix {
             ])
             break
         }
-        // case 'Beam': {
-        //     this.kLocal = math.matrix([
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0]
-        //     ])
-        //     break
-        // }
-        // case 'Truss': {
-        //     this.kLocal = math.matrix([
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0],
-        //         [0, 0, 0, 0, 0, 0]
-        //     ])
-        //     break
-        // }
+        case 'Truss': {
+            t = math.matrix!(
+                [
+                    [c, s, 0, 0],
+                    [0, 0, c, s]
+                ]
+            )
+            const E = element.properties.E
+            const A = (element.properties as TrussProperties).A
+            const l = element.length()
+
+            const EAl = E * A / l
+            this.kLocal = math.matrix!([
+                [EAl, -EAl],
+                [-EAl, EAl]
+            ])
+            break
+        }
         }
         this.k = math.multiply!(math.multiply!(math.transpose!(t), this.kLocal), t)
     }

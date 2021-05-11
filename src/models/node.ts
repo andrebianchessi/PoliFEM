@@ -4,6 +4,9 @@ export class Node {
     x: number;
     y: number;
     index: number;
+    uIndexLocal?: number; // Global horizontal displacement index
+    vIndexLocal?: number; // Global vertical displacement index
+    wIndexLocal?: number; // Global rotational displacement index
     uIndex?: number; // Global horizontal displacement index
     vIndex?: number; // Global vertical displacement index
     wIndex?: number; // Global rotational displacement index

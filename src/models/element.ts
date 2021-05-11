@@ -5,26 +5,44 @@ import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class Element {
-    type: 'Frame'
+    type: 'Frame' | 'Truss'
     n1: Node
     n2: Node
     properties: FrameProperties
     angle: Angle
     K: StiffnessMatrix
 
-    constructor (type: 'Frame', n1:Node, n2:Node, properties: FrameProperties, p: Problem) {
+    constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties, p: Problem) {
         this.type = type
         this.n1 = n1
         this.n2 = n2
         if (type === 'Frame') {
+            this.n1.uIndexLocal = 0
+            this.n1.vIndexLocal = 1
+            this.n1.wIndexLocal = 2
             this.n1.uIndex = n1.index * 3
             this.n1.vIndex = n1.index * 3 + 1
             this.n1.wIndex = n1.index * 3 + 2
 
+            this.n2.uIndexLocal = 0
+            this.n2.vIndexLocal = 1
+            this.n2.wIndexLocal = 2
             this.n2.uIndex = n2.index * 3
             this.n2.vIndex = n2.index * 3 + 1
             this.n2.wIndex = n2.index * 3 + 2
         }
+        if (type === 'Truss') {
+            this.n1.uIndexLocal = 0
+            this.n1.vIndexLocal = 1
+            this.n1.uIndex = n1.index * 2
+            this.n1.vIndex = n1.index * 2 + 1
+
+            this.n2.uIndexLocal = 0
+            this.n2.vIndexLocal = 1
+            this.n2.uIndex = n2.index * 2
+            this.n2.vIndex = n2.index * 2 + 1
+        }
+
         this.properties = properties
         if (n2.x !== n1.x) {
             this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))

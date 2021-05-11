@@ -17,11 +17,11 @@ export class StaticProblem extends Problem {
 
         // Build stiffness matrix
         for (const [, e] of this.elements) {
-            const localIndices = [0, 1, 2, 3, 4, 5]
+            const localIndices = [e.n1.uIndexLocal, e.n1.vIndexLocal, e.n1.wIndexLocal, e.n2.uIndexLocal, e.n2.vIndexLocal, e.n2.wIndexLocal]
             const globalIndices = [e.n1.uIndex, e.n1.vIndex, e.n1.wIndex, e.n2.uIndex, e.n2.vIndex, e.n2.wIndex]
             for (const i of localIndices) {
                 for (const j of localIndices) {
-                    if (globalIndices[i] != null && globalIndices[j] != null) {
+                    if (i != null && j != null) {
                         const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
                         this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([i, j]))
                     }

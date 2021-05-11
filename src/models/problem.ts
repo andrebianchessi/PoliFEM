@@ -70,25 +70,30 @@ export class Problem {
     }
 
     plot () {
+        const displacementScaleFactor = 2
         const x = []
         const y = []
         const xd = []
         const yd = []
         const displacements = []
         for (const [, e] of this.elements) {
+            let dx = this.U!.get([e.n1.uIndex, 0])
+            let dy = this.U!.get([e.n1.vIndex, 0])
             x.push(e.n1.x)
             y.push(e.n1.y)
-            xd.push(e.n1.x + this.U!.get([e.n1.uIndex, 0]))
-            yd.push(e.n1.y + this.U!.get([e.n1.vIndex, 0]))
-            displacements.push('dx: ' + this.U!.get([e.n1.uIndex, 0]) + '\ndy: ' + this.U!.get([e.n1.vIndex, 0]))
+            xd.push(e.n1.x + dx * displacementScaleFactor)
+            yd.push(e.n1.y + dy * displacementScaleFactor)
+            displacements.push('dx: ' + dx + '\ndy: ' + dy)
 
+            dx = this.U!.get([e.n2.uIndex, 0])
+            dy = this.U!.get([e.n2.vIndex, 0])
             x.push(e.n2.x)
             y.push(e.n2.y)
-            xd.push(e.n2.x + this.U!.get([e.n2.uIndex, 0]))
-            yd.push(e.n2.y + this.U!.get([e.n2.vIndex, 0]))
-            displacements.push('dx: ' + this.U!.get([e.n2.uIndex, 0]) + '\ndy: ' + this.U!.get([e.n2.vIndex, 0]))
+            xd.push(e.n2.x + dx * displacementScaleFactor)
+            yd.push(e.n2.y + dy * displacementScaleFactor)
+            displacements.push('dx: ' + dx + '\ndy: ' + dy)
         }
-        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'none' }, { x: xd, y: yd, name: 'Deformed Structure', text: displacements, hoverinfo: 'text' }]
+        const data: Plot[] = [{ x, y, name: 'Undeformed Structure', hoverinfo: 'none' }, { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text' }]
         plot(data)
     }
 }

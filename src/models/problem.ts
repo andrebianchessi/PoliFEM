@@ -4,6 +4,8 @@ import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
 import { Annotations } from 'plotly.js'
 import { Layout, Plot } from 'nodeplotlib'
+import { Matrix } from 'mathjs'
+import { math, replaceRowAndColByZeros } from './math'
 
 export class Problem {
     dof: number // degrees of freedom
@@ -13,6 +15,10 @@ export class Problem {
     elementCount: number
     loads: Load[]
     boundaryConditions: BoundaryCondition[]
+    K?: Matrix
+    M?: Matrix
+    F?: Matrix
+    U?: Matrix
 
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
@@ -22,6 +28,65 @@ export class Problem {
         this.loads = []
         this.boundaryConditions = []
         this.dof = 0
+    }
+
+    buildK () {
+        // Initialize matrix
+        this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
+
+        // Build stiffness matrix
+        for (const [, e] of this.elements) {
+            let localIndices: number[] = []
+            let globalIndices: number[] = []
+            if (e.type === 'Frame') {
+                localIndices = [0, 1, 2, 3, 4, 5]
+                globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n1.wIndex!, e.n2.uIndex!, e.n2.vIndex!, e.n2.wIndex!]
+            } else if (e.type === 'Truss') {
+                localIndices = [0, 1, 2, 3]
+                globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!]
+            }
+            for (let i = 0; i < localIndices.length; i++) {
+                for (let j = 0; j < localIndices.length; j++) {
+                    const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
+            this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
+                }
+            }
+        }
+    }
+
+    buildF () {
+        // Initialize vector
+        this.F = math.zeros!([this.dof, 1], 'sparse') as Matrix
+
+        // Build load vector
+        for (const l of this.loads) {
+            if (l.node.uIndex != null) {
+                this.F!.set([l.node.uIndex!, 0], this.F!.get([l.node.uIndex!, 0]) + l.x)
+            }
+            if (l.node.vIndex != null) {
+                this.F!.set([l.node.vIndex!, 0], this.F!.get([l.node.vIndex!, 0]) + l.y)
+            }
+            if (l.node.wIndex != null) {
+                this.F!.set([l.node.wIndex!, 0], this.F!.get([l.node.wIndex!, 0]) + l.w)
+            }
+        }
+    }
+
+    applyBC () {
+        for (const b of this.boundaryConditions) {
+            switch (b.type) {
+            case 'Fix': {
+                for (const i of [b.node.uIndex, b.node.vIndex, b.node.wIndex]) {
+                    if (i != null) {
+                        replaceRowAndColByZeros(this.K!, i)
+                                this.K!.set([i, i], 1)
+                                this.F!.set([i, 0], 0)
+                    }
+                }
+                break
+            }
+            }
+        }
     }
 
     problemDescriptionPlotData (): [Plot[], Layout] {

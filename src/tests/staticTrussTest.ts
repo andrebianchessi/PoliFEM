@@ -1,12 +1,13 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-new */
-import { Matrix } from 'mathjs'
+/*
+
+Test of a truss bar structure
+
+*/
+
 import { checkResult } from '../functions/checkResult'
-import { MatricesAreEqual } from '../functions/matricesAreEqual'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { Element } from '../models/element'
 import { Load } from '../models/load'
-import { math } from '../models/math'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
 

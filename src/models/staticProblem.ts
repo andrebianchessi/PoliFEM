@@ -10,10 +10,9 @@ export class StaticProblem extends Problem {
     F?: Matrix
 
     solve () {
-        const dof = this.dof
         // Initialize vectors and matrix
-        this.K = math.zeros!([dof, dof], 'sparse') as Matrix
-        this.F = math.zeros!([dof, 1], 'sparse') as Matrix
+        this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
+        this.F = math.zeros!([this.dof, 1], 'sparse') as Matrix
 
         // Build stiffness matrix
         for (const [, e] of this.elements) {

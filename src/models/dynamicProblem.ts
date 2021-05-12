@@ -21,6 +21,7 @@ export class DynamicProblem extends Problem {
 
     buildM () {
         this.M = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
+        // TODO
     }
 
     solve () {

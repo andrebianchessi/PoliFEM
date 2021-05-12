@@ -66,7 +66,7 @@ export class StaticProblem extends Problem {
         this.U = math.usolve!(this.K!, this.F!) as Matrix
     }
 
-    plot () {
+    plot (plotSolution: boolean) {
         const displacementScaleFactor = 100
         const arrows:Partial<Annotations>[] = []
         const momentsX = []
@@ -114,9 +114,7 @@ export class StaticProblem extends Problem {
 
         const data: Plot[] = [
             { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
-            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' },
-            { x: [], y: [], name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' }, showlegend: true },
-            { x: [], y: [], name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', marker: { color: 'blue' } }
+            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' }
         ]
 
         let first = true
@@ -127,20 +125,25 @@ export class StaticProblem extends Problem {
             const yd = []
             const displacements = []
             for (const n of [e.n1, e.n2]) {
-                const dx = this.U!.get([n.uIndex!, 0])
-                const dy = this.U!.get([n.vIndex!, 0])
                 x.push(n.x)
                 y.push(n.y)
-                xd.push(n.x + dx * displacementScaleFactor)
-                yd.push(n.y + dy * displacementScaleFactor)
-                if (n.wIndex == null) {
-                    displacements.push('dx: ' + dx + '\ndy: ' + dy)
-                } else {
-                    displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
+                if (plotSolution) {
+                    const dx = this.U!.get([n.uIndex!, 0])
+                    const dy = this.U!.get([n.vIndex!, 0])
+                    xd.push(n.x + dx * displacementScaleFactor)
+                    yd.push(n.y + dy * displacementScaleFactor)
+                    if (n.wIndex == null) {
+                        displacements.push('dx: ' + dx + '\ndy: ' + dy)
+                    } else {
+                        displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
+                    }
                 }
             }
             data.push({ x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' }, showlegend: first })
-            data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
+            if (plotSolution) {
+                data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
+            }
+
             first = false
         }
 

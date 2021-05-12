@@ -8,7 +8,7 @@ import { StaticProblem } from './models/staticProblem'
 
 const p = new StaticProblem()
 
-const properties = { E: 260000000000, A: 1 / 10000 }
+const properties = { E: 206000000000, A: 1 / 10000 }
 
 const n1 = Node.get(0, 0, p)
 const n2 = Node.get(0, 1, p)

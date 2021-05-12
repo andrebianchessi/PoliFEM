@@ -33,7 +33,6 @@ export class StaticProblem extends Problem {
                 }
             }
         }
-        console.log(this.K.toString())
         // Build load vector
         for (const l of this.loads) {
             if (l.node.uIndex != null) {
@@ -65,8 +64,7 @@ export class StaticProblem extends Problem {
 
         // Solve linear system
         this.U = math.usolve!(this.K!, this.F!) as Matrix
-        console.log(this.K.toString())
-        console.log(this.U.toString())
+        console.log('Displacements:\n' + this.U.toString())
     }
 
     plot () {

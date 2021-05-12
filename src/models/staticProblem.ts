@@ -69,11 +69,6 @@ export class StaticProblem extends Problem {
 
     plot () {
         const displacementScaleFactor = 100
-        const x = []
-        const y = []
-        const xd = []
-        const yd = []
-        const displacements = []
         const arrows:Partial<Annotations>[] = []
         const momentsX = []
         const momentsY = []
@@ -81,21 +76,7 @@ export class StaticProblem extends Problem {
         const bcsX = []
         const bcsY = []
         const bcsText = []
-        for (const [, e] of this.elements) {
-            for (const n of [e.n1, e.n2]) {
-                const dx = this.U!.get([n.uIndex!, 0])
-                const dy = this.U!.get([n.vIndex!, 0])
-                x.push(n.x)
-                y.push(n.y)
-                xd.push(n.x + dx * displacementScaleFactor)
-                yd.push(n.y + dy * displacementScaleFactor)
-                if (n.wIndex == null) {
-                    displacements.push('dx: ' + dx + '\ndy: ' + dy)
-                } else {
-                    displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
-                }
-            }
-        }
+
         const arrowsLength = 100
         for (const l of this.loads) {
             const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
@@ -135,9 +116,35 @@ export class StaticProblem extends Problem {
         const data: Plot[] = [
             { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
             { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' },
-            { x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' } },
-            { x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' } }
+            { x: [], y: [], name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' }, showlegend: true },
+            { x: [], y: [], name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', marker: { color: 'blue' } }
         ]
+
+        let first = true
+        for (const [, e] of this.elements) {
+            const x = []
+            const y = []
+            const xd = []
+            const yd = []
+            const displacements = []
+            for (const n of [e.n1, e.n2]) {
+                const dx = this.U!.get([n.uIndex!, 0])
+                const dy = this.U!.get([n.vIndex!, 0])
+                x.push(n.x)
+                y.push(n.y)
+                xd.push(n.x + dx * displacementScaleFactor)
+                yd.push(n.y + dy * displacementScaleFactor)
+                if (n.wIndex == null) {
+                    displacements.push('dx: ' + dx + '\ndy: ' + dy)
+                } else {
+                    displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
+                }
+            }
+            data.push({ x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' }, showlegend: first })
+            data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
+            first = false
+        }
+
         const layout:Layout = {
             hovermode: 'closest',
             annotations: arrows

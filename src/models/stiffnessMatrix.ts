@@ -1,17 +1,16 @@
 import { Matrix } from 'mathjs'
-import { BeamProperties } from './beamProperties'
 import { Element } from './element'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'
 import { TrussProperties } from './trussProperties'
 
 export class StiffnessMatrix {
-    type: 'Frame' | 'Truss' | 'Beam'
+    type: 'Frame' | 'Truss'
 
     k: Matrix
     kLocal:Matrix
 
-    constructor (element: Element, type: 'Frame' | 'Truss' | 'Beam') {
+    constructor (element: Element, type: 'Frame' | 'Truss') {
         const c = element.angle.c()
         const s = element.angle.s()
         let t
@@ -70,37 +69,6 @@ export class StiffnessMatrix {
                 [0, 0, 0, 0],
                 [-EAl, 0, EAl, 0],
                 [0, 0, 0, 0]
-            ])
-            break
-        }
-        case 'Beam': {
-            t = math.matrix!(
-                [
-                    [c, s, 0, 0, 0, 0],
-                    [-s, c, 0, 0, 0, 0],
-                    [0, 0, 1, 0, 0, 0],
-                    [0, 0, 0, c, s, 0],
-                    [0, 0, 0, -s, c, 0],
-                    [0, 0, 0, 0, 0, 1]
-                ]
-            )
-            const E = element.properties.E
-            const I = (element.properties as BeamProperties).I
-            const l = element.length()
-            const l3 = l * l * l
-            const l2 = l * l
-
-            const EI12l3 = E * I * 12 / l3
-            const EI6l2 = E * I * 6 / l2
-            const EI4l = E * I * 4 / l
-            const EI2l = E * I * 2 / l
-            this.kLocal = math.matrix!([
-                [0, 0, 0, 0, 0, 0],
-                [0, EI12l3, EI6l2, 0, -EI12l3, EI6l2],
-                [0, EI6l2, EI4l, 0, -EI6l2, EI2l],
-                [0, 0, 0, 0, 0, 0],
-                [0, -EI12l3, -EI6l2, 0, EI12l3, -EI6l2],
-                [0, EI6l2, EI2l, 0, -EI6l2, EI4l]
             ])
             break
         }

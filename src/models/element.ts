@@ -3,16 +3,17 @@ import { FrameProperties } from './frameProperties'
 import { Node } from './node'
 import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
+import { TrussProperties } from './trussProperties'
 
 export class Element {
     type: 'Frame' | 'Truss'
     n1: Node
     n2: Node
-    properties: FrameProperties
+    properties: FrameProperties | TrussProperties
     angle: Angle
     K: StiffnessMatrix
 
-    constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties, p: Problem) {
+    constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
         this.type = type
         this.n1 = n1
         this.n2 = n2

@@ -10,23 +10,26 @@ export class StaticProblem extends Problem {
     F?: Matrix
 
     solve () {
-        const dof = this.getDegreesOfFreedom()
+        const dof = this.dof
         // Initialize vectors and matrix
         this.K = math.zeros!([dof, dof], 'sparse') as Matrix
         this.F = math.zeros!([dof, 1], 'sparse') as Matrix
 
         // Build stiffness matrix
         for (const [, e] of this.elements) {
-            const localIndices = [e.n1.uIndexLocal, e.n1.vIndexLocal, e.n1.wIndexLocal, e.n2.uIndexLocal, e.n2.vIndexLocal, e.n2.wIndexLocal]
-            const globalIndices = [e.n1.uIndex, e.n1.vIndex, e.n1.wIndex, e.n2.uIndex, e.n2.vIndex, e.n2.wIndex]
-            for (const i of localIndices) {
-                if (i != null) {
-                    for (const j of localIndices) {
-                        if (j != null) {
-                            const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
-                            this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([i, j]))
-                        }
-                    }
+            let localIndices: number[] = []
+            let globalIndices: number[] = []
+            if (e.type === 'Frame') {
+                localIndices = [0, 1, 2, 3, 4, 5]
+                globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n1.wIndex!, e.n2.uIndex!, e.n2.vIndex!, e.n2.wIndex!]
+            } else if (e.type === 'Truss') {
+                localIndices = [0, 1, 2, 3]
+                globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!]
+            }
+            for (let i = 0; i < localIndices.length; i++) {
+                for (let j = 0; j < localIndices.length; j++) {
+                    const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
+                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
                 }
             }
         }

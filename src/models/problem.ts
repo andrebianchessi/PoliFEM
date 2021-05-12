@@ -4,6 +4,7 @@ import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
 
 export class Problem {
+    dof: number // degrees of freedom
     nodes: Map<number, Map<number, Node>>
     nodeCount: number
     elements: Map<number, Element>
@@ -18,23 +19,6 @@ export class Problem {
         this.elementCount = 0
         this.loads = []
         this.boundaryConditions = []
-    }
-
-    getDegreesOfFreedom ():number {
-        let dof = 0
-        for (const [, map] of this.nodes) {
-            for (const [, node] of map) {
-                if (node.uIndex != null) {
-                    dof += 1
-                }
-                if (node.vIndex != null) {
-                    dof += 1
-                }
-                if (node.wIndex != null) {
-                    dof += 1
-                }
-            }
-        }
-        return dof
+        this.dof = 0
     }
 }

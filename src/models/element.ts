@@ -17,30 +17,50 @@ export class Element {
         this.n1 = n1
         this.n2 = n2
         if (type === 'Frame') {
-            this.n1.uIndexLocal = 0
-            this.n1.vIndexLocal = 1
-            this.n1.wIndexLocal = 2
-            this.n1.uIndex = n1.index * 3
-            this.n1.vIndex = n1.index * 3 + 1
-            this.n1.wIndex = n1.index * 3 + 2
+            if (this.n1.uIndex == null) {
+                this.n1.uIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n1.vIndex == null) {
+                this.n1.vIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n1.wIndex == null) {
+                this.n1.wIndex = p.dof
+                p.dof += 1
+            }
 
-            this.n2.uIndexLocal = 0
-            this.n2.vIndexLocal = 1
-            this.n2.wIndexLocal = 2
-            this.n2.uIndex = n2.index * 3
-            this.n2.vIndex = n2.index * 3 + 1
-            this.n2.wIndex = n2.index * 3 + 2
+            if (this.n2.uIndex == null) {
+                this.n2.uIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n2.vIndex == null) {
+                this.n2.vIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n2.wIndex == null) {
+                this.n2.wIndex = p.dof
+                p.dof += 1
+            }
         }
         if (type === 'Truss') {
-            this.n1.uIndexLocal = 0
-            this.n1.vIndexLocal = 1
-            this.n1.uIndex = n1.index * 2
-            this.n1.vIndex = n1.index * 2 + 1
+            if (this.n1.uIndex == null) {
+                this.n1.uIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n1.vIndex == null) {
+                this.n1.vIndex = p.dof
+                p.dof += 1
+            }
 
-            this.n2.uIndexLocal = 0
-            this.n2.vIndexLocal = 1
-            this.n2.uIndex = n2.index * 2
-            this.n2.vIndex = n2.index * 2 + 1
+            if (this.n2.uIndex == null) {
+                this.n2.uIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n2.vIndex == null) {
+                this.n2.vIndex = p.dof
+                p.dof += 1
+            }
         }
 
         this.properties = properties

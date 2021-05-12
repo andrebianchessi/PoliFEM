@@ -64,7 +64,6 @@ export class StaticProblem extends Problem {
 
         // Solve linear system
         this.U = math.usolve!(this.K!, this.F!) as Matrix
-        console.log('Displacements:\n' + this.U.toString())
     }
 
     plot () {

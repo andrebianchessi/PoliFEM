@@ -17,7 +17,7 @@ const n4 = Node.get(-1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.P
 
 new Element('Truss', n3, n1, properties, p)
 new Element('Truss', n1, n2, properties, p)
-new Element('Truss', n4, n1, properties, p)
+new Element('Truss', n1, n4, properties, p)
 
 new Load(20000 * Math.cos(45 * Math.PI / 180), 20000 * Math.sin(45 * Math.PI / 180), 0, n1, p)
 

@@ -69,7 +69,7 @@ export class StaticProblem extends Problem {
     }
 
     plot () {
-        const displacementScaleFactor = 2
+        const displacementScaleFactor = 100
         const x = []
         const y = []
         const xd = []

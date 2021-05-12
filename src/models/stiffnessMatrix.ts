@@ -5,12 +5,12 @@ import { math } from './math'
 import { TrussProperties } from './trussProperties'
 
 export class StiffnessMatrix {
-    type: 'Frame' | 'Truss'
+    type: 'Frame' | 'Truss' | 'Beam'
 
     k: Matrix
     kLocal:Matrix
 
-    constructor (element: Element, type: 'Frame' | 'Truss') {
+    constructor (element: Element, type: 'Frame' | 'Truss' | 'Beam') {
         const c = element.angle.c()
         const s = element.angle.s()
         let t
@@ -54,6 +54,28 @@ export class StiffnessMatrix {
             t = math.matrix!(
                 [
                     [c, s, 0, 0],
+                    [-s, c, 0, 0],
+                    [0, 0, c, s],
+                    [0, 0, -s, c]
+                ]
+            )
+            const E = element.properties.E
+            const A = (element.properties as TrussProperties).A
+            const l = element.length()
+
+            const EAl = E * A / l
+            this.kLocal = math.matrix!([
+                [EAl, 0, -EAl, 0],
+                [0, 0, 0, 0],
+                [-EAl, 0, EAl, 0],
+                [0, 0, 0, 0]
+            ])
+            break
+        }
+        case 'Beam': {
+            t = math.matrix!(
+                [
+                    [c, s, 0, 0],
                     [0, 0, c, s]
                 ]
             )
@@ -69,6 +91,7 @@ export class StiffnessMatrix {
             break
         }
         }
+
         this.k = math.multiply!(math.multiply!(math.transpose!(t), this.kLocal), t)
     }
 }

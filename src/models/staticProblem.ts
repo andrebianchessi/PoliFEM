@@ -4,6 +4,7 @@ import { plot } from 'nodeplotlib'
 import { Problem } from './problem'
 
 export class StaticProblem extends Problem {
+    U?: Matrix
     solve () {
         this.buildK()
 

@@ -14,11 +14,12 @@ import { DynamicProblem } from '../models/dynamicProblem'
 export function DynamicTrussTest(){
     console.log('Dynamic truss test')
 
+    const timeStep = 0.1
     const nElements = 50
     const finalX = 300
     const properties = { E: 206000000000, A: 1 / 10000 }
 
-    const p = new DynamicProblem()
+    const p = new DynamicProblem(timeStep)
     const elementLength = finalX/nElements
     let n1: Node
     let n2: Node
@@ -29,5 +30,9 @@ export function DynamicTrussTest(){
     }
     new BoundaryCondition(n2!, 'Fix', p)
     p.plot(true)
+
+    p.buildK()
+    p.buildF()
+    p.setInitialConditions()
 
 }

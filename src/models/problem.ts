@@ -18,7 +18,7 @@ export class Problem {
     K?: Matrix
     M?: Matrix
     F?: Matrix
-    U?: Matrix
+    U?: Matrix | Matrix[]
 
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()

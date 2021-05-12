@@ -4,6 +4,7 @@ Test of a truss bar structure
 
 */
 
+import { Matrix } from 'mathjs'
 import { checkResult } from '../functions/checkResult'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { Element } from '../models/element'

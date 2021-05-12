@@ -5,14 +5,14 @@ import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class Element {
-    type: 'Frame' | 'Truss'
+    type: 'Frame' | 'Truss' | 'Beam'
     n1: Node
     n2: Node
     properties: FrameProperties
     angle: Angle
     K: StiffnessMatrix
 
-    constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties, p: Problem) {
+    constructor (type: 'Frame' | 'Truss'| 'Beam', n1:Node, n2:Node, properties: FrameProperties, p: Problem) {
         this.type = type
         this.n1 = n1
         this.n2 = n2
@@ -59,6 +59,25 @@ export class Element {
             }
             if (this.n2.vIndex == null) {
                 this.n2.vIndex = p.dof
+                p.dof += 1
+            }
+        }
+        if (type === 'Beam') {
+            if (this.n1.vIndex == null) {
+                this.n1.vIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n1.wIndex == null) {
+                this.n1.wIndex = p.dof
+                p.dof += 1
+            }
+
+            if (this.n2.vIndex == null) {
+                this.n2.vIndex = p.dof
+                p.dof += 1
+            }
+            if (this.n2.wIndex == null) {
+                this.n2.wIndex = p.dof
                 p.dof += 1
             }
         }

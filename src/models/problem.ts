@@ -16,7 +16,6 @@ export class Problem {
     loads: Load[]
     boundaryConditions: BoundaryCondition[]
     K?: Matrix
-    M?: Matrix
     F?: Matrix
     U?: Matrix | Matrix[]
 

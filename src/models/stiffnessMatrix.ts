@@ -63,7 +63,7 @@ export class StiffnessMatrix {
             const A = (element.properties as TrussProperties).A
             const l = element.length()
 
-            const EAl = E * A / l
+            const EAl = 1
             this.kLocal = math.matrix!([
                 [EAl, 0, -EAl, 0],
                 [0, 0, 0, 0],

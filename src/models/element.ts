@@ -66,7 +66,7 @@ export class Element {
 
         this.properties = properties
         if (n2.x !== n1.x) {
-            this.angle = new Angle(Math.atan((n2.y - n1.y)) / (n2.x - n1.x))
+            this.angle = new Angle(Math.atan((n2.y - n1.y) / (n2.x - n1.x)))
         } else {
             this.angle = new Angle(-Math.PI / 2)
         }

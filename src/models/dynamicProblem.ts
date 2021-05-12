@@ -1,6 +1,7 @@
 import { Matrix } from 'mathjs'
+import { Problem } from './problem'
 
-export class DynamicProblem {
+export class DynamicProblem extends Problem {
     K?: Matrix
     U?: Matrix
     F?: Matrix

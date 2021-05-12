@@ -3,7 +3,7 @@ import { Node } from './node'
 import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
 import { Annotations } from 'plotly.js'
-import { Layout, plot, Plot } from 'nodeplotlib'
+import { Layout, Plot } from 'nodeplotlib'
 
 export class Problem {
     dof: number // degrees of freedom
@@ -78,11 +78,13 @@ export class Problem {
         for (const [, e] of this.elements) {
             const x = []
             const y = []
+            const nodesText = []
             for (const n of [e.n1, e.n2]) {
                 x.push(n.x)
                 y.push(n.y)
+                nodesText.push(n.index.toString())
             }
-            data.push({ x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' }, showlegend: first })
+            data.push({ x, y, text: nodesText, name: 'Undeformed Structure', hoverinfo: 'text', marker: { color: 'black' }, showlegend: first })
             first = false
         }
 

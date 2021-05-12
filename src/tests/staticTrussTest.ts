@@ -32,9 +32,9 @@ export function StaticTrussTest ():boolean {
     new BoundaryCondition(n3, 'Fix', p)
     new BoundaryCondition(n4, 'Fix', p)
 
-    // p.plot(true)
+    p.plot(true)
     p.solve()
-    // p.plot()
+    p.plot()
 
     return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

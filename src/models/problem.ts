@@ -90,7 +90,6 @@ export class Problem {
             hovermode: 'closest',
             annotations: arrows
         }
-        plot(data, layout)
         return [data, layout]
     }
 }

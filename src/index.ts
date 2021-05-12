@@ -8,19 +8,20 @@ import { StaticProblem } from './models/staticProblem'
 
 const p = new StaticProblem()
 
-const properties = { E: 20, I: 666, A: 1780 }
+const properties = { E: 260000000000, A: 1 / 10000 }
 
 const n1 = Node.get(0, 0, p)
-const n2 = Node.get(0, 3000, p)
-const n3 = Node.get(0, 6000, p)
-const n4 = Node.get(3200, 3000, p)
-const e1 = new Element('Truss', n1, n2, properties, p)
-const e2 = new Element('Truss', n2, n3, properties, p)
-const e3 = new Element('Frame', n2, n4, properties, p)
-new Load(50, 0, 0, n2, p)
-new Load(0, -12.8, -6.8267, n2, p)
-new Load(0, -12.8, 6.8267, n4, p)
-new BoundaryCondition(n1, 'Fix', p)
+const n2 = Node.get(0, 1, p)
+const n3 = Node.get(1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
+const n4 = Node.get(-1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
+
+new Element('Truss', n1, n3, properties, p)
+new Element('Truss', n1, n4, properties, p)
+new Element('Truss', n1, n2, properties, p)
+
+new Load(20000 * Math.cos(45 * Math.PI / 180), 20000 * Math.sin(45 * Math.PI / 180), 0, n1, p)
+
+new BoundaryCondition(n2, 'Fix', p)
 new BoundaryCondition(n3, 'Fix', p)
 new BoundaryCondition(n4, 'Fix', p)
 

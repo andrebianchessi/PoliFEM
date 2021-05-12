@@ -65,91 +65,37 @@ export class StaticProblem extends Problem {
         this.U = math.usolve!(this.K!, this.F!) as Matrix
     }
 
-    plot (plotSolution: boolean) {
+    plot (structureOnly: boolean = false) {
         const displacementScaleFactor = 100
-        const arrows:Partial<Annotations>[] = []
-        const momentsX = []
-        const momentsY = []
-        const momentsText = []
-        const bcsX = []
-        const bcsY = []
-        const bcsText = []
+        const dataAndLayout = this.problemDescriptionPlotData()
+        const data = dataAndLayout[0]
+        const layout = dataAndLayout[1]
 
-        const arrowsLength = 100
-        for (const l of this.loads) {
-            const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
-            const arrowX = -l.x * scalingFactor
-            const arrowY = l.y * scalingFactor
-            arrows.push(
-                {
-                    text: Math.sqrt(l.x * l.x + l.y * l.y).toString(),
-                    x: l.node.x,
-                    y: l.node.y,
-                    xref: 'x',
-                    yref: 'y',
-                    showarrow: true,
-                    arrowhead: 5,
-                    ax: arrowX,
-                    ay: arrowY,
-                    arrowcolor: 'red',
-                    font: { color: 'red', size: 17 }
+        if(!structureOnly){
+            let first = true
+            for (const [, e] of this.elements) {
+                const xd = []
+                const yd = []
+                const displacements = []
+                for (const n of [e.n1, e.n2]) {
+                        const dx = this.U!.get([n.uIndex!, 0])
+                        const dy = this.U!.get([n.vIndex!, 0])
+                        xd.push(n.x + dx * displacementScaleFactor)
+                        yd.push(n.y + dy * displacementScaleFactor)
+                        if (n.wIndex == null) {
+                            displacements.push('dx: ' + dx + '\ndy: ' + dy)
+                        } else {
+                            displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
+                        }
                 }
-            )
-            if (l.w !== 0) {
-                momentsX.push(l.node.x)
-                momentsY.push(l.node.y)
-                momentsText.push(l.w.toString())
-            }
-        }
-        for (const b of this.boundaryConditions) {
-            bcsX.push(b.node.x)
-            bcsY.push(b.node.y)
-            if (b.value) {
-                bcsText.push(b.type + ' : ' + b.value)
-            } else {
-                bcsText.push(b.type)
-            }
-        }
-
-        const data: Plot[] = [
-            { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
-            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' }
-        ]
-
-        let first = true
-        for (const [, e] of this.elements) {
-            const x = []
-            const y = []
-            const xd = []
-            const yd = []
-            const displacements = []
-            for (const n of [e.n1, e.n2]) {
-                x.push(n.x)
-                y.push(n.y)
-                if (plotSolution) {
-                    const dx = this.U!.get([n.uIndex!, 0])
-                    const dy = this.U!.get([n.vIndex!, 0])
-                    xd.push(n.x + dx * displacementScaleFactor)
-                    yd.push(n.y + dy * displacementScaleFactor)
-                    if (n.wIndex == null) {
-                        displacements.push('dx: ' + dx + '\ndy: ' + dy)
-                    } else {
-                        displacements.push('dx: ' + dx + '\ndy: ' + dy + '\ndz:' + this.U!.get([n.wIndex!, 0]))
-                    }
+                if (!structureOnly) {
+                    data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
                 }
-            }
-            data.push({ x, y, name: 'Undeformed Structure', hoverinfo: 'none', marker: { color: 'black' }, showlegend: first })
-            if (plotSolution) {
-                data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
-            }
-
-            first = false
+                first = false
+            }   
         }
+        
 
-        const layout:Layout = {
-            hovermode: 'closest',
-            annotations: arrows
-        }
         plot(data, layout)
     }
 }

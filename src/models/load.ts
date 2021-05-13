@@ -1,5 +1,5 @@
 import { Node } from './node'
-import { StaticProblem } from './staticProblem'
+import { Problem } from './problem'
 
 export class Load {
     x: number // load on x direction
@@ -7,7 +7,7 @@ export class Load {
     w: number // load on w direction
     node: Node
 
-    constructor (x: number, y: number, w:number, node: Node, p: StaticProblem) {
+    constructor (x: number, y: number, w:number, node: Node, p: Problem) {
         this.x = x
         this.y = y
         this.w = w

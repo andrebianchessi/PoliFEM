@@ -8,6 +8,7 @@ import { BoundaryCondition } from '../models/boundaryCondition'
 import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
+import { Load } from '../models/load'
 
 export function DynamicTrussTest () {
     console.log('Dynamic truss test')
@@ -28,7 +29,8 @@ export function DynamicTrussTest () {
         new Element('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Fix', p)
-    p.plot(true)
+    new Load(100, 0, 0, Node.get(0, 0, p), p)
+    // p.plot(true)
 
     p.buildK()
     p.buildM()

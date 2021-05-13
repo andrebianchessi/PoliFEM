@@ -56,8 +56,9 @@ export class DynamicProblem extends Problem {
             const minusKuPresent : Matrix = math.multiply!(math.dotMultiply!(-1, this.K!), uPresent) as Matrix
             const uNext: Matrix = math.multiply!(math.inv!(Mdt2), math.add!(math.add!(math.add!(this.F!, minusKuPresent), _2Mdt2uPresent), minusMdt2uPast))
 
-            uPast = uPresent
+            uPast = math.clone!(uPresent)
             uPresent = uNext
+            this.U!.push(uPresent)
             t += this.timeStep
         }
     }

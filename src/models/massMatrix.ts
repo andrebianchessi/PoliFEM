@@ -29,12 +29,13 @@ export class MassMatrix {
             const A = (element.properties as TrussProperties).A
             const l = element.length()
 
-            const rhoAl = rho * A * l
+            const r = rho * A * l / 6
+            // TODO: verify matrix
             this.mLocal = math.matrix!([
-                [rhoAl, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, rhoAl, 0],
-                [0, 0, 0, 0]
+                [2 * r, 0, r, 0],
+                [0, 2 * r, 0, r],
+                [r, 0, 2 * r, 0],
+                [0, r, 0, 2 * r]
             ])
             break
         }

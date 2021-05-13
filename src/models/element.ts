@@ -1,5 +1,6 @@
 import { Angle } from './angleInRadians'
 import { FrameProperties } from './frameProperties'
+import { MassMatrix } from './massMatrix'
 import { Node } from './node'
 import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
@@ -12,6 +13,7 @@ export class Element {
     properties: FrameProperties | TrussProperties
     angle: Angle
     K: StiffnessMatrix
+    M?: MassMatrix
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
         this.type = type

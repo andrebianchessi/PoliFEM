@@ -30,13 +30,14 @@ export function DynamicTrussTest () {
     }
     new BoundaryCondition(n2!, 'Fix', p)
     new Load(1, 0, 0, Node.get(0, 0, p), p)
-    // p.plot(true)
+    p.plot()
 
     p.buildK()
     p.buildM()
     p.buildF()
     p.setInitialConditions()
+    p.applyBC()
     p.solve()
 
-    p.plot(false, 0)
+    p.plotNode(0)
 }

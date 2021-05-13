@@ -68,18 +68,19 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    plot (structureOnly: boolean = false, nodeIndex?:number) {
+    plot () {
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         plot(data, layout)
-        if (!structureOnly) {
-            const uNodeI: number[] = []
-            for (let i = 0; i < this.U!.length; i++) {
-                uNodeI.push((this.U![i]).get([nodeIndex!, 0]))
-            }
-            plot([{ x: this.t, y: uNodeI }])
+    }
+
+    plotNode (nodeIndex:number) {
+        const uNodeI: number[] = []
+        for (let i = 0; i < this.U!.length; i++) {
+            uNodeI.push((this.U![i]).get([nodeIndex!, 0]))
         }
+        plot([{ x: this.t, y: uNodeI }])
     }
 }

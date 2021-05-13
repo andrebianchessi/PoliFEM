@@ -81,9 +81,6 @@ export class Problem {
                         replaceRowAndColByZeros(this.K!, i)
                         this.K!.set([i, i], 1)
                         this.F!.set([i, 0], 0)
-                        if (this.M != null) {
-                            this.M!.set([i, i], 0)
-                        }
                     }
                 }
                 break

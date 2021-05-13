@@ -18,6 +18,7 @@ export class Problem {
     K?: Matrix
     F?: Matrix
     U?: Matrix | Matrix[]
+    M?: Matrix
 
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
@@ -78,8 +79,11 @@ export class Problem {
                 for (const i of [b.node.uIndex, b.node.vIndex, b.node.wIndex]) {
                     if (i != null) {
                         replaceRowAndColByZeros(this.K!, i)
-                                this.K!.set([i, i], 1)
-                                this.F!.set([i, 0], 0)
+                        this.K!.set([i, i], 1)
+                        this.F!.set([i, 0], 0)
+                        if (this.M != null) {
+                            this.M!.set([i, i], 0)
+                        }
                     }
                 }
                 break

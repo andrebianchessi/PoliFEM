@@ -15,7 +15,7 @@ export function DynamicTrussTest () {
 
     const timeStep = 0.1
     const duration = 1
-    const nElements = 50
+    const nElements = 3
     const finalX = 300
     const properties = { E: 206000000000, A: 1 / 10000, rho: 1 }
 

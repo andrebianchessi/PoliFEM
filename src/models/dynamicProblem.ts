@@ -9,16 +9,18 @@ export class DynamicProblem extends Problem {
     M?: Matrix
     timeStep: number
     duration: number
+    t: number[]
 
     constructor (timeStep: number, duration: number) {
         // Initial conditions are all asumed to be zero
         super()
         this.timeStep = timeStep
         this.duration = duration
+        this.t = []
     }
 
     setInitialConditions () {
-        const U0 = math.zeros!([this.dof, 1]) as Matrix
+        const U0: Matrix = math.zeros!([this.dof, 1], 'sparse') as Matrix
         this.U = [U0]
     }
 
@@ -49,25 +51,35 @@ export class DynamicProblem extends Problem {
         let t = 0
         let uPast = this.U![0]
         let uPresent = this.U![0]
+        this.t.push(t)
+        this.U?.push(uPresent)
         while (t < this.duration) {
+            t += this.timeStep
             const Mdt2: Matrix = math.dotMultiply!(1 / this.timeStep * this.timeStep, this.M!) as Matrix
             const minusMdt2uPast: Matrix = math.multiply!(math.dotMultiply!(-1 / this.timeStep * this.timeStep, this.M!), uPast) as Matrix
             const _2Mdt2uPresent: Matrix = math.multiply!(math.dotMultiply!(2 / this.timeStep * this.timeStep, this.M!), uPresent) as Matrix
             const minusKuPresent : Matrix = math.multiply!(math.dotMultiply!(-1, this.K!), uPresent) as Matrix
             const uNext: Matrix = math.multiply!(math.inv!(Mdt2), math.add!(math.add!(math.add!(this.F!, minusKuPresent), _2Mdt2uPresent), minusMdt2uPast))
 
-            uPast = math.clone!(uPresent)
+            uPast = uPresent
             uPresent = uNext
             this.U!.push(uPresent)
-            t += this.timeStep
+            this.t.push(t)
         }
     }
 
-    plot (structureOnly: boolean = false) {
+    plot (structureOnly: boolean = false, nodeIndex?:number) {
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         plot(data, layout)
+        if (!structureOnly) {
+            const uNodeI: number[] = []
+            for (let i = 0; i < this.U!.length; i++) {
+                uNodeI.push((this.U![i]).get([nodeIndex!, 0]))
+            }
+            plot([{ x: this.t, y: uNodeI }])
+        }
     }
 }

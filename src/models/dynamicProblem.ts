@@ -52,7 +52,9 @@ export class DynamicProblem extends Problem {
 
     solve () {
         let t = 0
-        let uPast = this.U![0]
+        const udd0 = math.multiply!(math.inv!(this.M!), math.add!(this.F!, math.multiply!(math.multiply!(-1, this.K!), this.U![0])))
+        let uPast = math.add!(this.U![0], math.multiply!(udd0, 1 / (this.timeStep * this.timeStep)))
+
         let uPresent = this.U![0]
         while (t < this.duration) {
             const M_t2 = math.multiply!(this.M!, 1 / (this.timeStep * this.timeStep))

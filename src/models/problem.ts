@@ -85,6 +85,36 @@ export class Problem {
                 }
                 break
             }
+            case 'RollerX': {
+                for (const i of [b.node.vIndex]) {
+                    if (i != null) {
+                        replaceRowAndColByZeros(this.K!, i)
+                        this.K!.set([i, i], 1)
+                        this.F!.set([i, 0], 0)
+                    }
+                }
+                break
+            }
+            case 'RollerY': {
+                for (const i of [b.node.uIndex]) {
+                    if (i != null) {
+                        replaceRowAndColByZeros(this.K!, i)
+                        this.K!.set([i, i], 1)
+                        this.F!.set([i, 0], 0)
+                    }
+                }
+                break
+            }
+            case 'Pin': {
+                for (const i of [b.node.uIndex, b.node.vIndex]) {
+                    if (i != null) {
+                        replaceRowAndColByZeros(this.K!, i)
+                        this.K!.set([i, i], 1)
+                        this.F!.set([i, 0], 0)
+                    }
+                }
+                break
+            }
             }
         }
     }

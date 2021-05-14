@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
+import { Element } from './element'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
 import { Node } from './node'
@@ -83,5 +84,19 @@ export class DynamicProblem extends Problem {
             uNodeI.push((this.U![i]).get([node.uIndex!, 0]))
         }
         plot([{ x: this.t, y: uNodeI }])
+    }
+
+    plotElementTension (e: Element) {
+        const sigmaElementI: number[] = []
+        for (let i = 0; i < this.U!.length; i++) {
+            const c = e.angle.c()
+            const s = e.angle.s()
+            const u1 = this.U![i].get([e.n1.uIndex!, 0])
+            const v1 = this.U![i].get([e.n1.uIndex!, 0])
+            const u2 = this.U![i].get([e.n2.uIndex!, 0])
+            const v2 = this.U![i].get([e.n2.uIndex!, 0])
+            sigmaElementI.push(e.properties.E / e.length() * (-c * u1 + -s * v1 + c * u2 + s * v2))
+        }
+        plot([{ x: this.t, y: sigmaElementI }])
     }
 }

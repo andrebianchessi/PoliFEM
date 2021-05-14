@@ -44,7 +44,7 @@ export class DynamicProblem extends Problem {
             for (let i = 0; i < localIndices.length; i++) {
                 for (let j = 0; j < localIndices.length; j++) {
                     const initialVal = this.M!.get([globalIndices[i]!, globalIndices[j]!])!
-                    this.M!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.M!.m.get([localIndices[i]!, localIndices[j]!]))
+                    this.M!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.M!.m!.get([localIndices[i]!, localIndices[j]!]))
                 }
             }
         }

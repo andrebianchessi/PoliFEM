@@ -14,7 +14,7 @@ export function DynamicTrussTest () {
     console.log('Dynamic truss test')
 
     const timeStep = 0.000000000001
-    const duration = 50000 * timeStep
+    const duration = 0.00000005
     const nElements = 50
     const finalX = 20
     const properties = { E: 30000000, A: 1, rho: 7.4 / 10000 }

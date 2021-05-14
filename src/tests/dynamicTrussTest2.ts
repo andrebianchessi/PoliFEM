@@ -28,17 +28,12 @@ export function DynamicTrussTest2 () {
     new Element('Truss', n1, n3, properties, p)
 
     new BoundaryCondition(n1!, 'Pin', p)
-    new BoundaryCondition(n2!, 'RollerX', p)
-    // p.plot()
+    new BoundaryCondition(n3!, 'RollerX', p)
+    p.plot()
 
     p.buildK()
     p.buildM()
     p.buildF()
     p.applyBC()
-    console.log(p.K?.toString())
     p.setInitialConditions()
-    // p.solve()
-
-    // // p.plotNodeXDisplacement(Node.get(0, 0, p))
-    // p.plotElementTension(p.elements.get(0)!)
 }

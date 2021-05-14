@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
 import { MassMatrix } from './massMatrix'
@@ -52,13 +53,14 @@ export class DynamicProblem extends Problem {
         let uPast = this.U![0]
         let uPresent = this.U![0]
         while (t < this.duration) {
-            const Mdt2: Matrix = math.dotMultiply!(1 / (this.timeStep * this.timeStep), this.M!) as Matrix
-            const minusMdt2uPast: Matrix = math.multiply!(math.dotMultiply!(-1 / (this.timeStep * this.timeStep), this.M!), uPast) as Matrix
-            const _2Mdt2uPresent: Matrix = math.multiply!(math.dotMultiply!(2 / (this.timeStep * this.timeStep), this.M!), uPresent) as Matrix
-            const minusKuPresent : Matrix = math.multiply!(math.dotMultiply!(-1, this.K!), uPresent) as Matrix
-            const uNext: Matrix = math.multiply!(math.inv!(Mdt2), math.add!(math.add!(math.add!(this.F!, minusKuPresent), _2Mdt2uPresent), minusMdt2uPast))
+            const M_t2 = math.multiply!(this.M!, 1 / (this.timeStep * this.timeStep))
+            const minusKUpresent = math.multiply!(math.multiply!(-1, this.K!), uPresent)
+            const minusM_t2Upast = math.multiply!(math.multiply!(this.M!, -1 / (this.timeStep * this.timeStep)), uPast)
+            const _2M_t2UPresent = math.multiply!(math.multiply!(this.M!, 2 / (this.timeStep * this.timeStep)), uPresent)
 
-            uPast = uPresent
+            const uNext = math.multiply!(math.inv!(M_t2), math.add!(this.F!, math.add!(minusKUpresent, math.add!(_2M_t2UPresent, minusM_t2Upast))))
+
+            uPast = math.clone!(uPresent)
             uPresent = uNext
             this.U!.push(uPresent)
             this.t.push(t)

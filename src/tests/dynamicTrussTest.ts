@@ -13,11 +13,11 @@ import { Load } from '../models/load'
 export function DynamicTrussTest () {
     console.log('Dynamic truss test')
 
-    const timeStep = 0.0000001
-    const duration = 0.000001
-    const nElements = 30
-    const finalX = 300
-    const properties = { E: 206000000000, A: 1 / 10000, rho: 1 }
+    const timeStep = 0.01
+    const duration = 500 * timeStep
+    const nElements = 100
+    const finalX = 20
+    const properties = { E: 30, A: 1, rho: 7.4 }
 
     const p = new DynamicProblem(timeStep, duration)
     const elementLength = finalX / nElements
@@ -29,7 +29,7 @@ export function DynamicTrussTest () {
         new Element('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Fix', p)
-    new Load(1, 0, 0, Node.get(0, 0, p), p)
+    new Load(100, 0, 0, Node.get(0, 0, p), p)
     p.plot()
 
     p.buildK()

@@ -51,13 +51,10 @@ export class DynamicProblem extends Problem {
         let t = 0
         let uPast = this.U![0]
         let uPresent = this.U![0]
-        this.t.push(t)
-        this.U?.push(uPresent)
         while (t < this.duration) {
-            t += this.timeStep
-            const Mdt2: Matrix = math.dotMultiply!(1 / this.timeStep * this.timeStep, this.M!) as Matrix
-            const minusMdt2uPast: Matrix = math.multiply!(math.dotMultiply!(-1 / this.timeStep * this.timeStep, this.M!), uPast) as Matrix
-            const _2Mdt2uPresent: Matrix = math.multiply!(math.dotMultiply!(2 / this.timeStep * this.timeStep, this.M!), uPresent) as Matrix
+            const Mdt2: Matrix = math.dotMultiply!(1 / (this.timeStep * this.timeStep), this.M!) as Matrix
+            const minusMdt2uPast: Matrix = math.multiply!(math.dotMultiply!(-1 / (this.timeStep * this.timeStep), this.M!), uPast) as Matrix
+            const _2Mdt2uPresent: Matrix = math.multiply!(math.dotMultiply!(2 / (this.timeStep * this.timeStep), this.M!), uPresent) as Matrix
             const minusKuPresent : Matrix = math.multiply!(math.dotMultiply!(-1, this.K!), uPresent) as Matrix
             const uNext: Matrix = math.multiply!(math.inv!(Mdt2), math.add!(math.add!(math.add!(this.F!, minusKuPresent), _2Mdt2uPresent), minusMdt2uPast))
 
@@ -65,6 +62,7 @@ export class DynamicProblem extends Problem {
             uPresent = uNext
             this.U!.push(uPresent)
             this.t.push(t)
+            t += this.timeStep
         }
     }
 

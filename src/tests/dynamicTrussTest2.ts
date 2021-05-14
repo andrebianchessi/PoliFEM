@@ -27,8 +27,8 @@ export function DynamicTrussTest2 () {
     new Element('Truss', n2, n3, properties, p)
     new Element('Truss', n1, n3, properties, p)
 
-    // new BoundaryCondition(n2!, 'Fix', p)
-    // new Load(100, 0, 0, Node.get(0, 0, p), p)
+    new BoundaryCondition(n1!, 'Pin', p)
+    new BoundaryCondition(n2!, 'RollerX', p)
     // p.plot()
 
     p.buildK()

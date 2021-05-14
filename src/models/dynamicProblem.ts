@@ -3,6 +3,7 @@ import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
+import { Node } from './node'
 import { Problem } from './problem'
 
 export class DynamicProblem extends Problem {
@@ -76,10 +77,10 @@ export class DynamicProblem extends Problem {
         plot(data, layout)
     }
 
-    plotNode (nodeIndex:number) {
+    plotNodeXDisplacement (node: Node) {
         const uNodeI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
-            uNodeI.push((this.U![i]).get([nodeIndex!, 0]))
+            uNodeI.push((this.U![i]).get([node.uIndex!, 0]))
         }
         plot([{ x: this.t, y: uNodeI }])
     }

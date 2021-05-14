@@ -29,7 +29,7 @@ export function DynamicTrussTest () {
         new Element('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Fix', p)
-    new Load(0.0001, 0, 0, Node.get(0, 0, p), p)
+    new Load(0.0000001, 0, 0, Node.get(0, 0, p), p)
     p.plot()
 
     p.buildK()
@@ -39,5 +39,5 @@ export function DynamicTrussTest () {
     p.applyBC()
     p.solve()
 
-    p.plotNode(0)
+    p.plotNodeXDisplacement(Node.get(0, 0, p))
 }

@@ -13,7 +13,7 @@ import { Load } from '../models/load'
 export function DynamicTrussTest () {
     console.log('Dynamic truss test')
 
-    const timeStep = 0.000001
+    const timeStep = 0.00000000001
     const duration = 10 * timeStep
     const nElements = 100
     const finalX = 20

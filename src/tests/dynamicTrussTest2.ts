@@ -15,7 +15,7 @@ export function DynamicTrussTest2 () {
 
     const timeStep = 0.000001
     const duration = 10 * timeStep
-    const properties = { E: 30, A: 10, rho: 0.1 }
+    const properties = { E: 30, A: 10, rho: 0.01 }
 
     const p = new DynamicProblem(timeStep, duration)
 
@@ -29,7 +29,7 @@ export function DynamicTrussTest2 () {
 
     new BoundaryCondition(n1!, 'Pin', p)
     new BoundaryCondition(n3!, 'RollerX', p)
-    p.plot()
+    // p.plot()
 
     p.buildK()
     p.buildM()

@@ -52,24 +52,34 @@ export class DynamicProblem extends Problem {
 
     solve () {
         let t = 0
-        const udd0 = math.multiply!(math.inv!(this.M!), math.add!(this.F!, math.multiply!(math.multiply!(-1, this.K!), this.U![0])))
-        let uPast = math.add!(this.U![0], math.multiply!(udd0, 1 / (this.timeStep * this.timeStep)))
-
         let uPresent = this.U![0]
         while (t < this.duration) {
-            const M_t2 = math.multiply!(this.M!, 1 / (this.timeStep * this.timeStep))
-            const minusKUpresent = math.multiply!(math.multiply!(-1, this.K!), uPresent)
-            const minusM_t2Upast = math.multiply!(math.multiply!(this.M!, -1 / (this.timeStep * this.timeStep)), uPast)
-            const _2M_t2UPresent = math.multiply!(math.multiply!(this.M!, 2 / (this.timeStep * this.timeStep)), uPresent)
-
-            const uNext = math.multiply!(math.inv!(M_t2), math.add!(this.F!, math.add!(minusKUpresent, math.add!(_2M_t2UPresent, minusM_t2Upast))))
-
-            uPast = math.clone!(uPresent)
-            uPresent = uNext
+            const du = math.multiply!(math.inv!(this.M!), math.add!(this.F!, math.multiply!(-1, math.multiply!(this.K!, uPresent)))) as Matrix
+            uPresent = math.add!(uPresent, math.multiply!(this.timeStep, du)) as Matrix
+            t += this.timeStep
             this.U!.push(uPresent)
             this.t.push(t)
-            t += this.timeStep
         }
+
+        // let t = 0
+        // const udd0 = math.multiply!(math.inv!(this.M!), math.add!(this.F!, math.multiply!(math.multiply!(-1, this.K!), this.U![0])))
+        // let uPast = math.add!(this.U![0], math.multiply!(udd0, 1 / (this.timeStep * this.timeStep)))
+
+        // let uPresent = this.U![0]
+        // while (t < this.duration) {
+        //     const M_t2 = math.multiply!(this.M!, 1 / (this.timeStep * this.timeStep))
+        //     const minusKUpresent = math.multiply!(math.multiply!(-1, this.K!), uPresent)
+        //     const minusM_t2Upast = math.multiply!(math.multiply!(this.M!, -1 / (this.timeStep * this.timeStep)), uPast)
+        //     const _2M_t2UPresent = math.multiply!(math.multiply!(this.M!, 2 / (this.timeStep * this.timeStep)), uPresent)
+
+        //     const uNext = math.multiply!(math.inv!(M_t2), math.add!(this.F!, math.add!(minusKUpresent, math.add!(_2M_t2UPresent, minusM_t2Upast))))
+
+        //     uPast = math.clone!(uPresent)
+        //     uPresent = uNext
+        //     this.U!.push(uPresent)
+        //     this.t.push(t)
+        //     t += this.timeStep
+        // }
     }
 
     plot () {

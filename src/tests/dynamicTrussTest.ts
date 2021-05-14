@@ -17,7 +17,7 @@ export function DynamicTrussTest () {
     const duration = 1000 * timeStep
     const nElements = 100
     const finalX = 20
-    const properties = { E: 30, A: 1, rho: 7.4 }
+    const properties = { E: 30000000, A: 1, rho: 7.4 / 10000 }
 
     const p = new DynamicProblem(timeStep, duration)
     const elementLength = finalX / nElements

@@ -48,7 +48,7 @@ export class Problem {
             for (let i = 0; i < localIndices.length; i++) {
                 for (let j = 0; j < localIndices.length; j++) {
                     const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
-            this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
+                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
                 }
             }
         }

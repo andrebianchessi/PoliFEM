@@ -53,8 +53,9 @@ export class DynamicProblem extends Problem {
     solve () {
         let t = 0
         let uPresent = this.U![0]
+        const mInv = math.inv!(this.M!)
         while (t < this.duration) {
-            const du = math.multiply!(math.inv!(this.M!), math.add!(this.F!, math.multiply!(-1, math.multiply!(this.K!, uPresent)))) as Matrix
+            const du = math.multiply!(mInv, math.add!(this.F!, math.multiply!(-1, math.multiply!(this.K!, uPresent)))) as Matrix
             uPresent = math.add!(uPresent, math.multiply!(this.timeStep, du)) as Matrix
             t += this.timeStep
             this.U!.push(uPresent)

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { DynamicTrussTest } from './tests/dynamicTrussTest'
 import { DynamicTrussTest2 } from './tests/dynamicTrussTest2'
 import { StaticTrussTest } from './tests/staticTrussTest'

@@ -16,23 +16,22 @@ export class MassMatrix {
             const A = (element.properties as TrussProperties).A
             const l = element.length()
 
-            const r = rho * A * l / 2
             // Lumped
-            // this.m = math.matrix!([
-            //     [r, 0, 0, 0],
-            //     [0, r, 0, 0],
-            //     [0, 0, r, 0],
-            //     [0, 0, 0, r]
-            // ])
-            // Consistent
-            this.m = math.multiply!(rho * A * l / 6,
-                math.matrix!([
-                    [2, 0, 1, 0],
-                    [0, 2, 0, 1],
-                    [1, 0, 2, 0],
-                    [0, 1, 0, 2]
-                ])) as Matrix
-            break
+            this.m = math.multiply!(rho * A * l / 2, math.matrix!([
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ])) as Matrix
+            // // Consistent
+            // this.m = math.multiply!(rho * A * l / 6,
+            //     math.matrix!([
+            //         [2, 0, 1, 0],
+            //         [0, 2, 0, 1],
+            //         [1, 0, 2, 0],
+            //         [0, 1, 0, 2]
+            //     ])) as Matrix
+            // break
         }
         }
     }

@@ -14,7 +14,7 @@ export function DynamicTrussTest () {
     console.log('Dynamic truss test')
 
     const timeStep = 0.0000001 / 1000
-    const duration = 0.05 / 1000
+    const duration = 100 * timeStep
     const nElements = 50
     const finalX = 20
     const properties = { E: 30 * 1000000, A: 1, rho: 7.4 / 10000 }
@@ -30,7 +30,7 @@ export function DynamicTrussTest () {
     }
     new BoundaryCondition(n2!, 'Fix', p)
     new Load(100, 0, 0, Node.get(0, 0, p), p)
-    p.plot()
+    // p.plot()
 
     p.buildK()
     p.buildM()

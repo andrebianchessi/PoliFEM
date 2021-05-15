@@ -23,7 +23,6 @@ export class DynamicProblem extends Problem {
     Udotdot?: Matrix[]
 
     constructor (timeStep: number, duration: number) {
-        // Initial conditions are all asumed to be zero
         super()
         this.timeStep = timeStep
         this.duration = duration
@@ -31,6 +30,9 @@ export class DynamicProblem extends Problem {
         this.dynamicLoads = []
     }
 
+    /**
+     * Sets all initial displacements and velocities to zero
+     */
     setInitialConditions () {
         this.U = [math.zeros!([this.dof, 1], 'sparse') as Matrix]
         this.Udot = [math.zeros!([this.dof, 1], 'sparse') as Matrix]

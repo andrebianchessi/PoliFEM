@@ -14,6 +14,7 @@ export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
     M?: Matrix
     Minv?: Matrix
+    FDynamic?: (t:number) => Matrix
     timeStep: number
     duration: number
     t: number[]
@@ -57,6 +58,27 @@ export class DynamicProblem extends Problem {
             }
         }
         this.Minv = math.inv!(this.M)
+    }
+
+    buildFDynamic () {
+        // Initialize vector
+        this.FDynamic = function (t:number) {
+            const Ft = math.zeros!([this.dof, 1], 'sparse') as Matrix
+
+            // Build load vector
+            for (const l of this.dynamicLoads) {
+                if (l.node.uIndex != null) {
+                this.F!.set([l.node.uIndex!, 0], this.F!.get([l.node.uIndex!, 0]) + l.x(t))
+                }
+                if (l.node.vIndex != null) {
+                this.F!.set([l.node.vIndex!, 0], this.F!.get([l.node.vIndex!, 0]) + l.y(t))
+                }
+                if (l.node.wIndex != null) {
+                this.F!.set([l.node.wIndex!, 0], this.F!.get([l.node.wIndex!, 0]) + l.w(t))
+                }
+            }
+            return Ft
+        }
     }
 
     solveTimeHistory () {

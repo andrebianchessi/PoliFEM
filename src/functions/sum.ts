@@ -6,7 +6,7 @@ export function sum (x: (Matrix|number)[]) {
         throw Error('Less than two values provided for multiplication')
     }
     let result = x[0]
-    for (let i = 1; i < x.length - 1; i++) {
+    for (let i = 1; i < x.length; i++) {
         result = math.add!(result, x[i]) as (Matrix|number)
     }
     return result

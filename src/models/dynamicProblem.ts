@@ -15,14 +15,14 @@ export class DynamicProblem extends Problem {
     M?: Matrix
     Minv?: Matrix
     FDynamic?: (t:number) => Matrix
-    timeStep: number
-    duration: number
+    timeStep?: number
+    duration?: number
     t: number[]
     U?: Matrix[]
     Udot?: Matrix[]
     Udotdot?: Matrix[]
 
-    constructor (timeStep: number, duration: number) {
+    constructor (timeStep?: number, duration?: number) {
         super()
         this.timeStep = timeStep
         this.duration = duration
@@ -92,7 +92,7 @@ export class DynamicProblem extends Problem {
     solveTimeHistory () {
         this.build()
 
-        const dt = this.timeStep
+        const dt = this.timeStep!
         let t = 0
         let uPresent = this.U![0]
         this.Udotdot = []
@@ -101,7 +101,7 @@ export class DynamicProblem extends Problem {
         )
         let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
 
-        while (t < this.duration) {
+        while (t < this.duration!) {
             const uNext = mult([
                 mult([dt * dt, this.Minv!]),
                 sum([
@@ -116,7 +116,7 @@ export class DynamicProblem extends Problem {
             uPast = math.clone!(uPresent)
             uPresent = uNext
             this.U!.push(uPresent)
-            t += this.timeStep
+            t += this.timeStep!
             this.t.push(t)
         }
     }

@@ -3,6 +3,7 @@ import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { Load } from '../models/load'
+import { DynamicLoad } from '../models/dynamicLoad'
 
 /**
  * Test of an axial impact on bar fixed on one end
@@ -26,12 +27,14 @@ export function DynamicTrussTest1 () {
         new Element('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Pin', p)
-    new Load(100, 0, 0, Node.get(0, 0, p), p)
+    // new Load(100, 0, 0, Node.get(0, 0, p), p)
+    new DynamicLoad((t:number) => 100, (t:number) => 0, (t:number) => 0, Node.get(0, 0, p), p)
     p.plot()
 
     p.buildK()
     p.buildM()
     p.buildF()
+    p.buildFDynamic()
     p.setInitialConditions()
     p.applyBC()
     p.solveTimeHistory()

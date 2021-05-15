@@ -68,13 +68,13 @@ export class DynamicProblem extends Problem {
             // Build load vector
             for (const l of this.dynamicLoads) {
                 if (l.node.uIndex != null) {
-                this.F!.set([l.node.uIndex!, 0], this.F!.get([l.node.uIndex!, 0]) + l.x(t))
+                Ft!.set([l.node.uIndex!, 0], this.F!.get([l.node.uIndex!, 0]) + l.x(t))
                 }
                 if (l.node.vIndex != null) {
-                this.F!.set([l.node.vIndex!, 0], this.F!.get([l.node.vIndex!, 0]) + l.y(t))
+                Ft!.set([l.node.vIndex!, 0], this.F!.get([l.node.vIndex!, 0]) + l.y(t))
                 }
                 if (l.node.wIndex != null) {
-                this.F!.set([l.node.wIndex!, 0], this.F!.get([l.node.wIndex!, 0]) + l.w(t))
+                Ft!.set([l.node.wIndex!, 0], this.F!.get([l.node.wIndex!, 0]) + l.w(t))
                 }
             }
             return Ft
@@ -87,7 +87,7 @@ export class DynamicProblem extends Problem {
         let uPresent = this.U![0]
         this.Udotdot = []
         this.Udotdot!.push(
-            mult([this.Minv!, sum([this.F!, mult([-1, this.K!, this.U![0]])])]) as Matrix
+            mult([this.Minv!, sum([this.F!, this.FDynamic!(t), mult([-1, this.K!, this.U![0]])])]) as Matrix
         )
         let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
 
@@ -96,6 +96,7 @@ export class DynamicProblem extends Problem {
                 mult([dt * dt, this.Minv!]),
                 sum([
                     this.F!,
+                    this.FDynamic!(t),
                     mult([-1, this.K!, uPresent]),
                     mult([2 / (dt * dt), this.M!, uPresent]),
                     mult([-1 / (dt * dt), this.M!, uPast])

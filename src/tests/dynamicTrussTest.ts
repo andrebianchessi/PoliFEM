@@ -13,11 +13,11 @@ import { Load } from '../models/load'
 export function DynamicTrussTest () {
     console.log('Dynamic truss test')
 
-    const timeStep = 0.000000000001
-    const duration = 0.00000005
+    const timeStep = 0.0000001 / 1000
+    const duration = 0.05 / 1000
     const nElements = 50
     const finalX = 20
-    const properties = { E: 30000000, A: 1, rho: 7.4 / 10000 }
+    const properties = { E: 30 * 1000000, A: 1, rho: 7.4 / 10000 }
 
     const p = new DynamicProblem(timeStep, duration)
     const elementLength = finalX / nElements

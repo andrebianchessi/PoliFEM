@@ -39,6 +39,5 @@ export function DynamicTrussTest () {
     p.applyBC()
     p.solve()
 
-    // p.plotNodeXDisplacement(Node.get(0, 0, p))
     p.plotElementTension(p.elements.get(25)!)
 }

@@ -11,6 +11,9 @@ import { Load } from '../models/load'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
 
+/**
+ * Test of a truss bar structure
+ */
 export function StaticTrussTest ():boolean {
     console.log('Static truss test')
     const p = new StaticProblem()

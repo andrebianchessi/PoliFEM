@@ -1,17 +1,14 @@
-/*
-
-Test of an axial impact on bar fixed o one end
-
-*/
-
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { Load } from '../models/load'
 
-export function DynamicTrussTest () {
-    console.log('Dynamic truss test')
+/**
+ * Test of an axial impact on bar fixed on one end
+ */
+export function DynamicTrussTest1 () {
+    console.log('Dynamic truss test 1')
 
     const timeStep = 0.0000005
     const duration = 300 * 1 / 1000000
@@ -40,4 +37,5 @@ export function DynamicTrussTest () {
     p.solveTimeHistory()
 
     p.plotElementTension(p.elements.get(25)!)
+    console.log('ok')
 }

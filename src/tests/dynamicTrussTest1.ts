@@ -20,9 +20,9 @@ export function DynamicTrussTest1 () {
     const elementLength = finalX / nElements
     let n1: Node
     let n2: Node
-    for (let x = 0; x <= finalX - elementLength; x = x + elementLength) {
-        n1 = Node.get(x, 0, p)
-        n2 = Node.get(x + elementLength, 0, p)
+    for (let i = 0; i < nElements; i++) {
+        n1 = Node.get(i * elementLength, 0, p)
+        n2 = Node.get((i + 1) * elementLength, 0, p)
         new Element('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Pin', p)

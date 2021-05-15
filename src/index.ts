@@ -4,5 +4,5 @@ import { DynamicTrussTest2 } from './tests/dynamicTrussTest2'
 import { StaticTrussTest } from './tests/staticTrussTest'
 
 // StaticTrussTest()
-// DynamicTrussTest1()
-DynamicTrussTest2()
+DynamicTrussTest1()
+// DynamicTrussTest2()

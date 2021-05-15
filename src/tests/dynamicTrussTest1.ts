@@ -27,14 +27,12 @@ export function DynamicTrussTest1 () {
         new Element('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Pin', p)
-    // new Load(100, 0, 0, Node.get(0, 0, p), p)
     new DynamicLoad((t:number) => 100, (t:number) => 0, (t:number) => 0, Node.get(0, 0, p), p)
     p.plot()
 
     p.buildK()
     p.buildM()
     p.buildF()
-    p.buildFDynamic()
     p.setInitialConditions()
     p.applyBC()
     p.solveTimeHistory()

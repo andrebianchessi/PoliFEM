@@ -60,8 +60,8 @@ export class DynamicProblem extends Problem {
         this.Minv = math.inv!(this.M)
     }
 
-    buildFDynamic () {
-        // Initialize vector
+    buildF () {
+        super.buildF()
         this.FDynamic = function (t:number) {
             const Ft = math.zeros!([this.dof, 1], 'sparse') as Matrix
 

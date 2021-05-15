@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
+import { mult } from '../functions/mult'
+import { sum } from '../functions/sum'
 import { Element } from './element'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
@@ -9,7 +11,10 @@ import { Problem } from './problem'
 
 export class DynamicProblem extends Problem {
     U?: Matrix[]
+    Udot?: Matrix[]
+    Udotdot?: Matrix[]
     M?: Matrix
+    Minv?: Matrix
     timeStep: number
     duration: number
     t: number[]
@@ -23,8 +28,8 @@ export class DynamicProblem extends Problem {
     }
 
     setInitialConditions () {
-        const U0: Matrix = math.zeros!([this.dof, 1], 'sparse') as Matrix
-        this.U = [U0]
+        this.U = [math.zeros!([this.dof, 1], 'sparse') as Matrix]
+        this.Udot = [math.zeros!([this.dof, 1], 'sparse') as Matrix]
     }
 
     buildM () {
@@ -48,39 +53,46 @@ export class DynamicProblem extends Problem {
                 }
             }
         }
+        this.Minv = math.inv!(this.M)
     }
 
     solve () {
-        let t = 0
-        let uPresent = this.U![0]
-        const mInv = math.inv!(this.M!)
-        while (t < this.duration) {
-            const du = math.multiply!(mInv, math.add!(this.F!, math.multiply!(-1, math.multiply!(this.K!, uPresent)))) as Matrix
-            uPresent = math.add!(uPresent, math.multiply!(this.timeStep, du)) as Matrix
-            t += this.timeStep
-            this.U!.push(uPresent)
-            this.t.push(t)
-        }
-
         // let t = 0
-        // const udd0 = math.multiply!(math.inv!(this.M!), math.add!(this.F!, math.multiply!(math.multiply!(-1, this.K!), this.U![0])))
-        // let uPast = math.add!(this.U![0], math.multiply!(udd0, 1 / (this.timeStep * this.timeStep)))
-
         // let uPresent = this.U![0]
+        // const mInv = math.inv!(this.M!)
         // while (t < this.duration) {
-        //     const M_t2 = math.multiply!(this.M!, 1 / (this.timeStep * this.timeStep))
-        //     const minusKUpresent = math.multiply!(math.multiply!(-1, this.K!), uPresent)
-        //     const minusM_t2Upast = math.multiply!(math.multiply!(this.M!, -1 / (this.timeStep * this.timeStep)), uPast)
-        //     const _2M_t2UPresent = math.multiply!(math.multiply!(this.M!, 2 / (this.timeStep * this.timeStep)), uPresent)
-
-        //     const uNext = math.multiply!(math.inv!(M_t2), math.add!(this.F!, math.add!(minusKUpresent, math.add!(_2M_t2UPresent, minusM_t2Upast))))
-
-        //     uPast = math.clone!(uPresent)
-        //     uPresent = uNext
+        //     const du = math.multiply!(mInv, math.add!(this.F!, math.multiply!(-1, math.multiply!(this.K!, uPresent)))) as Matrix
+        //     uPresent = math.add!(uPresent, math.multiply!(this.timeStep, du)) as Matrix
+        //     t += this.timeStep
         //     this.U!.push(uPresent)
         //     this.t.push(t)
-        //     t += this.timeStep
         // }
+        const dt = this.timeStep
+        let t = 0
+        let uPresent = this.U![0]
+        this.Udotdot = []
+        this.Udotdot!.push(
+            mult([this.Minv!, sum([this.F!, mult([-1, this.K!, this.U![0]])])]) as Matrix
+        )
+        let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
+
+        while (t < this.duration) {
+            const uNext = mult([
+                mult([dt * dt, this.Minv!]),
+                sum([
+                    this.F!,
+                    mult([-1, this.K!, uPresent]),
+                    mult([2 / (dt * dt), this.M!, uPresent]),
+                    mult([-1 / (dt * dt), this.M!, uPast])
+                ])
+            ]) as Matrix
+
+            uPast = math.clone!(uPresent)
+            uPresent = uNext
+            this.U!.push(uPresent)
+            t += this.timeStep
+            this.t.push(t)
+        }
     }
 
     plot () {

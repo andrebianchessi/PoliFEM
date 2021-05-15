@@ -1,4 +1,4 @@
-import { Matrix } from 'mathjs'
+import { cos, Matrix } from 'mathjs'
 import { math } from './math'
 import { plot } from 'nodeplotlib'
 import { Problem } from './problem'
@@ -12,8 +12,7 @@ export class StaticProblem extends Problem {
         this.U = math.usolve!(this.K!, this.F!) as Matrix
     }
 
-    plot (structureOnly: boolean = false) {
-        const displacementScaleFactor = 100
+    plot (structureOnly: boolean = false, displacementScaleFactor: number = 100) {
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]

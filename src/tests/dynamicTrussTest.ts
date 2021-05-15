@@ -37,7 +37,7 @@ export function DynamicTrussTest () {
     p.buildF()
     p.setInitialConditions()
     p.applyBC()
-    p.solve()
+    p.solveTimeHistory()
 
     p.plotElementTension(p.elements.get(25)!)
 }

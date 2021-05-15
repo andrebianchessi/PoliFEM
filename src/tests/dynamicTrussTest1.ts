@@ -29,11 +29,6 @@ export function DynamicTrussTest1 () {
     new DynamicLoad((t:number) => 100, (t:number) => 0, (t:number) => 0, Node.get(0, 0, p), p)
     p.plot()
 
-    p.buildK()
-    p.buildM()
-    p.buildF()
-    p.setInitialConditions()
-    p.applyBC()
     p.solveTimeHistory()
 
     p.plotElementTension(p.elements.get(25)!)

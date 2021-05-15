@@ -30,6 +30,12 @@ export class DynamicProblem extends Problem {
         this.dynamicLoads = []
     }
 
+    build () {
+        super.build()
+        this.buildM()
+        this.setInitialConditions()
+    }
+
     /**
      * Sets all initial displacements and velocities to zero
      */
@@ -84,6 +90,8 @@ export class DynamicProblem extends Problem {
     }
 
     solveTimeHistory () {
+        this.build()
+
         const dt = this.timeStep
         let t = 0
         let uPresent = this.U![0]

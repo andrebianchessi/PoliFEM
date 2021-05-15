@@ -6,11 +6,7 @@ import { Problem } from './problem'
 export class StaticProblem extends Problem {
     U?: Matrix
     solve () {
-        this.buildK()
-
-        this.buildF()
-
-        this.applyBC()
+        this.build()
 
         // Solve linear system
         this.U = math.usolve!(this.K!, this.F!) as Matrix

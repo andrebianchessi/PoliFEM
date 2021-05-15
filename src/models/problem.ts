@@ -30,6 +30,12 @@ export class Problem {
         this.dof = 0
     }
 
+    build () {
+        this.buildK()
+        this.buildF()
+        this.applyBC()
+    }
+
     buildK () {
         // Initialize matrix
         this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix

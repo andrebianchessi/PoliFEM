@@ -13,8 +13,8 @@ import { Load } from '../models/load'
 export function DynamicTrussTest () {
     console.log('Dynamic truss test')
 
-    const timeStep = 0.0000001 / 1000
-    const duration = 100 * timeStep
+    const timeStep = 0.000001
+    const duration = 400 * timeStep
     const nElements = 50
     const finalX = 20
     const properties = { E: 30 * 1000000, A: 1, rho: 7.4 / 10000 }
@@ -28,7 +28,7 @@ export function DynamicTrussTest () {
         n2 = Node.get(x + elementLength, 0, p)
         new Element('Truss', n1, n2, properties, p)
     }
-    new BoundaryCondition(n2!, 'Fix', p)
+    new BoundaryCondition(n2!, 'Pin', p)
     new Load(100, 0, 0, Node.get(0, 0, p), p)
     // p.plot()
 

@@ -3,6 +3,7 @@ import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
 import { mult } from '../functions/mult'
 import { sum } from '../functions/sum'
+import { DynamicLoad } from './dynamicLoad'
 import { Element } from './element'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
@@ -10,14 +11,15 @@ import { Node } from './node'
 import { Problem } from './problem'
 
 export class DynamicProblem extends Problem {
-    U?: Matrix[]
-    Udot?: Matrix[]
-    Udotdot?: Matrix[]
+    dynamicLoads: DynamicLoad[]
     M?: Matrix
     Minv?: Matrix
     timeStep: number
     duration: number
     t: number[]
+    U?: Matrix[]
+    Udot?: Matrix[]
+    Udotdot?: Matrix[]
 
     constructor (timeStep: number, duration: number) {
         // Initial conditions are all asumed to be zero
@@ -25,6 +27,7 @@ export class DynamicProblem extends Problem {
         this.timeStep = timeStep
         this.duration = duration
         this.t = []
+        this.dynamicLoads = []
     }
 
     setInitialConditions () {

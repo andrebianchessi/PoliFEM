@@ -179,7 +179,6 @@ export class DynamicProblem extends Problem {
             const xd = []
             const yd = []
             for (const n of [e.n1, e.n2]) {
-                console.log(this.ModesOfVibration[i])
                 const dx = this.ModesOfVibration[i].get([0, n.uIndex!])
                 const dy = this.ModesOfVibration[i].get([0, n.vIndex!])
                 xd.push(n.x + dx * displacementScaleFactor)

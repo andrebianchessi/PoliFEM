@@ -20,6 +20,7 @@ export class Problem {
     F?: Matrix
     U?: Matrix | Matrix[]
     M?: Matrix
+    DofModifiedByBC: Map<number, boolean>
 
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
@@ -29,6 +30,7 @@ export class Problem {
         this.loads = []
         this.boundaryConditions = []
         this.dof = 0
+        this.DofModifiedByBC = new Map<number, boolean>()
     }
 
     build () {

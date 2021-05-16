@@ -5,7 +5,8 @@ import { BoundaryCondition } from './boundaryCondition'
 import { Annotations } from 'plotly.js'
 import { Layout, Plot, plot } from 'nodeplotlib'
 import { Matrix } from 'mathjs'
-import { math, replaceRowAndColByZeros } from './math'
+import { math } from './math'
+import { replaceRowAndColByZeros } from '../functions/matrixUtils'
 
 export class Problem {
     dof: number // degrees of freedom

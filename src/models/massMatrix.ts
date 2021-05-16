@@ -23,7 +23,7 @@ export class MassMatrix {
                 [0, 0, 1, 0],
                 [0, 0, 0, 1]
             ])) as Matrix
-            // // Consistent
+            // Consistent
             // this.m = math.multiply!(rho * A * l / 6,
             //     math.matrix!([
             //         [2, 0, 1, 0],
@@ -31,7 +31,7 @@ export class MassMatrix {
             //         [1, 0, 2, 0],
             //         [0, 1, 0, 2]
             //     ])) as Matrix
-            // break
+            break
         }
         }
     }

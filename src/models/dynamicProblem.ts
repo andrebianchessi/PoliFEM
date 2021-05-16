@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
+import { getCol } from '../functions/matrixUtils'
 import { mult } from '../functions/mult'
-import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 import { sum } from '../functions/sum'
 import { DynamicLoad } from './dynamicLoad'
 import { Element } from './element'
@@ -122,17 +122,16 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveModal (): number[] {
+    solveModal (): {frequencies: number[], displacements: Matrix[]} {
         this.build()
-        PrintSparseMatrix(this.K!)
-        PrintSparseMatrix(this.M!)
-        PrintSparseMatrix(mult([this.Minv!, this.K!]) as Matrix)
-        const naturalFrequencies: number[] = []
+        const frequencies: number[] = []
+        const displacements: Matrix[] = []
         const eigs = math.eigs!(mult([this.Minv!, this.K!]))
         for (let i = 0; i < eigs.values.size()[0]; i++) {
-            naturalFrequencies.push(Math.sqrt(eigs.values.get([i])))
+            frequencies.push(Math.sqrt(eigs.values.get([i])))
+            displacements.push(getCol(i, eigs.vectors))
         }
-        return naturalFrequencies
+        return { frequencies, displacements }
     }
 
     plot () {

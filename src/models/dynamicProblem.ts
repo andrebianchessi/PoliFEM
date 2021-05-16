@@ -132,8 +132,20 @@ export class DynamicProblem extends Problem {
         const displacements: Matrix[] = []
         const eigs = math.eigs!(mult([this.Minv!, this.K!]))
         for (let i = 0; i < eigs.values.size()[0]; i++) {
-            frequencies.push(Math.sqrt(eigs.values.get([i])))
-            displacements.push(getCol(i, eigs.vectors))
+            // Check if oscilation is valid with the Bcs
+            const invalidWithBCs = false
+            // for (let dof = 0; dof < getCol(i, eigs.vectors).size()[0]; dof++) {
+            //     if (this.DofModifiedByBC.get(dof) === true) {
+            //         if (getCol(i, eigs.vectors).get([dof, 0]) !== 0) {
+            //             invalidWithBCs = true
+            //             break
+            //         }
+            //     }
+            // }
+            if (!invalidWithBCs) {
+                frequencies.push(Math.sqrt(eigs.values.get([i])))
+                displacements.push(getCol(i, eigs.vectors))
+            }
         }
         this.NaturalFrequencies = frequencies
         this.ModesOfVibration = displacements
@@ -179,8 +191,8 @@ export class DynamicProblem extends Problem {
             const xd = []
             const yd = []
             for (const n of [e.n1, e.n2]) {
-                const dx = this.ModesOfVibration[i].get([0, n.uIndex!])
-                const dy = this.ModesOfVibration[i].get([0, n.vIndex!])
+                const dx = this.ModesOfVibration[i].get([n.uIndex!, 0])
+                const dy = this.ModesOfVibration[i].get([n.vIndex!, 0])
                 xd.push(n.x + dx * displacementScaleFactor)
                 yd.push(n.y + dy * displacementScaleFactor)
             }

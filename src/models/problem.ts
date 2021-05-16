@@ -20,7 +20,6 @@ export class Problem {
     F?: Matrix
     U?: Matrix | Matrix[]
     M?: Matrix
-    DofModifiedByBC: Map<number, boolean>
 
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
@@ -30,7 +29,6 @@ export class Problem {
         this.loads = []
         this.boundaryConditions = []
         this.dof = 0
-        this.DofModifiedByBC = new Map<number, boolean>()
     }
 
     build () {
@@ -83,47 +81,10 @@ export class Problem {
 
     applyBC () {
         for (const b of this.boundaryConditions) {
-            switch (b.type) {
-            case 'Fix': {
-                for (const i of [b.node.uIndex, b.node.vIndex, b.node.wIndex]) {
-                    if (i != null) {
-                        replaceRowAndColByZeros(this.K!, i)
-                        this.K!.set([i, i], 1)
-                        this.F!.set([i, 0], 0)
-                    }
-                }
-                break
-            }
-            case 'RollerX': {
-                for (const i of [b.node.vIndex]) {
-                    if (i != null) {
-                        replaceRowAndColByZeros(this.K!, i)
-                        this.K!.set([i, i], 1)
-                        this.F!.set([i, 0], 0)
-                    }
-                }
-                break
-            }
-            case 'RollerY': {
-                for (const i of [b.node.uIndex]) {
-                    if (i != null) {
-                        replaceRowAndColByZeros(this.K!, i)
-                        this.K!.set([i, i], 1)
-                        this.F!.set([i, 0], 0)
-                    }
-                }
-                break
-            }
-            case 'Pin': {
-                for (const i of [b.node.uIndex, b.node.vIndex]) {
-                    if (i != null) {
-                        replaceRowAndColByZeros(this.K!, i)
-                        this.K!.set([i, i], 1)
-                        this.F!.set([i, 0], 0)
-                    }
-                }
-                break
-            }
+            for (const i of b.restrictedIndices) {
+                replaceRowAndColByZeros(this.K!, i)
+                this.K!.set([i, i], 1)
+                this.F!.set([i, 0], b.value)
             }
         }
     }

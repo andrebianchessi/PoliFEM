@@ -27,3 +27,16 @@ export function deleteRow (i:number, m:Matrix): Matrix {
     }
     return newM as Matrix
 }
+export function deleteCol (i:number, m:Matrix): Matrix {
+    let newM = null
+    for (let col = 0; col < m.size()[1]; col++) {
+        if (col !== i) {
+            if (newM == null) {
+                newM = getCol(col, m)
+            } else {
+                newM = math.concat!(newM, getCol(col, m))
+            }
+        }
+    }
+    return newM as Matrix
+}

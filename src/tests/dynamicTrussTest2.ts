@@ -18,7 +18,7 @@ export function DynamicTrussTest2 () {
     const L = 600 // bridge length
     const H = 20 // bridge height
     const properties = { E: 1, A: 1, I: 1, rho: 7.4 / 10000 }
-    const elementType = 'Frame'
+    const elementType = 'Truss'
 
     // Bridge top arch equation
     function y (x: number):number {
@@ -31,41 +31,45 @@ export function DynamicTrussTest2 () {
 
     const elementLength = L / 6
 
-    const f1 = Node.get(0, 0, p)
-    const f2 = Node.get(elementLength, 0, p)
-    const f3 = Node.get(elementLength * 2, 0, p)
-    const f4 = Node.get(elementLength * 3, 0, p)
-    const a1 = Node.get(elementLength, y(elementLength), p)
-    const a2 = Node.get(elementLength * 2, y(elementLength * 2), p)
-    const a3 = Node.get(elementLength * 3, y(elementLength * 3), p)
+    // Build floorNodes and archNodes
+    const floorNodes: Node[] = []
+    const archNodes: Node[] = []
+    for (let i = 0; i < 7; i++) {
+        floorNodes.push(Node.get(i * elementLength, 0, p))
+    }
+    for (let i = 1; i < 6; i++) {
+        archNodes.push(Node.get(i * elementLength, y(i * elementLength), p))
+    }
 
-    // floor
-    new Element(elementType, f1, f2, properties, p)
-    new Element(elementType, f2, f3, properties, p)
-    new Element(elementType, f3, f4, properties, p)
+    // Connect floor and arch elements
+    for (let i = 0; i < floorNodes.length - 1; i++) {
+        new Element(elementType, floorNodes[i], floorNodes[i + 1], properties, p)
+    }
+    for (let i = 0; i < archNodes.length - 1; i++) {
+        new Element(elementType, archNodes[i], archNodes[i + 1], properties, p)
+    }
 
-    // arch
-    new Element(elementType, a1, a2, properties, p)
-    new Element(elementType, a2, a3, properties, p)
+    // Vertical elements between floor and arch
+    for (let i = 1; i < floorNodes.length - 1; i++) {
+        new Element(elementType, floorNodes[i], archNodes[i - 1], properties, p)
+    }
 
-    // cross
-    new Element(elementType, f1, a1, properties, p)
-    new Element(elementType, f2, a2, properties, p)
-    new Element(elementType, f3, a3, properties, p)
+    // Diagonal elements between floor and arch
+    for (let i = 0; i <= 2; i++) {
+        new Element(elementType, floorNodes[i], archNodes[i], properties, p)
+    }
+    for (let i = 2; i <= 4; i++) {
+        new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
+    }
 
-    // vertical
-    new Element(elementType, f2, a1, properties, p)
-    new Element(elementType, f3, a2, properties, p)
-    new Element(elementType, f4, a3, properties, p)
-
-    new Load(0, -0.001, 0, a3, p)
-    new BoundaryCondition(f1, 'Fix', p)
-    new BoundaryCondition(f4, 'RollerY', p)
+    new Load(0, -100, 0, archNodes[2], p)
+    new BoundaryCondition(floorNodes[0], 'RollerX', p)
+    new BoundaryCondition(floorNodes[6], 'Pin', p)
 
     p.plot(true)
     try {
         p.solve()
-        p.plot(false, 1 / 100000)
+        p.plot(false, 1 / 1000000)
     } catch (e) {
         console.log(e)
     }

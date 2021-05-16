@@ -77,7 +77,7 @@ export function DynamicTrussTest2 () {
     // } catch (e) {
     //     console.log(e)
     // }
-    pDynamic.solveModal(1)
+    pDynamic.solveModal()
 
     console.log('ok')
 }

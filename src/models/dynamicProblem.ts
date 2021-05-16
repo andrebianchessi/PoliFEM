@@ -122,16 +122,17 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveModal (numberOfModes: number) {
+    solveModal (): number[] {
         this.build()
-        const naturalFrequencies = []
-        PrintSparseMatrix(this.Minv!)
         PrintSparseMatrix(this.K!)
-        PrintSparseMatrix(mult([this.Minv!, this.K!]) as Matrix, false)
+        PrintSparseMatrix(this.M!)
+        PrintSparseMatrix(mult([this.Minv!, this.K!]) as Matrix)
+        const naturalFrequencies: number[] = []
         const eigs = math.eigs!(mult([this.Minv!, this.K!]))
-        for (let i = 0; i < numberOfModes; i++) {
-            naturalFrequencies.push(Math.sqrt(eigs.values[i]))
+        for (let i = 0; i < eigs.values.size()[0]; i++) {
+            naturalFrequencies.push(Math.sqrt(eigs.values.get([i])))
         }
+        return naturalFrequencies
     }
 
     plot () {

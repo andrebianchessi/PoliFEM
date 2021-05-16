@@ -7,11 +7,13 @@ export function PrintSparseMatrix (m:Matrix, showValues: boolean = true) {
     for (let i = 0; i < nRows; i++) {
         let row = '\t[ '
         for (let j = 0; j < nCols; j++) {
-            let value
+            let value = m.get([i, j])
             if (!showValues) {
-                value = '*'
-            } else {
-                value = m.get([i, j])
+                if (value !== 0) {
+                    value = 'x'
+                } else {
+                    value = '0'
+                }
             }
             row += math.format!(value, { precision: 2 }) + ' '
         }

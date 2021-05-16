@@ -127,7 +127,7 @@ export class DynamicProblem extends Problem {
         const naturalFrequencies = []
         PrintSparseMatrix(this.Minv!)
         PrintSparseMatrix(this.K!)
-        PrintSparseMatrix(mult([this.Minv!, this.K!]) as Matrix)
+        PrintSparseMatrix(mult([this.Minv!, this.K!]) as Matrix, false)
         const eigs = math.eigs!(mult([this.Minv!, this.K!]))
         for (let i = 0; i < numberOfModes; i++) {
             naturalFrequencies.push(Math.sqrt(eigs.values[i]))

@@ -20,6 +20,11 @@ export class Element {
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
         Element.count += 1
         this.index = Element.count
+        if (type === 'Frame') {
+            if ((properties as FrameProperties).I == null) {
+                throw new Error('I not provided for element ' + this.index)
+            }
+        }
         this.type = type
         this.n1 = n1
         this.n2 = n2

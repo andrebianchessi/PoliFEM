@@ -18,7 +18,7 @@ export function DynamicTrussTest2 () {
     console.log('Dynamic truss test 2')
     const L = 600 // bridge length
     const H = 20 // bridge height
-    const properties = { E: 1, A: 1, rho: 7.4 / 10000 }
+    const properties = { E: 1, A: 1, I: 1, rho: 7.4 / 10000 }
 
     // Bridge top arch equation
     function y (x: number):number {
@@ -52,8 +52,8 @@ export function DynamicTrussTest2 () {
     // top
     new Element('Frame', a1, a2, properties, p)
 
-    new Load(0, -1, 0, a2, p)
-    new BoundaryCondition(f1, 'Pin', p)
+    new Load(0, -0.001, 0, a2, p)
+    new BoundaryCondition(f1, 'Fix', p)
     new BoundaryCondition(f3, 'RollerY', p)
 
     p.plot(true)
@@ -64,8 +64,6 @@ export function DynamicTrussTest2 () {
         console.log(e)
     }
 
-    // PrintSparseMatrix(p.K!)
-    // PrintSparseMatrix(p.F!)
     // p.solveTimeHistory()
 
     // p.plotElementTension(p.elements.get(25)!)

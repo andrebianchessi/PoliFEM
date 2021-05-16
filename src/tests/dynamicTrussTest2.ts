@@ -73,7 +73,5 @@ export function DynamicTrussTest2 () {
         console.log(e)
     }
 
-    // p.solveTimeHistory()
-
-    // p.plotElementTension(p.elements.get(25)!)
+    console.log('ok')
 }

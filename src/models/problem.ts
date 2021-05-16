@@ -3,7 +3,7 @@ import { Node } from './node'
 import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
 import { Annotations } from 'plotly.js'
-import { Layout, Plot } from 'nodeplotlib'
+import { Layout, Plot, plot } from 'nodeplotlib'
 import { Matrix } from 'mathjs'
 import { math, replaceRowAndColByZeros } from './math'
 
@@ -123,6 +123,14 @@ export class Problem {
             }
             }
         }
+    }
+
+    plot () {
+        const dataAndLayout = this.problemDescriptionPlotData()
+        const data = dataAndLayout[0]
+        const layout = dataAndLayout[1]
+
+        plot(data, layout)
     }
 
     problemDescriptionPlotData (): [Plot[], Layout] {

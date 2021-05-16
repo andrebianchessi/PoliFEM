@@ -65,10 +65,10 @@ export function DynamicTrussTest2 () {
     new BoundaryCondition(floorNodes[0], 'RollerX', p)
     new BoundaryCondition(floorNodes[6], 'Pin', p)
 
-    p.plot(true)
+    p.plot()
     try {
         p.solve()
-        p.plot(false, 1 / 1000000)
+        p.plotDisplacements(1 / 1000000)
     } catch (e) {
         console.log(e)
     }

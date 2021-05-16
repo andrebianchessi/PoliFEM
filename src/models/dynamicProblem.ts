@@ -137,6 +137,14 @@ export class DynamicProblem extends Problem {
         plot([{ x: this.t, y: uNodeI }])
     }
 
+    plotNodeYDisplacement (node: Node) {
+        const uNodeI: number[] = []
+        for (let i = 0; i < this.U!.length; i++) {
+            uNodeI.push((this.U![i]).get([node.vIndex!, 0]))
+        }
+        plot([{ x: this.t, y: uNodeI }])
+    }
+
     plotElementTension (e: Element) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {

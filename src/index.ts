@@ -5,7 +5,7 @@ import { DynamicTrussTest2 } from './tests/dynamicTrussTest2'
 import { ModalTest } from './tests/modalTest'
 import { StaticTrussTest } from './tests/staticTrussTest'
 
-StaticTrussTest()
-DynamicTrussTest1()
+// StaticTrussTest()
+// DynamicTrussTest1()
 // DynamicTrussTest2()
-// ModalTest()
+ModalTest()

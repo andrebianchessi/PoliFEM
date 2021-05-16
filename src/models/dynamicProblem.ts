@@ -133,18 +133,20 @@ export class DynamicProblem extends Problem {
         const eigs = math.eigs!(mult([this.Minv!, this.K!]))
         for (let i = 0; i < eigs.values.size()[0]; i++) {
             // Check if oscilation is valid with the Bcs
-            const invalidWithBCs = false
-            // for (let dof = 0; dof < getCol(i, eigs.vectors).size()[0]; dof++) {
-            //     if (this.DofModifiedByBC.get(dof) === true) {
-            //         if (getCol(i, eigs.vectors).get([dof, 0]) !== 0) {
-            //             invalidWithBCs = true
-            //             break
-            //         }
-            //     }
-            // }
+            let invalidWithBCs = false
+            const displacementVector = getCol(i, eigs.vectors)
+
+            for (const bc of this.boundaryConditions) {
+                for (const i of bc.restrictedIndices) {
+                    if (displacementVector.get([i, 0]) !== bc.value) {
+                        invalidWithBCs = true
+                        break
+                    }
+                }
+            }
             if (!invalidWithBCs) {
                 frequencies.push(Math.sqrt(eigs.values.get([i])))
-                displacements.push(getCol(i, eigs.vectors))
+                displacements.push(displacementVector)
             }
         }
         this.NaturalFrequencies = frequencies
@@ -196,7 +198,7 @@ export class DynamicProblem extends Problem {
                 xd.push(n.x + dx * displacementScaleFactor)
                 yd.push(n.y + dy * displacementScaleFactor)
             }
-            data.push({ x: xd, y: yd, hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
+            data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
         layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]

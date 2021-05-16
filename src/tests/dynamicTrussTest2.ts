@@ -38,28 +38,28 @@ export function DynamicTrussTest2 () {
     const a2 = Node.get(elementLength * 2, y(elementLength * 2), p)
 
     // floor
-    new Element('Truss', f1, f2, properties, p)
-    new Element('Truss', f2, f3, properties, p)
+    new Element('Frame', f1, f2, properties, p)
+    new Element('Frame', f2, f3, properties, p)
 
     // cross
-    new Element('Truss', f1, a1, properties, p)
-    new Element('Truss', f2, a2, properties, p)
+    new Element('Frame', f1, a1, properties, p)
+    new Element('Frame', f2, a2, properties, p)
 
     // vertical
-    new Element('Truss', f2, a1, properties, p)
-    new Element('Truss', f3, a2, properties, p)
+    new Element('Frame', f2, a1, properties, p)
+    new Element('Frame', f3, a2, properties, p)
 
     // top
-    new Element('Truss', a1, a2, properties, p)
+    new Element('Frame', a1, a2, properties, p)
 
     new Load(0, -1, 0, a2, p)
     new BoundaryCondition(f1, 'Pin', p)
-    new BoundaryCondition(f3, 'Pin', p)
+    new BoundaryCondition(f3, 'RollerY', p)
 
     p.plot(true)
     try {
         p.solve()
-        p.plot(false, 1 / 10000)
+        p.plot(false, 1 / 100000)
     } catch (e) {
         console.log(e)
     }

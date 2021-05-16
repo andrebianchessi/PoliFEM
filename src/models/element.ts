@@ -7,6 +7,8 @@ import { StiffnessMatrix } from './stiffnessMatrix'
 import { TrussProperties } from './trussProperties'
 
 export class Element {
+    static count = 0
+    index: number
     type: 'Frame' | 'Truss'
     n1: Node
     n2: Node
@@ -16,6 +18,8 @@ export class Element {
     M?: MassMatrix
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
+        Element.count += 1
+        this.index = Element.count
         this.type = type
         this.n1 = n1
         this.n2 = n2

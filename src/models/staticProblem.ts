@@ -9,7 +9,7 @@ export class StaticProblem extends Problem {
         this.build()
 
         // Solve linear system
-        this.U = math.usolve!(this.K!, this.F!) as Matrix
+        this.U = math.lusolve!(this.K!, this.F!) as Matrix
     }
 
     plot (structureOnly: boolean = false, displacementScaleFactor: number = 100) {

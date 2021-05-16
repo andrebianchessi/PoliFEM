@@ -2,6 +2,7 @@
 import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
 import { mult } from '../functions/mult'
+import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 import { sum } from '../functions/sum'
 import { DynamicLoad } from './dynamicLoad'
 import { Element } from './element'
@@ -121,9 +122,16 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveModal () {
+    solveModal (numberOfModes: number) {
         this.build()
+        const naturalFrequencies = []
+        PrintSparseMatrix(this.Minv!)
+        PrintSparseMatrix(this.K!)
+        PrintSparseMatrix(mult([this.Minv!, this.K!]) as Matrix)
         const eigs = math.eigs!(mult([this.Minv!, this.K!]))
+        for (let i = 0; i < numberOfModes; i++) {
+            naturalFrequencies.push(Math.sqrt(eigs.values[i]))
+        }
     }
 
     plot () {

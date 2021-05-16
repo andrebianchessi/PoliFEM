@@ -70,13 +70,14 @@ export function DynamicTrussTest2 () {
         new BoundaryCondition(floorNodes[6], 'Pin', p)
     }
 
-    pStatic.plot()
-    try {
-        pStatic.solve()
-        pStatic.plotDisplacements(10)
-    } catch (e) {
-        console.log(e)
-    }
+    // pStatic.plot()
+    // try {
+    //     pStatic.solve()
+    //     pStatic.plotDisplacements(10)
+    // } catch (e) {
+    //     console.log(e)
+    // }
+    pDynamic.solveModal(1)
 
     console.log('ok')
 }

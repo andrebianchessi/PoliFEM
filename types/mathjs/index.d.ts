@@ -80,21 +80,6 @@ declare namespace math {
          ************************************************************************/
 
         /**
-         * Compute eigenvalues and eigenvectors of a matrix.
-         * The eigenvalues are sorted by their absolute value, ascending.
-         * An eigenvalue with multiplicity k will be listed k times.
-         * The eigenvectors are returned as columns of a matrix – the eigenvector
-         * that belongs to the j-th eigenvalue in the list (eg. values[j]) is the
-         * j-th column (eg. column(vectors, j)). If the algorithm fails to converge,
-         * it will throw an error – in that case, however, you may still find useful
-         * information in err.values and err.vectors
-         * @param x Matrix to be diagonalized
-         * @param prec Precision, default value: 1e-15
-         * @returns Object containing an array of eigenvalues and a matrix with eigenvectors as columns.
-         */
-        eigs(x: Array | Matrix, prec?:number|BigNumber[]):{values: Array | Matrix, vectors: Array | Matrix}
-
-        /**
          * Set configuration options for math.js, and get current options. Will
          * emit a ‘config’ event, with arguments (curr, prev, changes).
          * @param options Available options: {number} epsilon Minimum relative
@@ -1301,6 +1286,21 @@ declare namespace math {
          * @returns Returns the dot product of x and y
          */
         dot(x: MathArray | Matrix, y: MathArray | Matrix): number;
+
+        /**
+         * Compute eigenvalues and eigenvectors of a matrix.
+         * The eigenvalues are sorted by their absolute value, ascending.
+         * An eigenvalue with multiplicity k will be listed k times.
+         * The eigenvectors are returned as columns of a matrix – the eigenvector
+         * that belongs to the j-th eigenvalue in the list (eg. values[j]) is the
+         * j-th column (eg. column(vectors, j)). If the algorithm fails to converge,
+         * it will throw an error – in that case, however, you may still find useful
+         * information in err.values and err.vectors
+         * @param x Matrix to be diagonalized
+         * @param prec Precision, default value: 1e-15
+         * @returns Object containing an array of eigenvalues and a matrix with eigenvectors as columns.
+         */
+        eigs(x: MathArray | Matrix, prec?:number|BigNumber[]):{values: MathArray | Matrix, vectors: MathArray | Matrix}
 
         /**
          * Compute the matrix exponential, expm(A) = e^A. The matrix must be

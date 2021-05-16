@@ -3,13 +3,11 @@
 Test of an axial impact on bar fixed o on
 
 */
-
 import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { Load } from '../models/load'
 import { StaticProblem } from '../models/staticProblem'
 import { BoundaryCondition } from '../models/boundaryCondition'
-import { DynamicProblem } from '../models/dynamicProblem'
 
 /**
  * Finds truss bridge natural frequency
@@ -28,7 +26,7 @@ export function DynamicTrussTest2 () {
         return a * x * x + H
     }
 
-    const p = new DynamicProblem(0.1, 10000)
+    const p = new StaticProblem()
 
     const elementLength = L / 6
 
@@ -67,15 +65,13 @@ export function DynamicTrussTest2 () {
     new BoundaryCondition(floorNodes[0], 'RollerX', p)
     new BoundaryCondition(floorNodes[6], 'Pin', p)
 
-    // p.plot(true)
-    // try {
-    //     p.solve()
-    //     p.plot(false, 1 / 1000000)
-    // } catch (e) {
-    //     console.log(e)
-    // }
-    p.solveTimeHistory()
-    p.plotNodeYDisplacement(archNodes[2])
+    p.plot(true)
+    try {
+        p.solve()
+        p.plot(false, 1 / 1000000)
+    } catch (e) {
+        console.log(e)
+    }
 
     // p.solveTimeHistory()
 

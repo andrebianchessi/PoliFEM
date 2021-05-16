@@ -22,6 +22,8 @@ export class DynamicProblem extends Problem {
     U?: Matrix[]
     Udot?: Matrix[]
     Udotdot?: Matrix[]
+    NaturalFrequencies: number[]
+    ModesOfVibration: Matrix[]
 
     constructor (timeStep?: number, duration?: number) {
         super()
@@ -29,6 +31,8 @@ export class DynamicProblem extends Problem {
         this.duration = duration
         this.t = []
         this.dynamicLoads = []
+        this.NaturalFrequencies = []
+        this.ModesOfVibration = []
     }
 
     build () {
@@ -122,7 +126,7 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveModal (): {frequencies: number[], displacements: Matrix[]} {
+    solveModal () {
         this.build()
         const frequencies: number[] = []
         const displacements: Matrix[] = []
@@ -131,15 +135,8 @@ export class DynamicProblem extends Problem {
             frequencies.push(Math.sqrt(eigs.values.get([i])))
             displacements.push(getCol(i, eigs.vectors))
         }
-        return { frequencies, displacements }
-    }
-
-    plot () {
-        const dataAndLayout = this.problemDescriptionPlotData()
-        const data = dataAndLayout[0]
-        const layout = dataAndLayout[1]
-
-        plot(data, layout)
+        this.NaturalFrequencies = frequencies
+        this.ModesOfVibration = displacements
     }
 
     plotNodeXDisplacement (node: Node) {
@@ -170,5 +167,28 @@ export class DynamicProblem extends Problem {
             sigmaElementI.push(e.properties.E / e.length() * (-c * u1 + -s * v1 + c * u2 + s * v2))
         }
         plot([{ x: this.t, y: sigmaElementI }])
+    }
+
+    plotModeOfVibration (i: number, displacementScaleFactor: number) {
+        const dataAndLayout = this.problemDescriptionPlotData()
+        const data = dataAndLayout[0]
+        const layout = dataAndLayout[1]
+
+        let first = true
+        for (const [, e] of this.elements) {
+            const xd = []
+            const yd = []
+            for (const n of [e.n1, e.n2]) {
+                console.log(this.ModesOfVibration[i])
+                const dx = this.ModesOfVibration[i].get([0, n.uIndex!])
+                const dy = this.ModesOfVibration[i].get([0, n.vIndex!])
+                xd.push(n.x + dx * displacementScaleFactor)
+                yd.push(n.y + dy * displacementScaleFactor)
+            }
+            data.push({ x: xd, y: yd, hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
+            first = false
+        }
+        layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]
+        plot(data, layout)
     }
 }

@@ -29,9 +29,7 @@ export function ModalTest () {
     new BoundaryCondition(n1, 'Pin', p)
     new BoundaryCondition(n3, 'RollerX', p)
 
-    const modes = p.solveModal()
-    console.log(modes.frequencies)
-    console.log(modes.displacements)
-
+    p.solveModal()
+    p.plotModeOfVibration(0, 10)
     // return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

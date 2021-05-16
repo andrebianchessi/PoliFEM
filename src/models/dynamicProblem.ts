@@ -121,6 +121,11 @@ export class DynamicProblem extends Problem {
         }
     }
 
+    solveModal () {
+        this.build()
+        const eigs = math.eigs!(mult([this.Minv!, this.K!]))
+    }
+
     plot () {
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]

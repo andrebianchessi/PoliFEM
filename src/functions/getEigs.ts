@@ -5,7 +5,6 @@ export function getEigs (m:mathjs.Matrix): { values: number[], vectors: number[]
     const A = new Matrix(m.toArray() as number[][])
     const e = new EigenvalueDecomposition(A)
     const real = e.realEigenvalues
-    const imaginary = e.imaginaryEigenvalues
     const vectorsMatrix = e.eigenvectorMatrix
     const vectors = []
     for (let i = 0; i < vectorsMatrix.rows; i++) {

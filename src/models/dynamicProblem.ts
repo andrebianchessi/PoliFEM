@@ -11,6 +11,7 @@ import { math } from './math'
 import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
+import { modalAnalysisBCTolerance } from '../constants'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
@@ -131,13 +132,13 @@ export class DynamicProblem extends Problem {
         this.build()
         const frequencies: number[] = []
         const displacements: number[][] = []
-        const eigs = await getEigs(mult([this.Minv!, this.K!]) as Matrix)
+        const eigs = getEigs(mult([this.Minv!, this.K!]) as Matrix)
         for (let i = 0; i < eigs.values.length; i++) {
             let invalidWithBCs = false
             const displacementVector = eigs.vectors[i]
             for (const bc of this.boundaryConditions) {
                 for (const i of bc.restrictedIndices) {
-                    if (displacementVector[i] !== bc.value) {
+                    if (Math.abs(displacementVector[i] - bc.value!) > modalAnalysisBCTolerance) {
                         invalidWithBCs = true
                         break
                     }
@@ -149,8 +150,8 @@ export class DynamicProblem extends Problem {
                 displacements.push(displacementVector!)
             }
         }
-        this.ModesOfVibration = displacements
-        this.NaturalFrequencies = frequencies
+        this.ModesOfVibration = displacements.reverse()
+        this.NaturalFrequencies = frequencies.reverse()
     }
 
     plotNodeXDisplacement (node: Node) {
@@ -184,6 +185,10 @@ export class DynamicProblem extends Problem {
     }
 
     plotModeOfVibration (i: number = 0, displacementScaleFactor: number = 10) {
+        if (i >= this.ModesOfVibration.length) {
+            console.log('Only ' + this.ModesOfVibration.length + ' modes of vibration calculated')
+            return
+        }
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]

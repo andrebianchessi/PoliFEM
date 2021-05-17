@@ -77,8 +77,11 @@ export function DynamicTrussTest2 () {
     // } catch (e) {
     //     console.log(e)
     // }
-    // pDynamic.solveModal()
-    // pDynamic.plotModeOfVibration()
+    pDynamic.solveModal()
+    pDynamic.plotModeOfVibration(0, 20)
+    pDynamic.plotModeOfVibration(1, 20)
+    pDynamic.plotModeOfVibration(2, 20)
+    pDynamic.plotModeOfVibration(3, 20)
 
     console.log('ok')
 }

@@ -10,7 +10,6 @@ import { math } from './math'
 import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
-import { modalAnalysisBCTolerance } from '../constants'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]

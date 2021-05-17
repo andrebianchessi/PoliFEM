@@ -1,4 +1,4 @@
-import { Matrix } from '../../types/mathjs'
+import { Matrix } from 'mathjs'
 import { Element } from './element'
 import { math } from './math'
 import { TrussProperties } from './trussProperties'

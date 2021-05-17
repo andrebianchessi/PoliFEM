@@ -1,4 +1,4 @@
-import { Matrix } from '../../types/mathjs'
+import { Matrix } from 'mathjs'
 import { math } from '../models/math'
 export function PrintSparseMatrix (m:Matrix, showValues: boolean = true) {
     console.log('[')

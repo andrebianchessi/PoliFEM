@@ -6,7 +6,7 @@ import { Annotations } from 'plotly.js'
 import { Layout, Plot, plot } from 'nodeplotlib'
 import { math } from './math'
 import { replaceRowAndColByZeros } from '../functions/matrixUtils'
-import { Matrix } from '../../types/mathjs'
+import { Matrix } from 'mathjs'
 
 export class Problem {
     dof: number // degrees of freedom

@@ -1,5 +1,5 @@
 
-import { Matrix } from '../../types/mathjs'
+import { Matrix } from 'mathjs'
 import { math } from '../models/math'
 import { MatricesAreEqual } from './matricesAreEqual'
 

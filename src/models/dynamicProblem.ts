@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { plot } from 'nodeplotlib'
-import { Matrix } from '../../types/mathjs'
+import { Matrix } from 'mathjs'
 import { getCol } from '../functions/matrixUtils'
 import { mult } from '../functions/mult'
 import { sum } from '../functions/sum'

@@ -10,6 +10,8 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.2
 
+declare module 'mathjs'{
+
 import { Decimal } from 'decimal.js'
 
 declare const math: math.MathJsStatic
@@ -4945,4 +4947,5 @@ declare namespace math {
     interface ImportObject {
         [key: string]: any;
     }
+}
 }

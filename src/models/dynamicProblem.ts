@@ -132,30 +132,23 @@ export class DynamicProblem extends Problem {
         const frequencies: number[] = []
         const displacements: number[][] = []
         const eigs = await getEigs(mult([this.Minv!, this.K!]) as Matrix)
-        console.log(eigs)
-        // for (let i = 0; i < (eigs.values as Matrix).size()[0]; i++) {
-        //     // Check if oscilation is valid with the Bcs
-        //     let invalidWithBCs = false
-        //     let displacementVector: Matrix
-        //     if (eigs.vectors.length !== 0) {
-        //         displacementVector = getCol(i, eigs.vectors as Matrix)
-        //         for (const bc of this.boundaryConditions) {
-        //             for (const i of bc.restrictedIndices) {
-        //                 if (displacementVector.get([i, 0]) !== bc.value) {
-        //                     invalidWithBCs = true
-        //                     break
-        //                 }
-        //             }
-        //         }
-        //     }
+        for (let i = 0; i < eigs.values.length; i++) {
+            let invalidWithBCs = false
+            const displacementVector = eigs.vectors[i]
+            for (const bc of this.boundaryConditions) {
+                for (const i of bc.restrictedIndices) {
+                    if (displacementVector[i] !== bc.value) {
+                        invalidWithBCs = true
+                        break
+                    }
+                }
+            }
 
-        //     if (!invalidWithBCs) {
-        //         frequencies.push(Math.sqrt((eigs.values as Matrix).get([i, 0])))
-        //         if (eigs.vectors.length !== 0) {
-        //             displacements.push(displacementVector!)
-        //         }
-        //     }
-        // }
+            if (!invalidWithBCs) {
+                frequencies.push(Math.sqrt(eigs.values[i]))
+                displacements.push(displacementVector!)
+            }
+        }
         this.ModesOfVibration = displacements
         this.NaturalFrequencies = frequencies
     }

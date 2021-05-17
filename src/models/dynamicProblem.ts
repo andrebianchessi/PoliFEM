@@ -10,6 +10,7 @@ import { MassMatrix } from './massMatrix'
 import { math } from './math'
 import { Node } from './node'
 import { Problem } from './problem'
+import { getEigs } from '../functions/getEigs'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
@@ -23,7 +24,7 @@ export class DynamicProblem extends Problem {
     Udot?: Matrix[]
     Udotdot?: Matrix[]
     NaturalFrequencies: number[]
-    ModesOfVibration: Matrix[]
+    ModesOfVibration: number[][]
 
     constructor (timeStep?: number, duration?: number) {
         super()
@@ -126,41 +127,35 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveModal () {
+    async solveModal () {
         this.build()
         const frequencies: number[] = []
-        const displacements: Matrix[] = []
-        let eigs
-        const A = mult([this.Minv!, this.K!])
-        try {
-            eigs = math.eigs!(A as Matrix)
-            eigs.values = math.matrix!((eigs.values as Matrix).toArray(), 'sparse')
-        } catch (e) {
-            eigs = { values: math.matrix!(e.values, 'sparse'), vectors: e.vectors }
-        }
-        for (let i = 0; i < (eigs.values as Matrix).size()[0]; i++) {
-            // Check if oscilation is valid with the Bcs
-            let invalidWithBCs = false
-            let displacementVector: Matrix
-            if (eigs.vectors.length !== 0) {
-                displacementVector = getCol(i, eigs.vectors as Matrix)
-                for (const bc of this.boundaryConditions) {
-                    for (const i of bc.restrictedIndices) {
-                        if (displacementVector.get([i, 0]) !== bc.value) {
-                            invalidWithBCs = true
-                            break
-                        }
-                    }
-                }
-            }
+        const displacements: number[][] = []
+        const eigs = await getEigs(mult([this.Minv!, this.K!]) as Matrix)
+        console.log(eigs)
+        // for (let i = 0; i < (eigs.values as Matrix).size()[0]; i++) {
+        //     // Check if oscilation is valid with the Bcs
+        //     let invalidWithBCs = false
+        //     let displacementVector: Matrix
+        //     if (eigs.vectors.length !== 0) {
+        //         displacementVector = getCol(i, eigs.vectors as Matrix)
+        //         for (const bc of this.boundaryConditions) {
+        //             for (const i of bc.restrictedIndices) {
+        //                 if (displacementVector.get([i, 0]) !== bc.value) {
+        //                     invalidWithBCs = true
+        //                     break
+        //                 }
+        //             }
+        //         }
+        //     }
 
-            if (!invalidWithBCs) {
-                frequencies.push(Math.sqrt((eigs.values as Matrix).get([i, 0])))
-                if (eigs.vectors.length !== 0) {
-                    displacements.push(displacementVector!)
-                }
-            }
-        }
+        //     if (!invalidWithBCs) {
+        //         frequencies.push(Math.sqrt((eigs.values as Matrix).get([i, 0])))
+        //         if (eigs.vectors.length !== 0) {
+        //             displacements.push(displacementVector!)
+        //         }
+        //     }
+        // }
         this.ModesOfVibration = displacements
         this.NaturalFrequencies = frequencies
     }
@@ -195,31 +190,31 @@ export class DynamicProblem extends Problem {
         plot([{ x: this.t, y: sigmaElementI }])
     }
 
-    plotModeOfVibration (i: number = 0, displacementScaleFactor: number = 10) {
-        if (this.ModesOfVibration.length === 0) {
-            console.log('Unable to determine modes of vibration\n')
-            console.log('Natural frequencies:')
-            console.log(this.NaturalFrequencies)
-            return
-        }
-        const dataAndLayout = this.problemDescriptionPlotData()
-        const data = dataAndLayout[0]
-        const layout = dataAndLayout[1]
+    // plotModeOfVibration (i: number = 0, displacementScaleFactor: number = 10) {
+    //     if (this.ModesOfVibration.length === 0) {
+    //         console.log('Unable to determine modes of vibration\n')
+    //         console.log('Natural frequencies:')
+    //         console.log(this.NaturalFrequencies)
+    //         return
+    //     }
+    //     const dataAndLayout = this.problemDescriptionPlotData()
+    //     const data = dataAndLayout[0]
+    //     const layout = dataAndLayout[1]
 
-        let first = true
-        for (const [, e] of this.elements) {
-            const xd = []
-            const yd = []
-            for (const n of [e.n1, e.n2]) {
-                const dx = this.ModesOfVibration[i].get([n.uIndex!, 0])
-                const dy = this.ModesOfVibration[i].get([n.vIndex!, 0])
-                xd.push(n.x + dx * displacementScaleFactor)
-                yd.push(n.y + dy * displacementScaleFactor)
-            }
-            data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
-            first = false
-        }
-        layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]
-        plot(data, layout)
-    }
+    //     let first = true
+    //     for (const [, e] of this.elements) {
+    //         const xd = []
+    //         const yd = []
+    //         for (const n of [e.n1, e.n2]) {
+    //             const dx = this.ModesOfVibration[i].get([n.uIndex!, 0])
+    //             const dy = this.ModesOfVibration[i].get([n.vIndex!, 0])
+    //             xd.push(n.x + dx * displacementScaleFactor)
+    //             yd.push(n.y + dy * displacementScaleFactor)
+    //         }
+    //         data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
+    //         first = false
+    //     }
+    //     layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]
+    //     plot(data, layout)
+    // }
 }

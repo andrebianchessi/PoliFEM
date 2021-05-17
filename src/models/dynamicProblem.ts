@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
-import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
+import { Matrix } from '../../types/mathjs'
 import { getCol } from '../functions/matrixUtils'
 import { mult } from '../functions/mult'
-import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 import { sum } from '../functions/sum'
 import { DynamicLoad } from './dynamicLoad'
 import { Element } from './element'

@@ -1,4 +1,4 @@
-import { Matrix } from 'mathjs'
+import { Matrix } from '../../types/mathjs'
 import { math } from '../models/math'
 
 export function sum (x: (Matrix|number)[]) {

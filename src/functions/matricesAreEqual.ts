@@ -1,4 +1,4 @@
-import { Matrix } from 'mathjs'
+import { Matrix } from '../../types/mathjs'
 import { math } from '../models/math'
 
 export function MatricesAreEqual (m1: Matrix, m2:Matrix): boolean {

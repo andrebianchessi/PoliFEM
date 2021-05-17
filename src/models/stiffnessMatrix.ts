@@ -1,4 +1,4 @@
-import { Matrix } from 'mathjs'
+import { Matrix } from '../../types/mathjs'
 import { Element } from './element'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'

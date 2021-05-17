@@ -1,7 +1,7 @@
-import { Matrix } from 'mathjs'
 import { math } from './math'
 import { plot } from 'nodeplotlib'
 import { Problem } from './problem'
+import { Matrix } from '../../types/mathjs'
 
 export class StaticProblem extends Problem {
     U?: Matrix

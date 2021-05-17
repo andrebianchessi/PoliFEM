@@ -3,6 +3,7 @@ import { Matrix } from 'mathjs'
 import { plot } from 'nodeplotlib'
 import { getCol } from '../functions/matrixUtils'
 import { mult } from '../functions/mult'
+import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 import { sum } from '../functions/sum'
 import { DynamicLoad } from './dynamicLoad'
 import { Element } from './element'
@@ -130,11 +131,17 @@ export class DynamicProblem extends Problem {
         this.build()
         const frequencies: number[] = []
         const displacements: Matrix[] = []
-        const eigs = math.eigs!(mult([this.Minv!, this.K!]))
-        for (let i = 0; i < eigs.values.size()[0]; i++) {
+        let eigs
+        const A = mult([this.Minv!, this.K!])
+        try {
+            eigs = math.eigs!(A as Matrix)
+        } catch (e) {
+            eigs = { values: e.values, vectors: e.vectors }
+        }
+        for (let i = 0; i < (eigs.values as Matrix).size()[0]; i++) {
             // Check if oscilation is valid with the Bcs
             let invalidWithBCs = false
-            const displacementVector = getCol(i, eigs.vectors)
+            const displacementVector = getCol(i, eigs.vectors as Matrix)
 
             for (const bc of this.boundaryConditions) {
                 for (const i of bc.restrictedIndices) {
@@ -145,7 +152,7 @@ export class DynamicProblem extends Problem {
                 }
             }
             if (!invalidWithBCs) {
-                frequencies.push(Math.sqrt(eigs.values.get([i])))
+                frequencies.push(Math.sqrt((eigs.values as Matrix).get([i])))
                 displacements.push(displacementVector)
             }
         }

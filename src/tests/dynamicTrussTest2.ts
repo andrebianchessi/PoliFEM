@@ -16,10 +16,10 @@ import { StaticProblem } from '../models/staticProblem'
 export function DynamicTrussTest2 () {
     console.log('Dynamic truss test 2')
 
-    const L = 600 // bridge length
-    const H = 20 // bridge height
+    const L = 1100 // bridge length
+    const H = 213 // bridge height
     const load = 10 * 1000
-    const properties = { E: 200 * 10 ** 9, A: 50 * 10 ** (-4), rho: 8000 * 50 * 10 ** (-4) }
+    const properties = { E: 30 * 1000000, A: 8, rho: 7.4 / 10000 }
     const elementType = 'Truss'
 
     const elementLength = L / 6
@@ -78,9 +78,9 @@ export function DynamicTrussTest2 () {
     //     console.log(e)
     // }
     pDynamic.solveModal()
-    pDynamic.plotModeOfVibration(0, 10)
-    pDynamic.plotModeOfVibration(1, 10)
-    pDynamic.plotModeOfVibration(2, 10)
+    pDynamic.plotModeOfVibration(0, 100)
+    pDynamic.plotModeOfVibration(1, 100)
+    pDynamic.plotModeOfVibration(2, 100)
 
     console.log('ok')
 }

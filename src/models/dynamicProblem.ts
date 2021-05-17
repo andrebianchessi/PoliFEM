@@ -136,8 +136,20 @@ export class DynamicProblem extends Problem {
             frequencies.push(Math.sqrt(eigs.values[i]))
             displacements.push(displacementVector!)
         }
-        this.ModesOfVibration = displacements.reverse()
-        this.NaturalFrequencies = frequencies.reverse()
+        // sort ascending by vibration
+        const combinedList = []
+        for (let i = 0; i < frequencies.length; i++) {
+            combinedList.push({ value: frequencies[i], vector: displacements[i] })
+        }
+        combinedList.sort(function (a, b) {
+            return a.value - b.value
+        })
+        this.ModesOfVibration = []
+        this.NaturalFrequencies = []
+        for (const c of combinedList) {
+            this.NaturalFrequencies.push(c.value)
+            this.ModesOfVibration.push(c.vector)
+        }
     }
 
     plotNodeXDisplacement (node: Node) {

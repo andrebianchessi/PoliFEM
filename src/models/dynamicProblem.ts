@@ -183,31 +183,25 @@ export class DynamicProblem extends Problem {
         plot([{ x: this.t, y: sigmaElementI }])
     }
 
-    // plotModeOfVibration (i: number = 0, displacementScaleFactor: number = 10) {
-    //     if (this.ModesOfVibration.length === 0) {
-    //         console.log('Unable to determine modes of vibration\n')
-    //         console.log('Natural frequencies:')
-    //         console.log(this.NaturalFrequencies)
-    //         return
-    //     }
-    //     const dataAndLayout = this.problemDescriptionPlotData()
-    //     const data = dataAndLayout[0]
-    //     const layout = dataAndLayout[1]
+    plotModeOfVibration (i: number = 0, displacementScaleFactor: number = 10) {
+        const dataAndLayout = this.problemDescriptionPlotData()
+        const data = dataAndLayout[0]
+        const layout = dataAndLayout[1]
 
-    //     let first = true
-    //     for (const [, e] of this.elements) {
-    //         const xd = []
-    //         const yd = []
-    //         for (const n of [e.n1, e.n2]) {
-    //             const dx = this.ModesOfVibration[i].get([n.uIndex!, 0])
-    //             const dy = this.ModesOfVibration[i].get([n.vIndex!, 0])
-    //             xd.push(n.x + dx * displacementScaleFactor)
-    //             yd.push(n.y + dy * displacementScaleFactor)
-    //         }
-    //         data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
-    //         first = false
-    //     }
-    //     layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]
-    //     plot(data, layout)
-    // }
+        let first = true
+        for (const [, e] of this.elements) {
+            const xd = []
+            const yd = []
+            for (const n of [e.n1, e.n2]) {
+                const dx = this.ModesOfVibration[i][n.uIndex!]
+                const dy = this.ModesOfVibration[i][n.vIndex!]
+                xd.push(n.x + dx * displacementScaleFactor)
+                yd.push(n.y + dy * displacementScaleFactor)
+            }
+            data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
+            first = false
+        }
+        layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]
+        plot(data, layout)
+    }
 }

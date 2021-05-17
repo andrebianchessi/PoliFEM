@@ -30,8 +30,8 @@ export async function ModalTest () {
     new BoundaryCondition(n3, 'RollerX', p)
 
     await p.solveModal()
-    // p.plotModeOfVibration(0, 10)
-    // p.plotModeOfVibration(1, 10)
-    // p.plotModeOfVibration(2, 10)
+    p.plotModeOfVibration(0, 10)
+    p.plotModeOfVibration(1, 10)
+    p.plotModeOfVibration(2, 10)
     // return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

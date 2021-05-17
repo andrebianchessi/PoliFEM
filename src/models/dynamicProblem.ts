@@ -131,7 +131,7 @@ export class DynamicProblem extends Problem {
         this.build()
         const frequencies: number[] = []
         const displacements: number[][] = []
-        const eigs = getEigs(mult([this.Minv!, this.K!]) as Matrix)
+        const eigs = getEigs(mult([this.Minv!, this.K!]) as Matrix, this)
         for (let i = 0; i < eigs.values.length; i++) {
             let invalidWithBCs = false
             const displacementVector = eigs.vectors[i]

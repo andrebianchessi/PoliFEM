@@ -9,3 +9,4 @@ import { StaticTrussTest } from './tests/staticTrussTest'
 // DynamicTrussTest1()
 DynamicTrussTest2()
 // ModalTest()
+console.log()

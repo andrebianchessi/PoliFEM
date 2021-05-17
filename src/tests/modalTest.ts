@@ -13,7 +13,7 @@ import { Node } from '../models/node'
  * Test of a truss bar structure
  */
 export async function ModalTest () {
-    console.log('Static truss test')
+    console.log('Modal truss test')
     const p = new DynamicProblem()
 
     const properties = { E: 30 * 10 ** 6, A: 10, rho: 0.1 / 10 }
@@ -29,7 +29,9 @@ export async function ModalTest () {
     new BoundaryCondition(n1, 'Pin', p)
     new BoundaryCondition(n3, 'RollerX', p)
 
-    await p.solveModal()
+    // p.plot()
+
+    p.solveModal()
     p.plotModeOfVibration(0, 10)
     p.plotModeOfVibration(1, 10)
     p.plotModeOfVibration(2, 10)

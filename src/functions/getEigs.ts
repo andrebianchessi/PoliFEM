@@ -1,15 +1,17 @@
 import * as mathjs from 'mathjs'
 import Matrix, { EigenvalueDecomposition } from 'ml-matrix'
 import { Problem } from '../models/problem'
-import { deleteCol, deleteRow } from './matrixUtils'
+import { deleteCols, deleteRows } from './matrixUtils'
 
 export function getEigs (m:mathjs.Matrix, p:Problem): { values: number[], vectors: number[][]} {
+    const rowsToDelete = []
     for (const bc of p.boundaryConditions) {
-        for (const i of bc.restrictedIndices) {
-            m = deleteRow(i, m)
-            m = deleteCol(i, m)
+        for (let i = 0; i < bc.restrictedIndices.length; i++) {
+            rowsToDelete.push(bc.restrictedIndices[i])
         }
     }
+    m = deleteRows(rowsToDelete, m)
+    m = deleteCols(rowsToDelete, m)
 
     const A = new Matrix(m.toArray() as number[][])
     const e = new EigenvalueDecomposition(A)

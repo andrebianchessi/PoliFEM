@@ -7,6 +7,6 @@ import { StaticTrussTest } from './tests/staticTrussTest'
 
 // StaticTrussTest()
 // DynamicTrussTest1()
-DynamicTrussTest2()
-// ModalTest()
+// DynamicTrussTest2()
+ModalTest()
 console.log()

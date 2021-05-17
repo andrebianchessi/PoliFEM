@@ -133,21 +133,9 @@ export class DynamicProblem extends Problem {
         const displacements: number[][] = []
         const eigs = getEigs(mult([this.Minv!, this.K!]) as Matrix, this)
         for (let i = 0; i < eigs.values.length; i++) {
-            let invalidWithBCs = false
             const displacementVector = eigs.vectors[i]
-            for (const bc of this.boundaryConditions) {
-                for (const i of bc.restrictedIndices) {
-                    if (Math.abs(displacementVector[i] - bc.value!) > modalAnalysisBCTolerance) {
-                        invalidWithBCs = true
-                        break
-                    }
-                }
-            }
-
-            if (!invalidWithBCs) {
-                frequencies.push(Math.sqrt(eigs.values[i]))
-                displacements.push(displacementVector!)
-            }
+            frequencies.push(Math.sqrt(eigs.values[i]))
+            displacements.push(displacementVector!)
         }
         this.ModesOfVibration = displacements.reverse()
         this.NaturalFrequencies = frequencies.reverse()

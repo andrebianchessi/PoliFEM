@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable camelcase */
-/* eslint-disable no-redeclare */
-/* eslint-disable no-use-before-define */
+/* eslint-disable */
 // Type definitions for mathjs 6.0
 // Project: https://mathjs.org/
 // Definitions by: Ilya Shestakov <https://github.com/siavol>,

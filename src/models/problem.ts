@@ -4,9 +4,9 @@ import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
 import { Annotations } from 'plotly.js'
 import { Layout, Plot, plot } from 'nodeplotlib'
-import { Matrix } from 'mathjs'
 import { math } from './math'
 import { replaceRowAndColByZeros } from '../functions/matrixUtils'
+import { Matrix } from '../../types/mathjs'
 
 export class Problem {
     dof: number // degrees of freedom

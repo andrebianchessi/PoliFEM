@@ -6,7 +6,7 @@ import { StaticTruss } from './tests/staticTruss'
 import { TrussAxialImpact } from './tests/trussAxialImpact'
 
 // Tests
-// StaticTruss()
-// TrussAxialImpact()
-// FallingTruss()
+StaticTruss()
+TrussAxialImpact()
+FallingTruss()
 BridgeModal()

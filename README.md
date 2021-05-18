@@ -1,6 +1,6 @@
 # PoliFEM
+<img src="modal.png" width="800">
 
-![](modal.png?raw=true "Title")
 ## Requirements
 - Node.js
 

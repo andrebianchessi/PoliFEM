@@ -9,4 +9,4 @@
 - In root directory, execute `npm run start`
 
 ## Other examples
-- Check examples in `tests/`
+- Check examples in `src/tests/`

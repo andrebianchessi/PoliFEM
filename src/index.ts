@@ -7,8 +7,8 @@ import { StaticTruss } from './tests/staticTruss'
 import { TrussAxialImpact } from './tests/trussAxialImpact'
 
 // Tests
-// StaticTruss()
-// TrussAxialImpact()
+StaticTruss()
+TrussAxialImpact()
 // FallingTruss()
-BridgeModal()
-BridgeStatic()
+// BridgeModal()
+// BridgeStatic()

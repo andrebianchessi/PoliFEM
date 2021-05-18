@@ -3,14 +3,14 @@ import { Problem } from './problem'
 
 export class BoundaryCondition {
     node: Node
-    type: 'Fix' | 'RollerX' | 'RollerY' | 'Pin'
-    value?: number
+    type: 'Fix' | 'RollerX' | 'RollerY' | 'Pin' | 'XDisplacement' | 'YDisplacement' | 'AngularDisplacement'
+    value: number
     restrictedIndices: number[]
 
-    constructor (node: Node, type: 'Fix' | 'RollerX' | 'RollerY' | 'Pin', p: Problem) {
+    constructor (node: Node, type: 'Fix' | 'RollerX' | 'RollerY' | 'Pin' | 'XDisplacement' | 'YDisplacement' | 'AngularDisplacement', p: Problem, value:number = 0) {
         this.node = node
         this.type = type
-        this.value = 0
+        this.value = value
         this.restrictedIndices = []
         p.boundaryConditions.push(this)
         switch (this.type) {
@@ -40,6 +40,30 @@ export class BoundaryCondition {
         }
         case 'Pin': {
             for (const i of [this.node.uIndex, this.node.vIndex]) {
+                if (i != null) {
+                    this.restrictedIndices.push(i)
+                }
+            }
+            break
+        }
+        case 'XDisplacement': {
+            for (const i of [this.node.uIndex]) {
+                if (i != null) {
+                    this.restrictedIndices.push(i)
+                }
+            }
+            break
+        }
+        case 'YDisplacement': {
+            for (const i of [this.node.vIndex]) {
+                if (i != null) {
+                    this.restrictedIndices.push(i)
+                }
+            }
+            break
+        }
+        case 'AngularDisplacement': {
+            for (const i of [this.node.wIndex]) {
                 if (i != null) {
                     this.restrictedIndices.push(i)
                 }

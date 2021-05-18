@@ -5,7 +5,7 @@ import { BoundaryCondition } from './boundaryCondition'
 import { Annotations } from 'plotly.js'
 import { Layout, Plot, plot } from 'nodeplotlib'
 import { math } from './math'
-import { replaceRowAndColByZeros } from '../functions/matrixUtils'
+import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
 
 export class Problem {
@@ -86,6 +86,12 @@ export class Problem {
     applyBC () {
         for (const b of this.boundaryConditions) {
             for (const i of b.restrictedIndices) {
+                const col = getCol(i, this.K!)
+                for (let row = 0; row < this.dof; row++) {
+                    const colValue = col.get([row, 0])
+                    const initialFValue = this.F!.get([row, 0])
+                    this.F!.set([row, 0], initialFValue - colValue * b.value)
+                }
                 replaceRowAndColByZeros(this.K!, i)
                 this.K!.set([i, i], 1)
                 this.F!.set([i, 0], b.value)

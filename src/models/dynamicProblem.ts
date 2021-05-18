@@ -133,7 +133,7 @@ export class DynamicProblem extends Problem {
         const eigs = getEigs(mult([this.Minv!, this.K!]) as Matrix, this)
         for (let i = 0; i < eigs.values.length; i++) {
             const displacementVector = eigs.vectors[i]
-            frequencies.push(Math.sqrt(eigs.values[i]))
+            frequencies.push(Math.sqrt(eigs.values[i]) / (2 * Math.PI))
             displacements.push(displacementVector!)
         }
         // sort ascending by vibration
@@ -204,7 +204,7 @@ export class DynamicProblem extends Problem {
             data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
-        layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i]
+        layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i] + ' Hz'
         plot(data, layout)
     }
 }

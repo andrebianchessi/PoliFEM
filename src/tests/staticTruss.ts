@@ -36,6 +36,7 @@ export function StaticTruss ():boolean {
     new BoundaryCondition(n4, 'Fix', p)
 
     p.solve()
+    p.plotDisplacements(10)
 
     return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

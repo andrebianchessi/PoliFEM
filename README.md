@@ -1,4 +1,6 @@
 # PoliFEM
+
+![Alt text](modal.png?raw=true "Title")
 ## Requirements
 - Node.js
 

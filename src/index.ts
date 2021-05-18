@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { math } from './models/math'
-import { DynamicTrussTest1 } from './tests/dynamicTrussTest1'
+import { DynamicTrussTest1 } from './tests/trussAxialImpact'
 import { DynamicTrussTest2 } from './tests/dynamicTrussTest2'
-import { DynamicTrussTest3 } from './tests/dynamicTrussTest3'
-import { ModalTest } from './tests/modalTest'
-import { StaticTrussTest } from './tests/staticTrussTest'
+import { DynamicTrussTest3 } from './tests/fallingTruss'
+import { ModalTest } from './tests/simpleModal'
+import { StaticTrussTest } from './tests/staticTruss'
 
 // StaticTrussTest()
 // DynamicTrussTest1()

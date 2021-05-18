@@ -11,6 +11,7 @@ export class MassMatrix {
     constructor (element: Element, type: 'Truss' | 'Frame') {
         this.type = type
         switch (type) {
+        // TODO: add beam and frame
         case 'Truss': {
             const rho = (element.properties as TrussProperties).rho!
             const A = (element.properties as TrussProperties).A

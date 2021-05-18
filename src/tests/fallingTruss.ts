@@ -3,11 +3,8 @@ import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { ElementWithWeight } from '../models/elementWithWeight'
 
-/**
- * Test of an axial impact on bar fixed on one end
- */
-export function DynamicTrussTest3 () {
-    console.log('Dynamic truss test 3')
+export function FallingTruss () {
+    console.log('Falling truss test')
 
     const timeStep = 0.0000005
     const duration = 300 * 1 / 1000000
@@ -29,7 +26,4 @@ export function DynamicTrussTest3 () {
 
     p.solveTimeHistory()
     p.plotNodeXDisplacement(n2!)
-
-    // p.plotElementTension(p.elements.get(25)!)
-    // console.log('ok')
 }

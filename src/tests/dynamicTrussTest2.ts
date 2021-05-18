@@ -1,24 +1,17 @@
-/*
-
-Test of an axial impact on bar fixed o on
-
-*/
 import { Element } from '../models/element'
 import { Node } from '../models/node'
-import { Load } from '../models/load'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { StaticProblem } from '../models/staticProblem'
 
 /**
- * Finds truss bridge natural frequency
+ * Test of modal analisys of a truss bridge
  */
-export function DynamicTrussTest2 () {
-    console.log('Dynamic truss test 2')
+export function BridgeModal () {
+    console.log('Bridge modal test 2')
 
     const L = 1100 // bridge length
     const H = 213 // bridge height
-    const load = 10 * 1000
     const properties = { E: 30 * 1000000, A: 8, rho: 7.4 / 10000 }
     const elementType = 'Truss'
 
@@ -64,19 +57,10 @@ export function DynamicTrussTest2 () {
         for (let i = 2; i <= 4; i++) {
             new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
         }
-
-        new Load(0, -load, 0, archNodes[2], p)
         new BoundaryCondition(floorNodes[0], 'RollerX', p)
         new BoundaryCondition(floorNodes[6], 'Pin', p)
     }
 
-    // pStatic.plot()
-    // try {
-    //     pStatic.solve()
-    //     pStatic.plotDisplacements(10)
-    // } catch (e) {
-    //     console.log(e)
-    // }
     pDynamic.solveModal()
     const displacementScale = 35
     pDynamic.plotModeOfVibration(0, displacementScale)

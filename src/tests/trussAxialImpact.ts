@@ -5,10 +5,10 @@ import { DynamicProblem } from '../models/dynamicProblem'
 import { DynamicLoad } from '../models/dynamicLoad'
 
 /**
- * Test of an axial impact on bar fixed on one end
+ * Test of an axial impact on a horizontal bar fixed on one end
  */
-export function DynamicTrussTest1 () {
-    console.log('Dynamic truss test 1')
+export function TrussAxialImpact () {
+    console.log('Truss axial impact')
 
     const timeStep = 0.0000005
     const duration = 300 * 1 / 1000000

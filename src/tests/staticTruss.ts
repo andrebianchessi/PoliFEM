@@ -14,7 +14,7 @@ import { StaticProblem } from '../models/staticProblem'
 /**
  * Test of a truss bar structure
  */
-export function StaticTrussTest ():boolean {
+export function StaticTruss ():boolean {
     console.log('Static truss test')
     const p = new StaticProblem()
 

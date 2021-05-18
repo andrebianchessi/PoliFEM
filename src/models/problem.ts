@@ -111,9 +111,10 @@ export class Problem {
             const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
             const arrowX = -l.x * scalingFactor
             const arrowY = l.y * scalingFactor
+            const magnitude = Math.sqrt(l.x * l.x + l.y * l.y).toString()
             arrows.push(
                 {
-                    text: Math.sqrt(l.x * l.x + l.y * l.y).toString(),
+                    text: l.isWeight ? 'g' : magnitude,
                     x: l.node.x,
                     y: l.node.y,
                     xref: 'x',

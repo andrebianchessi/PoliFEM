@@ -78,7 +78,7 @@ export function DynamicTrussTest2 () {
     //     console.log(e)
     // }
     pDynamic.solveModal()
-    const displacementScale = 30
+    const displacementScale = 35
     pDynamic.plotModeOfVibration(0, displacementScale)
     pDynamic.plotModeOfVibration(1, displacementScale)
     pDynamic.plotModeOfVibration(2, displacementScale)

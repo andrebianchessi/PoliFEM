@@ -17,7 +17,9 @@ export class Problem {
     loads: Load[]
     boundaryConditions: BoundaryCondition[]
     K?: Matrix
+    KWithoutBC?:Matrix
     F?: Matrix
+    FWithoutBC?:Matrix
     U?: Matrix | Matrix[]
     M?: Matrix
 
@@ -33,7 +35,9 @@ export class Problem {
 
     build () {
         this.buildK()
+        this.KWithoutBC = math.clone!(this.K)
         this.buildF()
+        this.FWithoutBC = math.clone!(this.F)
         this.applyBC()
     }
 

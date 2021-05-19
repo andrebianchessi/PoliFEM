@@ -4,7 +4,6 @@ import { Problem } from './problem'
 import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { Annotations } from 'plotly.js'
-import { Node } from './node'
 
 export class StaticProblem extends Problem {
     U?: Matrix

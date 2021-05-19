@@ -37,7 +37,7 @@ export function StaticTruss ():boolean {
 
     p.solve()
     p.plotDisplacements(10)
-    p.plotExternalForces()
+    p.plotExternalLoads()
 
     return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

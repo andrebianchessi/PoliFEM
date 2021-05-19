@@ -103,7 +103,7 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveTimeHistory (method:('Implicit'|'Explicit') = 'Implicit') {
+    solveTimeHistory (method:'Implicit'|'Explicit') {
         this.build()
 
         const dt = this.timeStep!

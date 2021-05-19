@@ -10,7 +10,7 @@ import { Element } from '../models/element'
 export function FallingBeam () {
     console.log('Falling beam test')
 
-    const timeStep = 0.0000001
+    const timeStep = 0.000001
     const duration = 0.001
     const nElements = 40
     const finalX = 20
@@ -34,7 +34,7 @@ export function FallingBeam () {
     new BoundaryCondition(n2!, 'RollerX', p)
     p.plot()
 
-    p.solveTimeHistory()
+    p.solveTimeHistory('Implicit')
     p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
     p.plotNodeYDisplacement(beamNodes[3])
 }

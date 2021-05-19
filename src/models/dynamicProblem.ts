@@ -11,7 +11,7 @@ import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
 import { InitialSpeed } from './initialSpeed'
-import { timeStepsToRecalculateK } from '../constants'
+import { beta, gamma, timeStepsToRecalculateK } from '../constants'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
@@ -103,7 +103,7 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    solveTimeHistory () {
+    solveTimeHistory (method:('Implicit'|'Explicit') = 'Implicit') {
         this.build()
 
         const dt = this.timeStep!
@@ -113,35 +113,129 @@ export class DynamicProblem extends Problem {
         this.Udotdot!.push(
             mult([this.Minv!, sum([this.F!, this.FDynamic!(t), mult([-1, this.K!, this.U![0]])])]) as Matrix
         )
-        let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
 
-        let timeStep = 0
-        while (t < this.duration!) {
-            timeStep++
-            const uNext = mult([
-                mult([dt * dt, this.Minv!]),
-                sum([
+        if (method === 'Explicit') {
+            let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
+
+            let timeStepNumber = 0
+            while (t < this.duration!) {
+                timeStepNumber++
+                const uNext = mult([
+                    mult([dt * dt, this.Minv!]),
+                    sum([
+                        this.F!,
+                        this.FDynamic!(t),
+                        mult([-1, this.K!, uPresent]),
+                        mult([2 / (dt * dt), this.M!, uPresent]),
+                        mult([-1 / (dt * dt), this.M!, uPast])
+                    ])
+                ]) as Matrix
+
+                uPast = math.clone!(uPresent)
+                uPresent = uNext
+                this.U!.push(uPresent)
+                t += dt
+                this.t.push(t)
+
+                if (this.dynamicK) {
+                    // Stiffness matrix is recalculated after some time
+                    // since the element angles might have changed
+                    if (timeStepNumber === timeStepsToRecalculateK) {
+                        timeStepNumber = 0
+                        this.buildK(uPresent)
+                        this.applyBC()
+                    }
+                }
+            }
+        }
+        if (method === 'Implicit') {
+            let timeStepNumber = 0
+            let uNext: Matrix
+            let uDotNext: Matrix
+            let uDotDotNext: Matrix
+
+            let uDotPresent = this.Udot![0]
+            let uDotDotPresent = this.Udotdot![0]
+
+            let Keff: Matrix
+            let B: Matrix
+            while (t < this.duration!) {
+                timeStepNumber++
+                Keff = sum([
+                    mult([1 / (beta * dt * dt), this.M!]),
+                    this.K!
+                ]) as Matrix
+
+                B = sum([
                     this.F!,
                     this.FDynamic!(t),
-                    mult([-1, this.K!, uPresent]),
-                    mult([2 / (dt * dt), this.M!, uPresent]),
-                    mult([-1 / (dt * dt), this.M!, uPast])
-                ])
-            ]) as Matrix
+                    mult([this.M!,
+                        sum([
+                            mult([
+                                1 / (beta * dt * dt),
+                                uPresent
+                            ]),
+                            mult([
+                                1 / (beta * dt),
+                                uDotPresent
+                            ]),
+                            mult([
+                                1 / (2 * beta) - 1,
+                                uDotDotPresent
+                            ])
+                        ])
+                    ])
+                ]) as Matrix
 
-            uPast = math.clone!(uPresent)
-            uPresent = uNext
-            this.U!.push(uPresent)
-            t += this.timeStep!
-            this.t.push(t)
+                uNext = math.lusolve!(Keff, B) as Matrix
 
-            if (this.dynamicK) {
-                // Stiffness matrix is recalculated after some time
-                // since the element angles might have changed
-                if (timeStep % timeStepsToRecalculateK === 0) {
-                    timeStep = 0
-                    this.buildK(uPresent)
-                    this.applyBC()
+                uDotNext = sum([
+                    mult([
+                        gamma / (beta * dt),
+                        sum([uNext, mult([-1, uPresent])]),
+                        mult([
+                            (1 - gamma / beta),
+                            uDotPresent
+                        ]),
+                        mult([
+                            -dt * (gamma / (2 * beta) - 1),
+                            uDotDotPresent
+                        ])
+                    ])
+                ]) as Matrix
+
+                uDotDotNext = sum([
+                    mult([
+                        1 / (beta * dt * dt),
+                        sum([
+                            uNext,
+                            mult([-1, uPresent]),
+                            mult([-dt, uDotPresent])
+                        ])
+                    ]),
+                    mult([
+                        1 - 1 / (2 * beta),
+                        uDotDotPresent
+                    ])
+                ]) as Matrix
+
+                this.U!.push(uNext)
+                this.Udot!.push(uDotNext)
+                this.Udotdot!.push(uDotDotNext)
+
+                uPresent = uNext
+                uDotPresent = uDotNext
+                uDotDotPresent = uDotDotNext
+                t += dt
+
+                if (this.dynamicK) {
+                    // Stiffness matrix is recalculated after some time
+                    // since the element angles might have changed
+                    if (timeStepNumber === timeStepsToRecalculateK) {
+                        timeStepNumber = 0
+                        this.buildK(uPresent)
+                        this.applyBC()
+                    }
                 }
             }
         }

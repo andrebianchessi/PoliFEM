@@ -10,9 +10,11 @@ import { math } from './math'
 import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
+import { InitialSpeed } from './initialSpeed'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
+    initialSpeeds: InitialSpeed[]
     M?: Matrix
     Minv?: Matrix
     FDynamic?: (t:number) => Matrix
@@ -33,6 +35,7 @@ export class DynamicProblem extends Problem {
         this.dynamicLoads = []
         this.NaturalFrequencies = []
         this.ModesOfVibration = []
+        this.initialSpeeds = []
     }
 
     build () {

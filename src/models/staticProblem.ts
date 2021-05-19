@@ -1,7 +1,10 @@
 import { math } from './math'
-import { plot } from 'nodeplotlib'
+import { Layout, plot } from 'nodeplotlib'
 import { Problem } from './problem'
 import { Matrix } from 'mathjs'
+import { mult } from '../functions/mult'
+import { Annotations } from 'plotly.js'
+import { Node } from './node'
 
 export class StaticProblem extends Problem {
     U?: Matrix
@@ -10,6 +13,10 @@ export class StaticProblem extends Problem {
 
         // Solve linear system
         this.U = math.lusolve!(this.K!, this.F!) as Matrix
+    }
+
+    getExternalNodalForces () : Matrix {
+        return mult([this.KWithoutBC!, this.U!]) as Matrix
     }
 
     plotDisplacements (displacementScaleFactor: number) {
@@ -37,6 +44,74 @@ export class StaticProblem extends Problem {
             first = false
         }
 
+        plot(data, layout)
+    }
+
+    plotExternalForces () {
+        const arrowsLength = 100
+        const dataAndLayout = this.problemDescriptionPlotData()
+        const data = dataAndLayout[0]
+
+        const arrows:Partial<Annotations>[] = []
+        const momentsX = []
+        const momentsY = []
+        const momentsText = []
+
+        const externalForces = this.getExternalNodalForces()
+
+        for (const [, map] of this.nodes) {
+            for (const [, node] of map) {
+                let fx, fy, fw
+                if (node.uIndex != null) {
+                    fx = externalForces.get([node.uIndex!, 0])
+                } else {
+                    fx = 0
+                }
+                if (node.vIndex != null) {
+                    fy = externalForces.get([node.vIndex!, 0])
+                } else {
+                    fy = 0
+                }
+                if (fx !== 0 || fy !== 0) {
+                    const scalingFactor = arrowsLength / Math.sqrt(fx * fx + fy * fy)
+                    const arrowX = -fx * scalingFactor
+                    const arrowY = fy * scalingFactor
+                    const magnitude = Math.sqrt(fx * fx + fy * fy).toString()
+                    arrows.push(
+                        {
+                            text: magnitude,
+                            x: node.x,
+                            y: node.y,
+                            xref: 'x',
+                            yref: 'y',
+                            showarrow: true,
+                            arrowhead: 5,
+                            ax: arrowX,
+                            ay: arrowY,
+                            arrowcolor: 'red',
+                            font: { color: 'red', size: 17 }
+                        }
+                    )
+                }
+                if (node.wIndex != null) {
+                    fw = externalForces.get([node.wIndex!, 0])
+                } else {
+                    fw = 0
+                }
+                if (fw !== 0) {
+                    momentsX.push(node.x)
+                    momentsY.push(node.y)
+                    momentsText.push(fw.toString())
+                }
+            }
+        }
+
+        const layout:Layout = {
+            hovermode: 'closest',
+            annotations: arrows
+        }
+
+        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
         plot(data, layout)
     }
 }

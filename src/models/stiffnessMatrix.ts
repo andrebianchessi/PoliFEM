@@ -13,12 +13,6 @@ export class StiffnessMatrix {
     constructor (element: Element, type: 'Frame' | 'Truss', U?:Matrix) {
         const c = element.angle(U).c()
         const s = element.angle(U).s()
-        if (c !== 1) {
-            console.log('c')
-        }
-        if (s !== 0) {
-            console.log('s')
-        }
         let t
 
         this.type = type

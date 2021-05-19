@@ -132,7 +132,11 @@ export class DynamicProblem extends Problem {
             this.U!.push(uPresent)
             t += this.timeStep!
             this.t.push(t)
+
+            // Stiffness matrix is recalculated after some time
+            // since the element angles might have changed
             if (timeStep % timeStepsToRecalculateK === 0) {
+                timeStep = 0
                 this.buildK(uPresent)
                 this.applyBC()
             }

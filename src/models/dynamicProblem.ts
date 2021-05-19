@@ -11,6 +11,7 @@ import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
 import { InitialSpeed } from './initialSpeed'
+import { timeStepsToRecalculateK } from '../constants'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
@@ -112,7 +113,9 @@ export class DynamicProblem extends Problem {
         )
         let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
 
+        let timeStep = 0
         while (t < this.duration!) {
+            timeStep++
             const uNext = mult([
                 mult([dt * dt, this.Minv!]),
                 sum([
@@ -129,8 +132,10 @@ export class DynamicProblem extends Problem {
             this.U!.push(uPresent)
             t += this.timeStep!
             this.t.push(t)
-            this.buildK(uPresent)
-            this.applyBC()
+            if (timeStep % timeStepsToRecalculateK === 0) {
+                this.buildK(uPresent)
+                this.applyBC()
+            }
         }
     }
 

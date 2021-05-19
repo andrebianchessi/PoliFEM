@@ -2,7 +2,7 @@
 
 import { BridgeModal } from './tests/bridgeModal'
 import { BridgeStatic } from './tests/bridgeStatic'
-import { FallingTruss } from './tests/fallingTruss'
+import { FallingTruss } from './tests/fallingBeam'
 import { StaticTruss } from './tests/staticTruss'
 import { TrussAxialImpact } from './tests/trussAxialImpact'
 

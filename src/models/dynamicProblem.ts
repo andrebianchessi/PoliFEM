@@ -192,15 +192,15 @@ export class DynamicProblem extends Problem {
                 uDotNext = sum([
                     mult([
                         gamma / (beta * dt),
-                        sum([uNext, mult([-1, uPresent])]),
-                        mult([
-                            (1 - gamma / beta),
-                            uDotPresent
-                        ]),
-                        mult([
-                            -dt * (gamma / (2 * beta) - 1),
-                            uDotDotPresent
-                        ])
+                        sum([uNext, mult([-1, uPresent])])
+                    ]),
+                    mult([
+                        (1 - gamma / beta),
+                        uDotPresent
+                    ]),
+                    mult([
+                        -dt * (gamma / (2 * beta) - 1),
+                        uDotDotPresent
                     ])
                 ]) as Matrix
 
@@ -222,6 +222,7 @@ export class DynamicProblem extends Problem {
                 this.U!.push(uNext)
                 this.Udot!.push(uDotNext)
                 this.Udotdot!.push(uDotDotNext)
+                this.t.push(t)
 
                 uPresent = uNext
                 uDotPresent = uDotNext

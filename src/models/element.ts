@@ -1,3 +1,4 @@
+import { Matrix } from 'mathjs'
 import { Angle } from './angleInRadians'
 import { FrameProperties } from './frameProperties'
 import { MassMatrix } from './massMatrix'
@@ -13,8 +14,7 @@ export class Element {
     n1: Node
     n2: Node
     properties: FrameProperties | TrussProperties
-    angle: Angle
-    K: StiffnessMatrix
+    K: (U?: Matrix) => StiffnessMatrix
     M?: MassMatrix
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
@@ -76,15 +76,36 @@ export class Element {
         }
 
         this.properties = properties
-        if (n2.x !== n1.x) {
-            this.angle = new Angle(Math.atan((n2.y - n1.y) / (n2.x - n1.x)))
-        } else {
-            this.angle = new Angle(-Math.PI / 2)
+        this.K = function (U?: Matrix) {
+            return (new StiffnessMatrix(this, type, U))
         }
-        this.K = (new StiffnessMatrix(this, type))
 
         p.elements.set(p.elementCount, this)
         p.elementCount += 1
+    }
+
+    angle (U?: Matrix): Angle {
+        let n1x
+        let n2x
+        let n1y
+        let n2y
+        if (U !== undefined && U !== null) {
+            n1x = this.n1.x + U!.get([this.n1.uIndex!, 0])
+            n2x = this.n2.x + U!.get([this.n2.uIndex!, 0])
+            n1y = this.n1.y + U!.get([this.n1.vIndex!, 0])
+            n2y = this.n2.y + U!.get([this.n2.vIndex!, 0])
+        } else {
+            n1x = this.n1.x
+            n2x = this.n2.x
+            n1y = this.n1.y
+            n2y = this.n2.y
+        }
+
+        if (n2x !== n1x) {
+            return new Angle(Math.atan((n2y - n1y) / (n2x - n1x)))
+        } else {
+            return new Angle(-Math.PI / 2)
+        }
     }
 
     length ():number {

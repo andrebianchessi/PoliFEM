@@ -10,9 +10,15 @@ export class StiffnessMatrix {
     k: Matrix
     kLocal:Matrix
 
-    constructor (element: Element, type: 'Frame' | 'Truss') {
-        const c = element.angle.c()
-        const s = element.angle.s()
+    constructor (element: Element, type: 'Frame' | 'Truss', U?:Matrix) {
+        const c = element.angle(U).c()
+        const s = element.angle(U).s()
+        if (c !== 1) {
+            console.log('c')
+        }
+        if (s !== 0) {
+            console.log('s')
+        }
         let t
 
         this.type = type

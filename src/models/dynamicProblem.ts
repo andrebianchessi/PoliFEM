@@ -11,6 +11,8 @@ import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
 import { InitialSpeed } from './initialSpeed'
+import { PrintSparseMatrix } from '../functions/printSparseMatrix'
+import { MatricesAreEqual } from '../functions/matrixUtils'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
@@ -129,6 +131,8 @@ export class DynamicProblem extends Problem {
             this.U!.push(uPresent)
             t += this.timeStep!
             this.t.push(t)
+            this.buildK(uPresent)
+            this.applyBC()
         }
     }
 
@@ -177,8 +181,8 @@ export class DynamicProblem extends Problem {
     plotElementTension (e: Element) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
-            const c = e.angle.c()
-            const s = e.angle.s()
+            const c = e.angle(this.U![i]).c()
+            const s = e.angle(this.U![i]).s()
             const u1 = this.U![i].get([e.n1.uIndex!, 0])
             const v1 = this.U![i].get([e.n1.uIndex!, 0])
             const u2 = this.U![i].get([e.n2.uIndex!, 0])

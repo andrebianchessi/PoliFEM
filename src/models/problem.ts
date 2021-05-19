@@ -42,7 +42,7 @@ export class Problem {
         this.applyBC()
     }
 
-    buildK () {
+    buildK (U?: Matrix) {
         // Initialize matrix
         this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
 
@@ -60,7 +60,7 @@ export class Problem {
             for (let i = 0; i < localIndices.length; i++) {
                 for (let j = 0; j < localIndices.length; j++) {
                     const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
-                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
+                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K(U).k.get([localIndices[i]!, localIndices[j]!]))
                 }
             }
         }

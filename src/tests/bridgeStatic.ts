@@ -56,7 +56,7 @@ export function BridgeStatic () {
         new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
     }
     new Load(0, -1000, 0, archNodes[2], p)
-    new BoundaryCondition(floorNodes[0], 'Pin', p)
+    new BoundaryCondition(floorNodes[0], 'RollerX', p)
     new BoundaryCondition(floorNodes[6], 'Pin', p)
 
     p.solve()

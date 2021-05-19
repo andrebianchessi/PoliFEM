@@ -10,6 +10,6 @@ import { TrussAxialImpact } from './tests/trussAxialImpact'
 // StaticTruss()
 // BridgeStatic()
 // TrussAxialImpact()
-FallingBeam()
-// BridgeModal()
+// FallingBeam()
+BridgeModal()
 console.log()

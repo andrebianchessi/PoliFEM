@@ -27,7 +27,7 @@ export function FallingBeam () {
         n2 = Node.get((i + 1) * elementLength, 0, p)
         beamNodes.push(n1)
         beamNodes.push(n2)
-        new Element('Truss', n1, n2, properties, p)
+        new Element('Frame', n1, n2, properties, p)
         new InitialSpeed(n2, 'Y', -w * n2.x, p)
     }
     new BoundaryCondition(Node.get(0, 0, p), 'Pin', p)

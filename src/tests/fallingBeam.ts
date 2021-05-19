@@ -4,6 +4,9 @@ import { DynamicProblem } from '../models/dynamicProblem'
 import { InitialSpeed } from '../models/initialSpeed'
 import { Element } from '../models/element'
 
+/**
+ * Simulates beam pinned at one end that falls into a support
+ */
 export function FallingBeam () {
     console.log('Falling beam test')
 

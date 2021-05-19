@@ -7,6 +7,7 @@ import { Layout, Plot, plot } from 'nodeplotlib'
 import { math } from './math'
 import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
+import { InitialSpeed } from './initialSpeed'
 
 export class Problem {
     dof: number // degrees of freedom
@@ -16,6 +17,7 @@ export class Problem {
     elementCount: number
     loads: Load[]
     boundaryConditions: BoundaryCondition[]
+    initialSpeeds?: InitialSpeed[]
     K?: Matrix
     KWithoutBC?:Matrix
     F?: Matrix
@@ -106,15 +108,17 @@ export class Problem {
     }
 
     problemDescriptionPlotData (): [Plot[], Layout] {
+        const arrowsLength = 100
         const arrows:Partial<Annotations>[] = []
         const momentsX = []
         const momentsY = []
         const momentsText = []
+        const initialRotationX = []
+        const initialRotationY = []
+        const initialRotationText = []
         const bcsX = []
         const bcsY = []
         const bcsText = []
-
-        const arrowsLength = 100
         for (const l of this.loads) {
             const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
             const arrowX = -l.x * scalingFactor
@@ -150,10 +154,39 @@ export class Problem {
                 bcsText.push(b.type)
             }
         }
+        if (this.initialSpeeds != null) {
+            for (const initialSpeed of this.initialSpeeds) {
+                if (initialSpeed.direction === 'X' || initialSpeed.direction === 'Y') {
+                    const scalingFactor = arrowsLength / initialSpeed.value
+                    const ax = initialSpeed.direction === 'X' ? scalingFactor * initialSpeed.value : 0
+                    const ay = initialSpeed.direction === 'Y' ? scalingFactor * initialSpeed.value : 0
+                    arrows.push(
+                        {
+                            text: initialSpeed.value.toString(),
+                            x: initialSpeed.node.x,
+                            y: initialSpeed.node.y,
+                            xref: 'x',
+                            yref: 'y',
+                            showarrow: true,
+                            arrowhead: 5,
+                            ax: ax,
+                            ay: ay,
+                            arrowcolor: 'purple',
+                            font: { color: 'purple', size: 17 }
+                        }
+                    )
+                } else {
+                    initialRotationX.push(initialSpeed.node.x)
+                    initialRotationY.push(initialSpeed.node.y)
+                    initialRotationText.push(initialSpeed.value.toString())
+                }
+            }
+        }
 
         const data: Plot[] = [
             { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
-            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' }
+            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' },
+            { x: initialRotationX, y: initialRotationY, name: 'Initial rotation speed', text: initialRotationText, hoverinfo: 'text', marker: { size: 18, color: 'purple' }, mode: 'markers', type: 'scatter' }
         ]
 
         let first = true

@@ -2,9 +2,13 @@ import { DynamicProblem } from './dynamicProblem'
 import { Node } from './node'
 
 export class InitialSpeed {
+    direction: 'X' | 'Y' | 'Z'
+    node: Node
     dofIndex:number
     value: number
     constructor (node: Node, direction: 'X' | 'Y' | 'Z', value: number, p:DynamicProblem) {
+        this.node = node
+        this.direction = direction
         switch (direction) {
         case 'X': {
             if (node.uIndex == null) {

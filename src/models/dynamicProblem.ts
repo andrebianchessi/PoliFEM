@@ -50,6 +50,9 @@ export class DynamicProblem extends Problem {
     setInitialConditions () {
         this.U = [math.zeros!([this.dof, 1], 'sparse') as Matrix]
         this.Udot = [math.zeros!([this.dof, 1], 'sparse') as Matrix]
+        for (const initialSpeed of this.initialSpeeds) {
+            this.Udot[0].set([initialSpeed.dofIndex, 0], initialSpeed.value)
+        }
     }
 
     buildM () {

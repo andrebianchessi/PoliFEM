@@ -1,5 +1,5 @@
 export type TrussProperties = {
     E: number
     A: number
-    rho?: number // weight/length
+    rho?: number // material density
 }

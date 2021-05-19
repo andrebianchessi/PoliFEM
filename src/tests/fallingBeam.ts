@@ -7,20 +7,23 @@ import { Element } from '../models/element'
 export function FallingBeam () {
     console.log('Falling beam test')
 
-    const timeStep = 0.000000001
-    const duration = 0.000001
-    const nElements = 80
+    const timeStep = 0.0000001
+    const duration = 0.001
+    const nElements = 40
     const finalX = 20
     const properties = { E: 30 * 1000000, A: 1, I: 1, rho: 7.4 / 10000 }
-    const w = 0.00001 // rotation speed
+    const w = 50 // rotation speed
 
     const p = new DynamicProblem(timeStep, duration)
     const elementLength = finalX / nElements
     let n1: Node
     let n2: Node
+    const beamNodes = []
     for (let i = 0; i < nElements; i++) {
         n1 = Node.get(i * elementLength, 0, p)
         n2 = Node.get((i + 1) * elementLength, 0, p)
+        beamNodes.push(n1)
+        beamNodes.push(n2)
         new Element('Frame', n1, n2, properties, p)
         new InitialSpeed(n2, 'Y', -w * n2.x, p)
     }
@@ -29,5 +32,6 @@ export function FallingBeam () {
     p.plot()
 
     p.solveTimeHistory()
-    p.plotNodeYDisplacement(Node.get(nElements / 2 * elementLength, 0, p))
+    p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
+    p.plotNodeYDisplacement(beamNodes[3])
 }

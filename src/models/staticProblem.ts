@@ -46,7 +46,11 @@ export class StaticProblem extends Problem {
         plot(data, layout)
     }
 
-    plotExternalLoads () {
+    /**
+     *
+     * @param minMagnitude Minumum load magnitude to be ploted
+     */
+    plotExternalLoads (minMagnitude: number = 0) {
         const arrowsLength = 100
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]
@@ -71,7 +75,7 @@ export class StaticProblem extends Problem {
                 } else {
                     fy = 0
                 }
-                if (fx !== 0 || fy !== 0) {
+                if (Math.abs(fx) > minMagnitude || Math.abs(fy) > minMagnitude) {
                     const scalingFactor = arrowsLength / Math.sqrt(fx * fx + fy * fy)
                     const arrowX = -fx * scalingFactor
                     const arrowY = fy * scalingFactor
@@ -97,7 +101,7 @@ export class StaticProblem extends Problem {
                 } else {
                     fw = 0
                 }
-                if (fw !== 0) {
+                if (Math.abs(fw) > minMagnitude) {
                     momentsX.push(node.x)
                     momentsY.push(node.y)
                     momentsText.push(fw.toString())

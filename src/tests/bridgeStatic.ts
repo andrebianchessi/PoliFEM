@@ -61,6 +61,7 @@ export function BridgeStatic () {
 
     p.solve()
     p.plotDisplacements(2000)
+    p.plotExternalLoads(10 ** (-10))
 
     console.log('ok')
 }

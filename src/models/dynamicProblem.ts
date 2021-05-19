@@ -11,8 +11,6 @@ import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
 import { InitialSpeed } from './initialSpeed'
-import { PrintSparseMatrix } from '../functions/printSparseMatrix'
-import { MatricesAreEqual } from '../functions/matrixUtils'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]

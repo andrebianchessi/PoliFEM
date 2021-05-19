@@ -2,7 +2,6 @@ import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { StaticProblem } from '../models/staticProblem'
-import { Load } from '../models/load'
 
 /**
  * Test of static analisys of a truss bridge

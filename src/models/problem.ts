@@ -172,7 +172,8 @@ export class Problem {
 
         const layout:Layout = {
             hovermode: 'closest',
-            annotations: arrows
+            annotations: arrows,
+            title: 'Problem description'
         }
         return [data, layout]
     }

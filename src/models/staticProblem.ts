@@ -15,7 +15,7 @@ export class StaticProblem extends Problem {
         this.U = math.lusolve!(this.K!, this.F!) as Matrix
     }
 
-    getExternalNodalForces () : Matrix {
+    getExternalNodalLoads () : Matrix {
         return mult([this.KWithoutBC!, this.U!]) as Matrix
     }
 
@@ -43,11 +43,11 @@ export class StaticProblem extends Problem {
             data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
-
+        layout.title = 'Original and deformed structure'
         plot(data, layout)
     }
 
-    plotExternalForces () {
+    plotExternalLoads () {
         const arrowsLength = 100
         const dataAndLayout = this.problemDescriptionPlotData()
         const data = dataAndLayout[0]
@@ -57,18 +57,18 @@ export class StaticProblem extends Problem {
         const momentsY = []
         const momentsText = []
 
-        const externalForces = this.getExternalNodalForces()
+        const externalLoads = this.getExternalNodalLoads()
 
         for (const [, map] of this.nodes) {
             for (const [, node] of map) {
                 let fx, fy, fw
                 if (node.uIndex != null) {
-                    fx = externalForces.get([node.uIndex!, 0])
+                    fx = externalLoads.get([node.uIndex!, 0])
                 } else {
                     fx = 0
                 }
                 if (node.vIndex != null) {
-                    fy = externalForces.get([node.vIndex!, 0])
+                    fy = externalLoads.get([node.vIndex!, 0])
                 } else {
                     fy = 0
                 }
@@ -94,7 +94,7 @@ export class StaticProblem extends Problem {
                     )
                 }
                 if (node.wIndex != null) {
-                    fw = externalForces.get([node.wIndex!, 0])
+                    fw = externalLoads.get([node.wIndex!, 0])
                 } else {
                     fw = 0
                 }
@@ -108,7 +108,8 @@ export class StaticProblem extends Problem {
 
         const layout:Layout = {
             hovermode: 'closest',
-            annotations: arrows
+            annotations: arrows,
+            title: 'External loads'
         }
 
         data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })

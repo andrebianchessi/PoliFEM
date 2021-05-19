@@ -59,7 +59,7 @@ export class DynamicProblem extends Problem {
         this.M = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
         // Build mass matrix
         for (const [, e] of this.elements) {
-            e.M = new MassMatrix(e, 'Truss')
+            e.M = new MassMatrix(e, e.type)
             let localIndices: number[] = []
             let globalIndices: number[] = []
             if (e.type === 'Frame') {

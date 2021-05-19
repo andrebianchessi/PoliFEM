@@ -8,6 +8,7 @@ import { math } from './math'
 import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
 import { InitialSpeed } from './initialSpeed'
+import { bcColor, initSpeedColor, loadColor } from '../constants'
 
 export class Problem {
     dof: number // degrees of freedom
@@ -135,8 +136,8 @@ export class Problem {
                     arrowhead: 5,
                     ax: arrowX,
                     ay: arrowY,
-                    arrowcolor: 'red',
-                    font: { color: 'red', size: 17 }
+                    arrowcolor: loadColor,
+                    font: { color: loadColor, size: 17 }
                 }
             )
             if (l.w !== 0) {
@@ -157,12 +158,12 @@ export class Problem {
         if (this.initialSpeeds != null) {
             for (const initialSpeed of this.initialSpeeds) {
                 if (initialSpeed.direction === 'X' || initialSpeed.direction === 'Y') {
-                    const scalingFactor = arrowsLength / initialSpeed.value
+                    const scalingFactor = Math.abs(arrowsLength / initialSpeed.value)
                     const ax = initialSpeed.direction === 'X' ? scalingFactor * initialSpeed.value : 0
                     const ay = initialSpeed.direction === 'Y' ? scalingFactor * initialSpeed.value : 0
                     arrows.push(
                         {
-                            text: initialSpeed.value.toString(),
+                            text: Math.abs(initialSpeed.value).toString(),
                             x: initialSpeed.node.x,
                             y: initialSpeed.node.y,
                             xref: 'x',
@@ -171,8 +172,8 @@ export class Problem {
                             arrowhead: 5,
                             ax: ax,
                             ay: ay,
-                            arrowcolor: 'purple',
-                            font: { color: 'purple', size: 17 }
+                            arrowcolor: initSpeedColor,
+                            font: { color: initSpeedColor, size: 17 }
                         }
                     )
                 } else {
@@ -184,9 +185,9 @@ export class Problem {
         }
 
         const data: Plot[] = [
-            { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' },
-            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: 'purple', size: 13 }, mode: 'markers', type: 'scatter' },
-            { x: initialRotationX, y: initialRotationY, name: 'Initial rotation speed', text: initialRotationText, hoverinfo: 'text', marker: { size: 18, color: 'purple' }, mode: 'markers', type: 'scatter' }
+            { x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: loadColor }, mode: 'markers', type: 'scatter' },
+            { x: bcsX, y: bcsY, name: 'Boundary conditions', text: bcsText, hoverinfo: 'text', marker: { color: bcColor, size: 13 }, mode: 'markers', type: 'scatter' },
+            { x: initialRotationX, y: initialRotationY, name: 'Initial rotation speed', text: initialRotationText, hoverinfo: 'text', marker: { size: 18, color: initSpeedColor }, mode: 'markers', type: 'scatter' }
         ]
 
         let first = true

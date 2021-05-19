@@ -2,13 +2,13 @@
 
 import { BridgeModal } from './tests/bridgeModal'
 import { BridgeStatic } from './tests/bridgeStatic'
-import { FallingTruss } from './tests/fallingBeam'
+import { FallingBeam } from './tests/fallingBeam'
 import { StaticTruss } from './tests/staticTruss'
 import { TrussAxialImpact } from './tests/trussAxialImpact'
 
 // Tests
-StaticTruss()
+// StaticTruss()
+// BridgeStatic()
 // TrussAxialImpact()
-// FallingTruss()
+FallingBeam()
 // BridgeModal()
-BridgeStatic()

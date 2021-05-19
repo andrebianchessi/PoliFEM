@@ -55,13 +55,13 @@ export function BridgeStatic () {
     for (let i = 2; i <= 4; i++) {
         new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
     }
-    new Load(0, -1000, 0, archNodes[2], p)
     new BoundaryCondition(floorNodes[0], 'RollerX', p)
     new BoundaryCondition(floorNodes[6], 'Pin', p)
+    new BoundaryCondition(floorNodes[3], 'YDisplacement', p, -L / 10)
 
     p.solve()
-    p.plotDisplacements(2000)
-    p.plotExternalLoads(10 ** (-10))
+    p.plotDisplacements(1 / 10)
+    p.plotExternalLoads(10 ** (-6))
 
     console.log('ok')
 }

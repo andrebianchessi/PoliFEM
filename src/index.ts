@@ -8,8 +8,8 @@ import { TrussAxialImpact } from './tests/trussAxialImpact'
 
 // Tests
 // StaticTruss()
-// BridgeStatic()
+BridgeStatic()
 // TrussAxialImpact()
 // FallingBeam()
-BridgeModal()
+// BridgeModal()
 console.log()

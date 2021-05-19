@@ -1,5 +1,4 @@
 import { Matrix } from 'mathjs'
-import { mult } from '../functions/mult'
 import { Element } from './element'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'

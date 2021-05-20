@@ -1,7 +1,7 @@
 # PoliFEM
 <img src="modal.png" width="800">
 <img src="static.png" width="800">
-<img src="load.png" width="800">
+<img src="loads.png" width="800">
 
 ## About
 Static and dynamic (modal and time history) Finite Element Solver for frames, beams and truss structures.

@@ -54,8 +54,8 @@ export function BridgeStatic () {
     for (let i = 2; i <= 4; i++) {
         new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
     }
-    new BoundaryCondition(floorNodes[0], 'RollerX', p)
-    new BoundaryCondition(floorNodes[6], 'Pin', p)
+    new BoundaryCondition(floorNodes[0], 'Pin', p)
+    new BoundaryCondition(floorNodes[6], 'RollerX', p)
     new BoundaryCondition(floorNodes[3], 'YDisplacement', p, -L / 10)
 
     p.solve()

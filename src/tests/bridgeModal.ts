@@ -57,12 +57,12 @@ export function BridgeModal () {
         for (let i = 2; i <= 4; i++) {
             new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
         }
-        new BoundaryCondition(floorNodes[0], 'RollerX', p)
-        new BoundaryCondition(floorNodes[6], 'Pin', p)
+        new BoundaryCondition(floorNodes[0], 'Pin', p)
+        new BoundaryCondition(floorNodes[6], 'RollerX', p)
     }
 
     pDynamic.solveModal()
-    const displacementScale = 35
+    const displacementScale = 100
     pDynamic.plotModeOfVibration(0, displacementScale)
 
     console.log('ok')

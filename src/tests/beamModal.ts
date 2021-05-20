@@ -1,7 +1,6 @@
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
-import { InitialSpeed } from '../models/initialSpeed'
 import { Element } from '../models/element'
 
 /**
@@ -29,8 +28,4 @@ export function BeamModal () {
 
     p.solveModal()
     p.plotModeOfVibration(0, 1)
-
-    // p.solveTimeHistory('Implicit')
-    // p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
-    // p.plotNodeYDisplacement(beamNodes[3])
 }

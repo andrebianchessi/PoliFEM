@@ -18,12 +18,12 @@ export function getEigs (m:mathjs.Matrix, p:Problem): { values: number[], vector
     const real = e.realEigenvalues
     const vectorsMatrix = e.eigenvectorMatrix
     const reducedVectors = []
-    for (let i = 0; i < vectorsMatrix.rows; i++) {
-        const line = []
-        for (let j = 0; j < vectorsMatrix.columns; j++) {
-            line.push(vectorsMatrix.get(i, j))
+    for (let j = 0; j < vectorsMatrix.columns; j++) {
+        const column = []
+        for (let i = 0; i < vectorsMatrix.rows; i++) {
+            column.push(vectorsMatrix.get(i, j))
         }
-        reducedVectors.push(line)
+        reducedVectors.push(column)
     }
 
     const expandedVectors: number[][] = []

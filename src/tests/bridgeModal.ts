@@ -64,6 +64,9 @@ export function BridgeModal () {
     pDynamic.solveModal()
     const displacementScale = 100
     pDynamic.plotModeOfVibration(0, displacementScale)
+    pDynamic.plotModeOfVibration(1, displacementScale)
+    pDynamic.plotModeOfVibration(2, displacementScale)
+    pDynamic.plotModeOfVibration(3, displacementScale)
 
     console.log('ok')
 }

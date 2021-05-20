@@ -27,5 +27,8 @@ export function BeamModal () {
     p.plot()
 
     p.solveModal()
-    p.plotModeOfVibration(0, 1)
+    p.plotModeOfVibration(0)
+    p.plotModeOfVibration(1)
+    p.plotModeOfVibration(2)
+    p.plotModeOfVibration(3)
 }

@@ -29,7 +29,7 @@ export function TrussAxialImpact () {
     new Load(100, 0, 0, Node.get(0, 0, p), p)
     p.plot()
 
-    p.solveTimeHistory('Implicit')
+    p.solveTimeHistory('Explicit')
 
     p.plotElementTension(p.elements.get(25)!)
     console.log('ok')

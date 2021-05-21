@@ -2,7 +2,6 @@ import { BoundaryCondition } from '../models/boundaryCondition'
 import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
-import { DynamicLoad } from '../models/dynamicLoad'
 import { Load } from '../models/load'
 
 /**

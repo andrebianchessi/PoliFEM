@@ -242,7 +242,7 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    async solveModal () {
+    solveModal () {
         this.build()
         const frequencies: number[] = []
         const displacements: number[][] = []

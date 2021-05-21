@@ -7,7 +7,7 @@ import { StaticProblem } from '../models/staticProblem'
  * Test of static analisys of a truss bridge
  */
 export function BridgeStatic () {
-    console.log('Bridge static test 2')
+    console.log('Bridge static test')
 
     const L = 1100 // bridge length
     const H = 213 // bridge height
@@ -56,7 +56,7 @@ export function BridgeStatic () {
     }
     new BoundaryCondition(floorNodes[0], 'Pin', p)
     new BoundaryCondition(floorNodes[6], 'RollerX', p)
-    new BoundaryCondition(floorNodes[3], 'YDisplacement', p, -L / 10)
+    new BoundaryCondition(archNodes[2], 'YDisplacement', p, -L / 10)
 
     p.solve()
     p.plotDisplacements(1 / 10)

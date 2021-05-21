@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { BeamDynamic } from './beamDynamic'
 import { BeamModal } from './beamModal'
+import { BridgeDynamic } from './bridgeDynamic'
 import { BridgeModal } from './bridgeModal'
 import { BridgeStatic } from './bridgeStatic'
 import { FallingBeam } from './fallingBeam'
@@ -9,9 +10,10 @@ import { TrussAxialImpact } from './trussAxialImpact'
 
 // Tests
 // StaticTruss()
-// BridgeStatic()
-TrussAxialImpact()
+// TrussAxialImpact()
 // FallingBeam()
 // BeamModal()
-// BridgeModal()
 // BeamDynamic()
+// BridgeModal()
+// BridgeStatic()
+BridgeDynamic()

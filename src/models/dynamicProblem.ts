@@ -48,7 +48,7 @@ export class DynamicProblem extends Problem {
     }
 
     /**
-     * Sets all initial displacements and velocities to zero
+     * Sets all initial displacements and velocities
      */
     setInitialConditions () {
         this.U = [math.zeros!([this.dof, 1], 'sparse') as Matrix]

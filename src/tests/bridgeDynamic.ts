@@ -62,7 +62,7 @@ export function BridgeDynamic () {
     new BoundaryCondition(floorNodes[0], 'Pin', p)
     new BoundaryCondition(floorNodes[6], 'RollerX', p)
 
-    new Load(0, -load, 0, floorNodes[3], p)
+    new Load(0, -load, 0, archNodes[2], p)
 
     p.plot()
     p.solveTimeHistory('Implicit')

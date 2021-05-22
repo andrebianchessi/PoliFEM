@@ -287,13 +287,7 @@ export class DynamicProblem extends Problem {
     plotElementTension (e: Element) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
-            const c = e.angle(this.U![i]).c()
-            const s = e.angle(this.U![i]).s()
-            const u1 = this.U![i].get([e.n1.uIndex!, 0])
-            const v1 = this.U![i].get([e.n1.uIndex!, 0])
-            const u2 = this.U![i].get([e.n2.uIndex!, 0])
-            const v2 = this.U![i].get([e.n2.uIndex!, 0])
-            sigmaElementI.push(e.properties.E / e.length() * (-c * u1 + -s * v1 + c * u2 + s * v2))
+            sigmaElementI.push(e.getSigma(this.U![i], this))
         }
         plot([{ x: this.t, y: sigmaElementI }])
     }

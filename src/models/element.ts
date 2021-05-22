@@ -1,8 +1,13 @@
 import { Matrix } from 'mathjs'
+import { mult } from '../functions/mult'
+// eslint-disable-next-line camelcase
+import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
+import { sum } from '../functions/sum'
 import { Angle } from './angleInRadians'
 import { FrameProperties } from './frameProperties'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
+import { NodalLoads } from './nodalLoads'
 import { Node } from './node'
 import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
@@ -115,18 +120,77 @@ export class Element {
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY)
     }
 
-    plotLoads (U: Matrix) {
+    getNodalLoads (U: Matrix, p: Problem): NodalLoads {
         let t: Matrix
+        let FLocal: Matrix
+        let ULocal: Matrix
 
         if (this.type === 'Truss') {
-            t = math.matrix!(
-                [
-                    [c, s, 0, 0],
-                    [-s, c, 0, 0],
-                    [0, 0, c, s],
-                    [0, 0, -s, c]
-                ]
+            t = getT_4x4(this.angle(U))
+            FLocal = math.matrix!([
+                p.F!.get([this.n1.uIndex!, 0]),
+                p.F!.get([this.n1.vIndex!, 0]),
+                p.F!.get([this.n2.uIndex!, 0]),
+                p.F!.get([this.n2.vIndex!, 0])
+            ])
+            ULocal = math.matrix!([
+                U!.get([this.n1.uIndex!, 0]),
+                U!.get([this.n1.vIndex!, 0]),
+                U!.get([this.n2.uIndex!, 0]),
+                U!.get([this.n2.vIndex!, 0])
+            ])
+        } else {
+            t = getT_6x6(this.angle(U))
+            FLocal = math.matrix!([
+                p.F!.get([this.n1.uIndex!, 0]),
+                p.F!.get([this.n1.vIndex!, 0]),
+                p.F!.get([this.n1.wIndex!, 0]),
+                p.F!.get([this.n2.uIndex!, 0]),
+                p.F!.get([this.n2.vIndex!, 0]),
+                p.F!.get([this.n2.wIndex!, 0])
+            ])
+            ULocal = math.matrix!([
+                U.get([this.n1.uIndex!, 0]),
+                U.get([this.n1.vIndex!, 0]),
+                U.get([this.n1.wIndex!, 0]),
+                U.get([this.n2.uIndex!, 0]),
+                U.get([this.n2.vIndex!, 0]),
+                U.get([this.n2.wIndex!, 0])
+            ])
+        }
+
+        const KLocal = this.K(U).kLocal
+
+        const nl = sum([FLocal, mult([KLocal, mult([t, ULocal])])]) as Matrix
+
+        if (this.type === 'Truss') {
+            return new NodalLoads(
+                nl.get([0]),
+                nl.get([1]),
+                0,
+                nl.get([2]),
+                nl.get([3]),
+                0
+            )
+        } else {
+            return new NodalLoads(
+                nl.get([0]),
+                nl.get([1]),
+                nl.get([2]),
+                nl.get([3]),
+                nl.get([4]),
+                nl.get([5])
             )
         }
+    }
+
+    /**
+     * Calculates normal tension in element
+     * @param U Global displacement vector
+     * @param p problem
+     */
+    getSigma (U: Matrix, p: Problem) {
+        const nodalLoads = this.getNodalLoads(U, p)
+        return -nodalLoads.X1 / this.properties.A
     }
 }

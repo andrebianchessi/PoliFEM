@@ -129,7 +129,7 @@ export class StaticProblem extends Problem {
             const forces = e.getForces(this.U!, this, x)
             N.push(forces.N)
             V.push(forces.V)
-            M.push(forces.M)
+            M.push(-forces.M)
             X.push(x)
         }
         plot([{ x: X, y: N, name: 'N' }, { x: X, y: V, name: 'V' }, { x: X, y: M, name: 'M' }])

@@ -2,6 +2,7 @@ import { Matrix } from 'mathjs'
 import { Angle } from './angleInRadians'
 import { FrameProperties } from './frameProperties'
 import { MassMatrix } from './massMatrix'
+import { math } from './math'
 import { Node } from './node'
 import { Problem } from './problem'
 import { StiffnessMatrix } from './stiffnessMatrix'
@@ -112,5 +113,20 @@ export class Element {
         const deltaX = this.n2.x - this.n1.x
         const deltaY = this.n2.y - this.n1.y
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+    }
+
+    plotLoads (U: Matrix) {
+        let t: Matrix
+
+        if (this.type === 'Truss') {
+            t = math.matrix!(
+                [
+                    [c, s, 0, 0],
+                    [-s, c, 0, 0],
+                    [0, 0, c, s],
+                    [0, 0, -s, c]
+                ]
+            )
+        }
     }
 }

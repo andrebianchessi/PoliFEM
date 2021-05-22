@@ -1,4 +1,6 @@
 import { Matrix } from 'mathjs'
+// eslint-disable-next-line camelcase
+import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
 import { Element } from './element'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'
@@ -11,23 +13,13 @@ export class StiffnessMatrix {
     kLocal:Matrix
 
     constructor (element: Element, type: 'Frame' | 'Truss', U?:Matrix) {
-        const c = element.angle(U).c()
-        const s = element.angle(U).s()
         let t
 
         this.type = type
         switch (type) {
         case 'Frame': {
-            t = math.matrix!(
-                [
-                    [c, s, 0, 0, 0, 0],
-                    [-s, c, 0, 0, 0, 0],
-                    [0, 0, 1, 0, 0, 0],
-                    [0, 0, 0, c, s, 0],
-                    [0, 0, 0, -s, c, 0],
-                    [0, 0, 0, 0, 0, 1]
-                ]
-            )
+            t = getT_6x6(element.angle(U))
+
             const E = element.properties.E
             const I = (element.properties as FrameProperties).I
             const A = (element.properties as FrameProperties).A
@@ -51,14 +43,8 @@ export class StiffnessMatrix {
             break
         }
         case 'Truss': {
-            t = math.matrix!(
-                [
-                    [c, s, 0, 0],
-                    [-s, c, 0, 0],
-                    [0, 0, c, s],
-                    [0, 0, -s, c]
-                ]
-            )
+            t = t = getT_4x4(element.angle(U))
+
             const E = element.properties.E
             const A = (element.properties as TrussProperties).A
             const l = element.length()

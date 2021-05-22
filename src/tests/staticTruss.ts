@@ -25,7 +25,7 @@ export function StaticTruss ():boolean {
     const n3 = Node.get(1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
     const n4 = Node.get(-1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
 
-    new Element('Truss', n3, n1, properties, p)
+    const e1 = new Element('Truss', n3, n1, properties, p)
     new Element('Truss', n1, n2, properties, p)
     new Element('Truss', n4, n1, properties, p)
 
@@ -38,6 +38,7 @@ export function StaticTruss ():boolean {
     p.solve()
     p.plotDisplacements(10)
     p.plotExternalLoads()
+    p.plotForcesDiagram(e1)
 
     return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

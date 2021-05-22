@@ -12,6 +12,7 @@ import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
 import { InitialSpeed } from './initialSpeed'
 import { beta, gamma, timeStepsToRecalculateK } from '../constants'
+import { StaticProblem } from './staticProblem'
 
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
@@ -287,7 +288,7 @@ export class DynamicProblem extends Problem {
     plotElementTension (e: Element) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
-            sigmaElementI.push(e.getNormalTension(this.U![i], this))
+            sigmaElementI.push(e.getNormalTension(this.U![i], this as unknown as StaticProblem))
         }
         plot([{ x: this.t, y: sigmaElementI }])
     }

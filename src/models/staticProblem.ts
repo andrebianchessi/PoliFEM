@@ -4,6 +4,7 @@ import { Problem } from './problem'
 import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { Annotations } from 'plotly.js'
+import { Element } from './element'
 
 export class StaticProblem extends Problem {
     U?: Matrix
@@ -117,5 +118,20 @@ export class StaticProblem extends Problem {
 
         data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
         plot(data, layout)
+    }
+
+    plotForcesDiagram (e: Element) {
+        const N: number[] = []
+        const V: number[] = []
+        const M: number[] = []
+        const X: number[] = []
+        for (let x = 0; x <= 1; x = x + 0.01) {
+            const forces = e.getForces(this.U!, this, x)
+            N.push(forces.N)
+            V.push(forces.V)
+            M.push(forces.M)
+            X.push(x)
+        }
+        plot([{ x: X, y: N }, { x: X, y: V }, { x: X, y: M }])
     }
 }

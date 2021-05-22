@@ -287,7 +287,7 @@ export class DynamicProblem extends Problem {
     plotElementTension (e: Element) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
-            sigmaElementI.push(e.getSigma(this.U![i], this))
+            sigmaElementI.push(e.getNormalTension(this.U![i], this))
         }
         plot([{ x: this.t, y: sigmaElementI }])
     }

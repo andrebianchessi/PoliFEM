@@ -189,7 +189,7 @@ export class Element {
      * @param U Global displacement vector
      * @param p problem
      */
-    getSigma (U: Matrix, p: Problem) {
+    getNormalTension (U: Matrix, p: Problem) {
         const nodalLoads = this.getNodalLoads(U, p)
         return -nodalLoads.X1 / this.properties.A
     }

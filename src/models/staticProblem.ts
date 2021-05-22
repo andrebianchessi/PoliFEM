@@ -125,13 +125,15 @@ export class StaticProblem extends Problem {
         const V: number[] = []
         const M: number[] = []
         const X: number[] = []
-        for (let x = 0; x <= 1; x = x + 0.01) {
+        for (let x = 0; x < 1.02; x += 0.02) {
             const forces = e.getForces(this.U!, this, x)
             N.push(forces.N)
             V.push(forces.V)
             M.push(-forces.M)
             X.push(x)
         }
-        plot([{ x: X, y: N, name: 'N' }, { x: X, y: V, name: 'V' }, { x: X, y: M, name: 'M' }])
+        const data: any[] = [{ x: X, y: N, name: 'N', hoverinfo: 'y' }, { x: X, y: V, name: 'V', hoverinfo: 'y' }, { x: X, y: M, name: 'M', hoverinfo: 'y' }]
+        data.push({ x: [0, 1], y: [N[0] * 1.01, N[0] * 1.01], text: ['x:' + e.n1.x + ' y:' + e.n1.y, 'x:' + e.n2.x + ' y:' + e.n2.y], hoverinfo: 'text', name: 'Nodes', mode: 'markers', type: 'scatter' })
+        plot(data)
     }
 }

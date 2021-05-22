@@ -132,6 +132,6 @@ export class StaticProblem extends Problem {
             M.push(forces.M)
             X.push(x)
         }
-        plot([{ x: X, y: N }, { x: X, y: V }, { x: X, y: M }])
+        plot([{ x: X, y: N, name: 'N' }, { x: X, y: V, name: 'V' }, { x: X, y: M, name: 'M' }])
     }
 }

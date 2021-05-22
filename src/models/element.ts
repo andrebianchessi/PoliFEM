@@ -139,12 +139,12 @@ export class Element {
             t = getT_6x6(this.angle(U))
             ULocal = mult([
                 t, math.matrix!([
-                    U.get([this.n1.uIndex!, 0]),
-                    U.get([this.n1.vIndex!, 0]),
-                    U.get([this.n1.wIndex!, 0]),
-                    U.get([this.n2.uIndex!, 0]),
-                    U.get([this.n2.vIndex!, 0]),
-                    U.get([this.n2.wIndex!, 0])
+                    [U.get([this.n1.uIndex!, 0])],
+                    [U.get([this.n1.vIndex!, 0])],
+                    [U.get([this.n1.wIndex!, 0])],
+                    [U.get([this.n2.uIndex!, 0])],
+                    [U.get([this.n2.vIndex!, 0])],
+                    [U.get([this.n2.wIndex!, 0])]
                 ])
             ]) as Matrix
         }

@@ -15,3 +15,7 @@ Static and dynamic (modal, implicit time history and explicit time history) Fini
 
 ## Other examples
 - Check examples in `src/tests/`
+
+## TODO
+- Docstrings
+- Publish to npm

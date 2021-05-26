@@ -18,7 +18,7 @@ export class StiffnessMatrix {
         this.type = type
         switch (type) {
         case 'Frame': {
-            t = getT_6x6(element.angle(U))
+            t = getT_6x6(element.angle)
 
             const E = element.properties.E
             const I = (element.properties as FrameProperties).I
@@ -43,7 +43,7 @@ export class StiffnessMatrix {
             break
         }
         case 'Truss': {
-            t = t = getT_4x4(element.angle(U))
+            t = t = getT_4x4(element.angle)
 
             const E = element.properties.E
             const A = (element.properties as TrussProperties).A

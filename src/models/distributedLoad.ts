@@ -34,7 +34,7 @@ export class DistributedLoad {
         let t: Matrix
 
         if (e.type === 'Truss') {
-            t = getT_4x4(e.angle())
+            t = getT_4x4(e.angle)
             fGlobal = math.matrix!([
                 [x1],
                 [y1],
@@ -42,7 +42,7 @@ export class DistributedLoad {
                 [y2]
             ])
         } else {
-            t = getT_6x6(e.angle())
+            t = getT_6x6(e.angle)
             fGlobal = math.matrix!([
                 [x1],
                 [y1],

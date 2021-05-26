@@ -25,6 +25,7 @@ export class Element {
     K: (U?: Matrix) => StiffnessMatrix
     M?: MassMatrix
     distributedLoads: DistributedLoad[]
+    angle: Angle
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
         Element.count += 1
@@ -38,6 +39,13 @@ export class Element {
         this.type = type
         this.n1 = n1
         this.n2 = n2
+
+        if (this.n2.x !== this.n1.x) {
+            this.angle = new Angle(Math.atan((this.n2.y - this.n1.y) / (this.n2.x - this.n1.x)))
+        } else {
+            this.angle = new Angle(-Math.PI / 2)
+        }
+
         if (type === 'Frame') {
             if (this.n1.uIndex == null) {
                 this.n1.uIndex = p.dof
@@ -94,30 +102,6 @@ export class Element {
         p.elementCount += 1
     }
 
-    angle (U?: Matrix): Angle {
-        let n1x
-        let n2x
-        let n1y
-        let n2y
-        if (U !== undefined && U !== null) {
-            n1x = this.n1.x + U!.get([this.n1.uIndex!, 0])
-            n2x = this.n2.x + U!.get([this.n2.uIndex!, 0])
-            n1y = this.n1.y + U!.get([this.n1.vIndex!, 0])
-            n2y = this.n2.y + U!.get([this.n2.vIndex!, 0])
-        } else {
-            n1x = this.n1.x
-            n2x = this.n2.x
-            n1y = this.n1.y
-            n2y = this.n2.y
-        }
-
-        if (n2x !== n1x) {
-            return new Angle(Math.atan((n2y - n1y) / (n2x - n1x)))
-        } else {
-            return new Angle(-Math.PI / 2)
-        }
-    }
-
     length ():number {
         const deltaX = this.n2.x - this.n1.x
         const deltaY = this.n2.y - this.n1.y
@@ -129,7 +113,7 @@ export class Element {
         let ULocal: Matrix
 
         if (this.type === 'Truss') {
-            t = getT_4x4(this.angle(U))
+            t = getT_4x4(this.angle)
             ULocal = mult([
                 t, math.matrix!([
                     [U!.get([this.n1.uIndex!, 0])],
@@ -139,7 +123,7 @@ export class Element {
                 ])
             ]) as Matrix
         } else {
-            t = getT_6x6(this.angle(U))
+            t = getT_6x6(this.angle)
             ULocal = mult([
                 t, math.matrix!([
                     [U.get([this.n1.uIndex!, 0])],
@@ -190,34 +174,34 @@ export class Element {
      * @param U Global displacement vector
      * @param p Problem instance
      * @param xAdim Adimensional x
-     *              (x=0 is at node 1 and x=2 is at node 2)
+     *              (x=0 is at node 1 and x=1 is at node 2)
      */
     getForces (U: Matrix, p: StaticProblem, xAdim: number): Forces {
-        // Distributed forces equivalent applied at nodes in global coord.
-        const fDistNodal = math.matrix!([[0], [0], [0], [0], [0], [0]], 'sparse')
+        // // Distributed forces equivalent applied at nodes in global coord.
+        // const fDistNodal = math.matrix!([[0], [0], [0], [0], [0], [0]], 'sparse')
 
-        for (const ld of this.distributedLoads) {
-            fDistNodal.set([0, 0], fDistNodal.get([0, 0]) + ld.l1.x)
-            fDistNodal.set([1, 0], fDistNodal.get([1, 0]) + ld.l1.y)
-            fDistNodal.set([2, 0], fDistNodal.get([2, 0]) + ld.l1.w)
-            fDistNodal.set([3, 0], fDistNodal.get([3, 0]) + ld.l2.x)
-            fDistNodal.set([4, 0], fDistNodal.get([4, 0]) + ld.l2.y)
-            fDistNodal.set([5, 0], fDistNodal.get([5, 0]) + ld.l2.w)
-        }
+        // for (const ld of this.distributedLoads) {
+        //     fDistNodal.set([0, 0], fDistNodal.get([0, 0]) + ld.l1.x)
+        //     fDistNodal.set([1, 0], fDistNodal.get([1, 0]) + ld.l1.y)
+        //     fDistNodal.set([2, 0], fDistNodal.get([2, 0]) + ld.l1.w)
+        //     fDistNodal.set([3, 0], fDistNodal.get([3, 0]) + ld.l2.x)
+        //     fDistNodal.set([4, 0], fDistNodal.get([4, 0]) + ld.l2.y)
+        //     fDistNodal.set([5, 0], fDistNodal.get([5, 0]) + ld.l2.w)
+        // }
 
-        // Distributed forces equivalent applied at nodes in local coord.
-        const fDistNodalLocal = mult([getT_6x6(this.angle()), fDistNodal]) as Matrix
+        // // Distributed forces equivalent applied at nodes in local coord.
+        // const fDistNodalLocal = mult([getT_6x6(this.angle), fDistNodal]) as Matrix
+
+        // // subtract distributed loads contribution
+        // nodalLoads.X1 -= -fDistNodalLocal.get([0, 0])
+        // nodalLoads.Y1 -= -fDistNodalLocal.get([1, 0])
+        // nodalLoads.M1 -= -fDistNodalLocal.get([2, 0])
+        // nodalLoads.X2 -= -fDistNodalLocal.get([3, 0])
+        // nodalLoads.Y2 -= -fDistNodalLocal.get([4, 0])
+        // nodalLoads.M2 -= -fDistNodalLocal.get([5, 0])
 
         const l = this.length()
         const nodalLoads = this.getNodalLoads(U, p)
-
-        // subtract distributed loads contribution
-        nodalLoads.X1 -= -fDistNodalLocal.get([0, 0])
-        nodalLoads.Y1 -= -fDistNodalLocal.get([1, 0])
-        nodalLoads.M1 -= -fDistNodalLocal.get([2, 0])
-        nodalLoads.X2 -= -fDistNodalLocal.get([3, 0])
-        nodalLoads.Y2 -= -fDistNodalLocal.get([4, 0])
-        nodalLoads.M2 -= -fDistNodalLocal.get([5, 0])
 
         let n1 = 0
         let v1 = 0
@@ -245,6 +229,9 @@ export class Element {
         const v = function (xAdim:number): number {
             return v1 + (v2 - v1) * xAdim
         }
+        const w = function (xAdim:number): number {
+            return w1 + (w2 - w1) * xAdim
+        }
 
         // TODO
         const N = function (xAdim:number) {
@@ -252,13 +239,13 @@ export class Element {
         }
 
         const V = function (xAdim:number) {
-            return 0
+            return nodalLoads.Y1 + (v(0) + v(xAdim)) * x(xAdim) / 2
         }
 
         const M = function (xAdim:number) {
             return 0
         }
 
-        return new Forces(N(xAdim), V(xAdim), M(xAdim))
+        return new Forces(0, V(xAdim), M(xAdim))
     }
 }

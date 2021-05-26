@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
-import math, { Matrix } from 'mathjs'
+import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
 import { Element } from './element'
 import { Load } from './load'
+import { math } from './math'
 import { Problem } from './problem'
 
 export class DistributedLoad {
@@ -29,43 +30,37 @@ export class DistributedLoad {
         )
         p.distributedLoads.push(this)
 
-        let f1Global: Matrix
-        let f2Global: Matrix
+        let fGlobal: Matrix
         let t: Matrix
 
         if (e.type === 'Truss') {
             t = getT_4x4(e.angle())
-            f1Global = math.matrix!([
+            fGlobal = math.matrix!([
                 [x1],
-                [y1]
-            ])
-            f2Global = math.matrix!([
+                [y1],
                 [x2],
                 [y2]
             ])
         } else {
             t = getT_6x6(e.angle())
-            f1Global = math.matrix!([
+            fGlobal = math.matrix!([
                 [x1],
                 [y1],
-                [w1]
-            ])
-            f2Global = math.matrix!([
+                [w1],
                 [x2],
                 [y2],
                 [w2]
             ])
         }
 
-        const f1Local = mult([t, f1Global]) as Matrix
-        const f2Local = mult([t, f2Global]) as Matrix
+        const fLocal = mult([t, fGlobal]) as Matrix
 
         if (e.type === 'Truss') {
-            this.l1Local = new Load(f1Local.get([0, 0]), f1Local.get([0, 1]), 0, e.n1, p, false)
-            this.l2Local = new Load(f2Local.get([0, 0]), f2Local.get([0, 1]), 0, e.n2, p, false)
+            this.l1Local = new Load(fLocal.get([0, 0]), fLocal.get([0, 1]), 0, e.n1, p, false)
+            this.l2Local = new Load(fLocal.get([0, 2]), fLocal.get([0, 2]), 0, e.n2, p, false)
         } else {
-            this.l1Local = new Load(f1Local.get([0, 0]), f1Local.get([0, 1]), f1Local.get([0, 2]), e.n1, p, false)
-            this.l2Local = new Load(f2Local.get([0, 0]), f2Local.get([0, 1]), f2Local.get([0, 2]), e.n2, p, false)
+            this.l1Local = new Load(fLocal.get([0, 0]), fLocal.get([1, 0]), fLocal.get([2, 0]), e.n1, p, false)
+            this.l2Local = new Load(fLocal.get([3, 0]), fLocal.get([4, 0]), fLocal.get([5, 0]), e.n2, p, false)
         }
     }
 }

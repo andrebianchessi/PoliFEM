@@ -62,5 +62,6 @@ export class DistributedLoad {
             this.l1Local = new Load(fLocal.get([0, 0]), fLocal.get([1, 0]), fLocal.get([2, 0]), e.n1, p, false)
             this.l2Local = new Load(fLocal.get([3, 0]), fLocal.get([4, 0]), fLocal.get([5, 0]), e.n2, p, false)
         }
+        e.distributedLoads.push(this)
     }
 }

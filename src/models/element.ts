@@ -3,6 +3,7 @@ import { mult } from '../functions/mult'
 // eslint-disable-next-line camelcase
 import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
 import { Angle } from './angleInRadians'
+import { DistributedLoad } from './distributedLoad'
 import { Forces } from './forces'
 import { FrameProperties } from './frameProperties'
 import { MassMatrix } from './massMatrix'
@@ -23,10 +24,12 @@ export class Element {
     properties: FrameProperties | TrussProperties
     K: (U?: Matrix) => StiffnessMatrix
     M?: MassMatrix
+    distributedLoads: DistributedLoad[]
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
         Element.count += 1
         this.index = Element.count
+        this.distributedLoads = []
         if (type === 'Frame') {
             if ((properties as FrameProperties).I == null) {
                 throw new Error('I not provided for element ' + this.index)

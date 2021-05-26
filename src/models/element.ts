@@ -246,8 +246,6 @@ export class Element {
             } else {
                 xG = (v(0) * x * x / 2 + (v(xAdim) - v(0)) * x * 1 / 2 * (2 * x / 3)) / (v(0) * x + (v(xAdim) - v(0)) * x * 1 / 2)
             }
-            console.log('x:', x)
-            console.log(xG)
             return -(nodalLoads.M1 + (w(0) + w(xAdim)) * x / 2 - V(xAdim) * x + (v(0) + v(xAdim)) * x / 2 * xG)
         }
 

@@ -219,9 +219,7 @@ export class Element {
             w2 += ld.l2Local.w
         }
 
-        const x = function (xAdim:number): number {
-            return xAdim * l
-        }
+        const x = xAdim * l
 
         const n = function (xAdim:number): number {
             return n1 + (n2 - n1) * xAdim
@@ -233,17 +231,24 @@ export class Element {
             return w1 + (w2 - w1) * xAdim
         }
 
-        // TODO
         const N = function (xAdim:number) {
-            return -(nodalLoads.X1 + (n(0) + n(xAdim)) * x(xAdim) / 2)
+            return -(nodalLoads.X1 + (n(0) + n(xAdim)) * x / 2)
         }
 
         const V = function (xAdim:number) {
-            return nodalLoads.Y1 + (v(0) + v(xAdim)) * x(xAdim) / 2
+            return nodalLoads.Y1 + (v(0) + v(xAdim)) * x / 2
         }
 
         const M = function (xAdim:number) {
-            return -(nodalLoads.M1 + (w(0) + w(xAdim)) * x(xAdim) / 2 - V(xAdim) * x(xAdim) + (v(0) + v(xAdim)) * x(xAdim) / 2 * x(xAdim) / 2)
+            let xG
+            if (xAdim === 0) {
+                xG = 0
+            } else {
+                xG = (v(0) * x * x / 2 + (v(xAdim) - v(0)) * x * 1 / 2 * (2 * x / 3)) / (v(0) * x + (v(xAdim) - v(0)) * x * 1 / 2)
+            }
+            console.log('x:', x)
+            console.log(xG)
+            return -(nodalLoads.M1 + (w(0) + w(xAdim)) * x / 2 - V(xAdim) * x + (v(0) + v(xAdim)) * x / 2 * xG)
         }
 
         return new Forces(N(xAdim), V(xAdim), M(xAdim))

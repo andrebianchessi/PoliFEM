@@ -1,8 +1,10 @@
+/**
+ *  Nodal loads at the element's reference frame
+ *  positive X forces are directed to the right
+ *  positive Y forces are directed upwards
+ *  positive moments are directed cc-wise
+ */
 export class NodalLoads {
-    // Nodal loads at the element's reference frame
-    // positive X forces are directed to the right
-    // positive Y forces are directed upwards
-    // positive moments are directed cc-wise
     X1:number
     Y1:number
     M1:number

@@ -193,20 +193,20 @@ export class Element {
      *              (x=0 is at node 1 and x=2 is at node 2)
      */
     getForces (U: Matrix, p: StaticProblem, xAdim: number): Forces {
-        // Distributed forces equivalent applied at nodes in global coord.
-        const fDistNodal = math.matrix!([[0], [0], [0], [0], [0], [0]], 'sparse')
+        // // Distributed forces equivalent applied at nodes in global coord.
+        // const fDistNodal = math.matrix!([[0], [0], [0], [0], [0], [0]], 'sparse')
 
-        for (const ld of this.distributedLoads) {
-            fDistNodal.set([0, 0], fDistNodal.get([0, 0]) + ld.l1.x)
-            fDistNodal.set([1, 0], fDistNodal.get([1, 0]) + ld.l1.y)
-            fDistNodal.set([2, 0], fDistNodal.get([2, 0]) + ld.l1.w)
-            fDistNodal.set([3, 0], fDistNodal.get([3, 0]) + ld.l2.x)
-            fDistNodal.set([4, 0], fDistNodal.get([4, 0]) + ld.l2.y)
-            fDistNodal.set([5, 0], fDistNodal.get([5, 0]) + ld.l2.w)
-        }
+        // for (const ld of this.distributedLoads) {
+        //     fDistNodal.set([0, 0], fDistNodal.get([0, 0]) + ld.l1.x)
+        //     fDistNodal.set([1, 0], fDistNodal.get([1, 0]) + ld.l1.y)
+        //     fDistNodal.set([2, 0], fDistNodal.get([2, 0]) + ld.l1.w)
+        //     fDistNodal.set([3, 0], fDistNodal.get([3, 0]) + ld.l2.x)
+        //     fDistNodal.set([4, 0], fDistNodal.get([4, 0]) + ld.l2.y)
+        //     fDistNodal.set([5, 0], fDistNodal.get([5, 0]) + ld.l2.w)
+        // }
 
-        // Distributed forces equivalent applied at nodes in local coord.
-        const fDistNodalLocal = mult([getT_6x6(this.angle()), fDistNodal]) as Matrix
+        // // Distributed forces equivalent applied at nodes in local coord.
+        // const fDistNodalLocal = mult([getT_6x6(this.angle()), fDistNodal]) as Matrix
 
         const l = this.length()
         const nodalLoads = this.getNodalLoads(U, p)
@@ -245,21 +245,18 @@ export class Element {
         const v = function (xAdim:number): number {
             return v1 + (v2 - v1) * xAdim
         }
-        const vIntegral = function (xAdim:number): number {
-            return v1 * xAdim + (v2 - v1) * xAdim * xAdim / 2
-        }
 
+        // TODO
         const N = function (xAdim:number) {
             return -(nodalLoads.X1 + (n(0) + n(xAdim)) * x(xAdim) / 2)
         }
 
-        const V0 = nodalLoads.Y1
         const V = function (xAdim:number) {
-            return V0 + (v(0) + v(xAdim)) * x(xAdim) / 2
+            return 0
         }
 
         const M = function (xAdim:number) {
-            return nodalLoads.M1 + V0 * xAdim + (vIntegral(0) + vIntegral(xAdim)) * x(xAdim) / 2 + (v(0) + v(xAdim)) * x(xAdim) * x(xAdim) / 2 / 2
+            return 0
         }
 
         return new Forces(N(xAdim), V(xAdim), M(xAdim))

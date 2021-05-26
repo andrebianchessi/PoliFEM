@@ -246,6 +246,6 @@ export class Element {
             return -(nodalLoads.M1 + (w(0) + w(xAdim)) * x(xAdim) / 2 - V(xAdim) * x(xAdim) + (v(0) + v(xAdim)) * x(xAdim) / 2 * x(xAdim) / 2)
         }
 
-        return new Forces(0, V(xAdim), M(xAdim))
+        return new Forces(N(xAdim), V(xAdim), M(xAdim))
     }
 }

@@ -8,7 +8,7 @@ import { math } from './math'
 import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
 import { InitialSpeed } from './initialSpeed'
-import { bcColor, initSpeedColor, loadColor } from '../constants'
+import { bcColor, initSpeedColor, loadColor, distLoadColor } from '../constants'
 import { DistributedLoad } from './distributedLoad'
 
 export class Problem {
@@ -124,29 +124,60 @@ export class Problem {
         const bcsY = []
         const bcsText = []
         for (const l of this.loads) {
-            const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
-            const arrowX = -l.x * scalingFactor
-            const arrowY = l.y * scalingFactor
-            const magnitude = Math.sqrt(l.x * l.x + l.y * l.y).toString()
-            arrows.push(
-                {
-                    text: magnitude,
-                    x: l.node.x,
-                    y: l.node.y,
-                    xref: 'x',
-                    yref: 'y',
-                    showarrow: true,
-                    arrowhead: 5,
-                    ax: arrowX,
-                    ay: arrowY,
-                    arrowcolor: loadColor,
-                    font: { color: loadColor, size: 17 }
+            if (!l.isDistEquivalent) {
+                const scalingFactor = arrowsLength / Math.sqrt(l.x * l.x + l.y * l.y)
+                const arrowX = -l.x * scalingFactor
+                const arrowY = l.y * scalingFactor
+                const magnitude = Math.sqrt(l.x * l.x + l.y * l.y).toString()
+                arrows.push(
+                    {
+                        text: magnitude,
+                        x: l.node.x,
+                        y: l.node.y,
+                        xref: 'x',
+                        yref: 'y',
+                        showarrow: true,
+                        arrowhead: 5,
+                        ax: arrowX,
+                        ay: arrowY,
+                        arrowcolor: loadColor,
+                        font: { color: loadColor, size: 17 }
+                    }
+                )
+                if (l.w !== 0) {
+                    momentsX.push(l.node.x)
+                    momentsY.push(l.node.y)
+                    momentsText.push(l.w.toString())
                 }
-            )
-            if (l.w !== 0) {
-                momentsX.push(l.node.x)
-                momentsY.push(l.node.y)
-                momentsText.push(l.w.toString())
+            }
+        }
+
+        for (const l of this.distributedLoads) {
+            const nDivs = 50
+            const scalingFactor = arrowsLength / Math.max(Math.sqrt(l.l1Local.x * l.l1Local.x + l.l1Local.y * l.l1Local.y), Math.sqrt(l.l2Local.x * l.l2Local.x + l.l2Local.y * l.l2Local.y))
+            for (let i = 0; i <= nDivs; i++) {
+                const x = l.l1Local.node.x + (l.l2Local.node.x - l.l1Local.node.x) / nDivs * i
+                const y = l.l1Local.node.y + (l.l2Local.node.y - l.l1Local.node.y) / nDivs * i
+                let lx = -(l.l1Local.x + (l.l2Local.x - l.l1Local.x) / nDivs * i)
+                let ly = (l.l1Local.y + (l.l2Local.y - l.l1Local.y) / nDivs * i)
+                const magnitude = Math.sqrt(lx * lx + ly * ly).toString()
+                lx = lx * scalingFactor
+                ly = ly * scalingFactor
+                arrows.push(
+                    {
+                        text: i === 0 || i === nDivs ? magnitude : '',
+                        x: x,
+                        y: y,
+                        xref: 'x',
+                        yref: 'y',
+                        showarrow: true,
+                        arrowhead: 5,
+                        ax: lx,
+                        ay: ly,
+                        arrowcolor: distLoadColor,
+                        font: { color: distLoadColor, size: 17 }
+                    }
+                )
             }
         }
         for (const b of this.boundaryConditions) {

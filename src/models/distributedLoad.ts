@@ -20,13 +20,13 @@ export class DistributedLoad {
             (1 / 3 * x1 + 1 / 6 * x2) * l,
             (7 / 20 * y1 + 3 / 20 * y2) * l,
             (1 / 20 * w1 + 1 / 30 * w2) * l * l,
-            e.n1, p
+            e.n1, p, true, true
         )
         this.l2 = new Load(
             (1 / 3 * x2 + 1 / 6 * x1) * l,
             (7 / 20 * y2 + 3 / 20 * y1) * l,
             (1 / 20 * w2 + 1 / 30 * w1) * l * l,
-            e.n2, p
+            e.n2, p, true, true
         )
         p.distributedLoads.push(this)
 

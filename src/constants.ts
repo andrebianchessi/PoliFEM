@@ -1,4 +1,5 @@
 export const loadColor = 'red'
+export const distLoadColor = 'brown'
 export const bcColor = 'purple'
 export const initSpeedColor = 'orange'
 

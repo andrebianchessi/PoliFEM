@@ -193,31 +193,31 @@ export class Element {
      *              (x=0 is at node 1 and x=2 is at node 2)
      */
     getForces (U: Matrix, p: StaticProblem, xAdim: number): Forces {
-        // // Distributed forces equivalent applied at nodes in global coord.
-        // const fDistNodal = math.matrix!([[0], [0], [0], [0], [0], [0]], 'sparse')
+        // Distributed forces equivalent applied at nodes in global coord.
+        const fDistNodal = math.matrix!([[0], [0], [0], [0], [0], [0]], 'sparse')
 
-        // for (const ld of this.distributedLoads) {
-        //     fDistNodal.set([0, 0], fDistNodal.get([0, 0]) + ld.l1.x)
-        //     fDistNodal.set([1, 0], fDistNodal.get([1, 0]) + ld.l1.y)
-        //     fDistNodal.set([2, 0], fDistNodal.get([2, 0]) + ld.l1.w)
-        //     fDistNodal.set([3, 0], fDistNodal.get([3, 0]) + ld.l2.x)
-        //     fDistNodal.set([4, 0], fDistNodal.get([4, 0]) + ld.l2.y)
-        //     fDistNodal.set([5, 0], fDistNodal.get([5, 0]) + ld.l2.w)
-        // }
+        for (const ld of this.distributedLoads) {
+            fDistNodal.set([0, 0], fDistNodal.get([0, 0]) + ld.l1.x)
+            fDistNodal.set([1, 0], fDistNodal.get([1, 0]) + ld.l1.y)
+            fDistNodal.set([2, 0], fDistNodal.get([2, 0]) + ld.l1.w)
+            fDistNodal.set([3, 0], fDistNodal.get([3, 0]) + ld.l2.x)
+            fDistNodal.set([4, 0], fDistNodal.get([4, 0]) + ld.l2.y)
+            fDistNodal.set([5, 0], fDistNodal.get([5, 0]) + ld.l2.w)
+        }
 
-        // // Distributed forces equivalent applied at nodes in local coord.
-        // const fDistNodalLocal = mult([getT_6x6(this.angle()), fDistNodal]) as Matrix
+        // Distributed forces equivalent applied at nodes in local coord.
+        const fDistNodalLocal = mult([getT_6x6(this.angle()), fDistNodal]) as Matrix
 
         const l = this.length()
         const nodalLoads = this.getNodalLoads(U, p)
 
-        // // subtract distributed loads contribution
-        // nodalLoads.X1 -= -fDistNodalLocal.get([0, 0])
-        // nodalLoads.Y1 -= -fDistNodalLocal.get([1, 0])
-        // nodalLoads.M1 -= -fDistNodalLocal.get([2, 0])
-        // nodalLoads.X2 -= -fDistNodalLocal.get([3, 0])
-        // nodalLoads.Y2 -= -fDistNodalLocal.get([4, 0])
-        // nodalLoads.M2 -= -fDistNodalLocal.get([5, 0])
+        // subtract distributed loads contribution
+        nodalLoads.X1 -= -fDistNodalLocal.get([0, 0])
+        nodalLoads.Y1 -= -fDistNodalLocal.get([1, 0])
+        nodalLoads.M1 -= -fDistNodalLocal.get([2, 0])
+        nodalLoads.X2 -= -fDistNodalLocal.get([3, 0])
+        nodalLoads.Y2 -= -fDistNodalLocal.get([4, 0])
+        nodalLoads.M2 -= -fDistNodalLocal.get([5, 0])
 
         let n1 = 0
         let v1 = 0

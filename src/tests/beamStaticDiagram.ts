@@ -4,7 +4,7 @@ import { Load } from '../models/load'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
 
-export function StaticBeamDiagram () {
+export function BeamStaticDiagram () {
     console.log('Static beam diagrams test')
     const properties = { E: 30 * 1000000, A: 1, I: 1, rho: 7.4 / 10000 }
 

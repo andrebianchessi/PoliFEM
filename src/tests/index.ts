@@ -5,17 +5,17 @@ import { BridgeDynamic } from './bridgeDynamic'
 import { BridgeModal } from './bridgeModal'
 import { BridgeStatic } from './bridgeStatic'
 import { FallingBeam } from './fallingBeam'
-import { StaticBeamDiagram } from './staticBeamDiagrams'
+import { BeamStaticDiagram } from './beamStaticDiagram'
 import { StaticTruss } from './staticTruss'
 import { TrussAxialImpact } from './trussAxialImpact'
 
 // Tests
 // StaticTruss()
-// StaticBeamDiagram()
+BeamStaticDiagram()
 // TrussAxialImpact()
 // FallingBeam()
 // BeamModal()
 // BeamDynamic()
 // BridgeModal()
 // BridgeStatic()
-BridgeDynamic()
+// BridgeDynamic()

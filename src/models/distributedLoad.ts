@@ -25,7 +25,7 @@ export class DistributedLoad {
         this.l2 = new Load(
             (1 / 3 * x2 + 1 / 6 * x1) * l,
             (7 / 20 * y2 + 3 / 20 * y1) * l,
-            (1 / 20 * w2 + 1 / 30 * w1) * l * l,
+            (-1 / 20 * w2 - 1 / 30 * w1) * l * l,
             e.n2, p, true, true
         )
         p.distributedLoads.push(this)

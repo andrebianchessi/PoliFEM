@@ -127,7 +127,7 @@ export class Problem {
             const magnitude = Math.sqrt(l.x * l.x + l.y * l.y).toString()
             arrows.push(
                 {
-                    text: l.isWeight ? 'g' : magnitude,
+                    text: magnitude,
                     x: l.node.x,
                     y: l.node.y,
                     xref: 'x',

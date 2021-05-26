@@ -6,14 +6,12 @@ export class Load {
     y: number // load on y direction
     w: number // load on w direction
     node: Node
-    isWeight: boolean
 
-    constructor (x: number, y: number, w:number, node: Node, p: Problem, isWeight: boolean = false) {
+    constructor (x: number, y: number, w:number, node: Node, p: Problem) {
         this.x = x
         this.y = y
         this.w = w
         this.node = node
-        this.isWeight = isWeight
         p.loads.push(this)
     }
 }

@@ -11,12 +11,13 @@ export function BeamStaticDiagram () {
     const p = new StaticProblem()
 
     const n1 = Node.get(0, 0, p)
-    const n2 = Node.get(100, 0, p)
+    const n2 = Node.get(10, 0, p)
     const e = new Element('Frame', n1, n2, properties, p)
 
     new DistributedLoad(e, 0, -100, 0, 0, -100, 0, p)
     // new Load(0, -100, 0, n2, p)
-    new BoundaryCondition(n1, 'Fix', p)
+    new BoundaryCondition(n1, 'Pin', p)
+    new BoundaryCondition(n2, 'RollerX', p)
     p.plot()
     p.solve()
     p.plotDisplacements(10)

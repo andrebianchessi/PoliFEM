@@ -11,11 +11,11 @@ import { TrussAxialImpact } from './trussAxialImpact'
 
 // Tests
 // StaticTruss()
-StaticBeamDiagram()
+// StaticBeamDiagram()
 // TrussAxialImpact()
 // FallingBeam()
 // BeamModal()
 // BeamDynamic()
 // BridgeModal()
 // BridgeStatic()
-// BridgeDynamic()
+BridgeDynamic()

@@ -30,7 +30,7 @@ export class DynamicProblem extends Problem {
     ModesOfVibration: number[][]
     dynamicK: boolean
 
-    constructor (timeStep?: number, duration?: number, dynamicK: boolean = false) {
+    constructor (timeStep?: number, duration?: number) {
         super()
         this.timeStep = timeStep
         this.duration = duration
@@ -39,7 +39,7 @@ export class DynamicProblem extends Problem {
         this.NaturalFrequencies = []
         this.ModesOfVibration = []
         this.initialSpeeds = []
-        this.dynamicK = dynamicK
+        this.dynamicK = false
     }
 
     build () {
@@ -139,8 +139,7 @@ export class DynamicProblem extends Problem {
                 this.t.push(t)
 
                 if (this.dynamicK) {
-                    // Stiffness matrix is recalculated after some time
-                    // since the element angles might have changed
+                    // Stiffness matrix is recalculated every time step
                     if (timeStepNumber === timeStepsToRecalculateK) {
                         timeStepNumber = 0
                         this.buildK(uPresent)
@@ -231,8 +230,7 @@ export class DynamicProblem extends Problem {
                 t += dt
 
                 if (this.dynamicK) {
-                    // Stiffness matrix is recalculated after some time
-                    // since the element angles might have changed
+                    // Stiffness matrix is recalculated every time step
                     if (timeStepNumber === timeStepsToRecalculateK) {
                         timeStepNumber = 0
                         this.buildK(uPresent)

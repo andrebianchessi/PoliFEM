@@ -7,11 +7,13 @@ export class Load {
     w: number // load on w direction
     node: Node
 
-    constructor (x: number, y: number, w:number, node: Node, p: Problem) {
+    constructor (x: number, y: number, w:number, node: Node, p: Problem, addToProblem: boolean = true) {
         this.x = x
         this.y = y
         this.w = w
         this.node = node
-        p.loads.push(this)
+        if (addToProblem) {
+            p.loads.push(this)
+        }
     }
 }

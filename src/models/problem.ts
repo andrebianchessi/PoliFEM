@@ -9,6 +9,7 @@ import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
 import { InitialSpeed } from './initialSpeed'
 import { bcColor, initSpeedColor, loadColor } from '../constants'
+import { DistributedLoad } from './distributedLoad'
 
 export class Problem {
     dof: number // degrees of freedom
@@ -17,6 +18,7 @@ export class Problem {
     elements: Map<number, Element>
     elementCount: number
     loads: Load[]
+    distributedLoads: DistributedLoad[]
     boundaryConditions: BoundaryCondition[]
     initialSpeeds?: InitialSpeed[]
     K?: Matrix
@@ -31,6 +33,7 @@ export class Problem {
         this.elements = new Map<number, Element>()
         this.elementCount = 0
         this.loads = []
+        this.distributedLoads = []
         this.boundaryConditions = []
         this.dof = 0
     }

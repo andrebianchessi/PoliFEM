@@ -208,12 +208,12 @@ export class Element {
             ])
         ]) as Matrix
 
-        const N1 = nodalLoads.X1 + f.get([0, 0])
-        const V1 = nodalLoads.Y1 + f.get([1, 0])
-        const W1 = nodalLoads.M1 + f.get([2, 0])
-        const N2 = nodalLoads.X2 + f.get([3, 0])
-        const V2 = nodalLoads.Y2 + f.get([4, 0])
-        const W2 = nodalLoads.M2 + f.get([5, 0])
+        const N1 = nodalLoads.X1 - f.get([0, 0])
+        const V1 = nodalLoads.Y1 - f.get([1, 0])
+        const W1 = nodalLoads.M1 - f.get([2, 0])
+        const N2 = nodalLoads.X2 - f.get([3, 0])
+        const V2 = nodalLoads.Y2 - f.get([4, 0])
+        const W2 = nodalLoads.M2 - f.get([5, 0])
 
         let n1D = 0
         let v1D = 0

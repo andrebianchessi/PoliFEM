@@ -153,7 +153,7 @@ export class Problem {
         }
 
         for (const l of this.distributedLoads) {
-            const nDivs = 50
+            const nDivs = 25
             const scalingFactor = arrowsLength / Math.max(Math.sqrt(l.l1Local.x * l.l1Local.x + l.l1Local.y * l.l1Local.y), Math.sqrt(l.l2Local.x * l.l2Local.x + l.l2Local.y * l.l2Local.y))
             for (let i = 0; i <= nDivs; i++) {
                 const x = l.l1Local.node.x + (l.l2Local.node.x - l.l1Local.node.x) / nDivs * i
@@ -163,21 +163,23 @@ export class Problem {
                 const magnitude = Math.sqrt(lx * lx + ly * ly).toString()
                 lx = lx * scalingFactor
                 ly = ly * scalingFactor
-                arrows.push(
-                    {
-                        text: i === 0 || i === nDivs ? magnitude : '',
-                        x: x,
-                        y: y,
-                        xref: 'x',
-                        yref: 'y',
-                        showarrow: true,
-                        arrowhead: 5,
-                        ax: lx,
-                        ay: ly,
-                        arrowcolor: distLoadColor,
-                        font: { color: distLoadColor, size: 17 }
-                    }
-                )
+                if (magnitude !== '0') {
+                    arrows.push(
+                        {
+                            text: i === 0 || i === nDivs ? magnitude : '',
+                            x: x,
+                            y: y,
+                            xref: 'x',
+                            yref: 'y',
+                            showarrow: true,
+                            arrowhead: 1,
+                            ax: lx,
+                            ay: ly,
+                            arrowcolor: distLoadColor,
+                            font: { color: distLoadColor, size: 17 }
+                        }
+                    )
+                }
             }
         }
         for (const b of this.boundaryConditions) {

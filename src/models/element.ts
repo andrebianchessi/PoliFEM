@@ -210,10 +210,10 @@ export class Element {
 
         const N1 = nodalLoads.X1 - f.get([0, 0])
         const V1 = nodalLoads.Y1 - f.get([1, 0])
-        const W1 = nodalLoads.M1 - f.get([2, 0])
+        const M1 = nodalLoads.M1 - f.get([2, 0])
         const N2 = nodalLoads.X2 - f.get([3, 0])
         const V2 = nodalLoads.Y2 - f.get([4, 0])
-        const W2 = nodalLoads.M2 - f.get([5, 0])
+        const M2 = nodalLoads.M2 - f.get([5, 0])
 
         let n1D = 0
         let v1D = 0
@@ -237,13 +237,23 @@ export class Element {
         const v = function (xAdim:number):number {
             return v1D + (v2D - v1D) * xAdim
         }
-        const w = function (xAdim:number):number {
+        const m = function (xAdim:number):number {
             return w1D + (w2D - w1D) * xAdim
         }
 
         const N = -(N1 + (n(0) + n(xAdim)) * x / 2)
         const V = V1 + (v(0) + v(xAdim)) * x / 2
-        const M = 0
+
+        const s1 = (v(0) * x)
+        const x1 = x / 2
+        const s2 = (v(xAdim) - v(0)) * x / 2
+        const x2 = 2 / 3 * x
+        let xG = (s1 * x1 + s2 * x2) / (s1 + s2)
+        if (isNaN(xG)) {
+            xG = 0
+        }
+
+        const M = -(M1 + (m(0) + m(xAdim)) * x / 2 - (v(0) + v(xAdim)) * x / 2 * xG - V * x)
         return new Forces(N, V, M)
     }
 }

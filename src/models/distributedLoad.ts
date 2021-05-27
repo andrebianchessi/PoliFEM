@@ -13,19 +13,19 @@ export class DistributedLoad {
     l2: Load
     l1Local: Load
     l2Local: Load
-    constructor (e: Element, x1:number, y1:number, w1: number, x2:number, y2:number, w2: number, p:Problem) {
+    constructor (e: Element, x1:number, y1:number, x2:number, y2:number, p:Problem) {
         this.e = e
         const l = e.length()
         this.l1 = new Load(
             (1 / 3 * x1 + 1 / 6 * x2) * l,
             (7 / 20 * y1 + 3 / 20 * y2) * l,
-            (1 / 20 * w1 + 1 / 30 * w2) * l * l,
+            (1 / 20 * y1 + 1 / 30 * y2) * l * l,
             e.n1, p, true, true
         )
         this.l2 = new Load(
             (1 / 3 * x2 + 1 / 6 * x1) * l,
             (7 / 20 * y2 + 3 / 20 * y1) * l,
-            (-1 / 20 * w2 - 1 / 30 * w1) * l * l,
+            (-1 / 20 * y2 - 1 / 30 * y1) * l * l,
             e.n2, p, true, true
         )
         p.distributedLoads.push(this)
@@ -46,10 +46,10 @@ export class DistributedLoad {
             fGlobal = math.matrix!([
                 [x1],
                 [y1],
-                [w1],
+                [0],
                 [x2],
                 [y2],
-                [w2]
+                [0]
             ])
         }
 

@@ -14,7 +14,7 @@ export function BeamStaticDiagram () {
     const n2 = Node.get(10, 0, p)
     const e = new Element('Frame', n1, n2, properties, p)
 
-    new DistributedLoad(e, 0, -100, 0, 0, 0, 0, p)
+    new DistributedLoad(e, 0, -100, 0, 0, p)
     new BoundaryCondition(n1, 'Fix', p)
     p.plot()
     p.solve()

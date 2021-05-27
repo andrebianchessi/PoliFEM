@@ -244,7 +244,6 @@ export class Element {
         const N = -(N1 + (n(0) + n(xAdim)) * x / 2)
         const V = -(V1 + (v(0) + v(xAdim)) * x / 2)
         const M = 0
-        9
         return new Forces(N, V, M)
     }
 }

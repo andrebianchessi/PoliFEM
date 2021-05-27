@@ -248,6 +248,6 @@ export class Element {
         console.log(xG)
 
         const M = -(M1 - (v(0) + v(xAdim)) * x / 2 * xG - V * x)
-        return new Forces(N, V, M)
+        return new Forces(N, V, 0)
     }
 }

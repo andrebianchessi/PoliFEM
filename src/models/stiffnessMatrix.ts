@@ -12,7 +12,7 @@ export class StiffnessMatrix {
     k: Matrix
     kLocal:Matrix
 
-    constructor (element: Element, type: 'Frame' | 'Truss', U?:Matrix) {
+    constructor (element: Element, type: 'Frame' | 'Truss') {
         let t
 
         this.type = type

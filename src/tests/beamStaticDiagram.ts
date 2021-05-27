@@ -19,7 +19,6 @@ export function BeamStaticDiagram () {
     p.plot()
     p.solve()
     p.plotDisplacements(10)
-    p.plotExternalLoads()
     p.plotForcesDiagram(e)
 
     console.log('ok')

@@ -176,6 +176,7 @@ export class Element {
      */
     getForces (U: Matrix, p: StaticProblem, xAdim: number): Forces {
         const l = this.length()
+        const x = l * xAdim
         const nodalLoads = this.getNodalLoads(U, p)
 
         let n1 = 0
@@ -188,10 +189,10 @@ export class Element {
         for (const dl of this.distributedLoads) {
             n1 += dl.l1.x
             v1 += dl.l1.y
-            w1 += dl.l1.y
+            w1 += dl.l1.w
             n2 += dl.l2.x
             v2 += dl.l2.y
-            w2 += dl.l1.y
+            w2 += dl.l2.w
         }
 
         const t = getT_6x6(this.angle)
@@ -214,18 +215,36 @@ export class Element {
         const V2 = nodalLoads.Y2 + f.get([4, 0])
         const W2 = nodalLoads.M2 + f.get([5, 0])
 
-        const N = function (xAdim:number) {
-            return 0
+        let n1D = 0
+        let v1D = 0
+        let w1D = 0
+        let n2D = 0
+        let v2D = 0
+        let w2D = 0
+
+        for (const dl of this.distributedLoads) {
+            n1D += dl.l1Local.x
+            v1D += dl.l1Local.y
+            w1D += dl.l1Local.w
+            n2D += dl.l2Local.x
+            v2D += dl.l2Local.y
+            w2D += dl.l2Local.w
         }
 
-        const V = function (xAdim:number) {
-            return 0
+        const n = function (xAdim:number):number {
+            return n1D + (n2D - n1D) * xAdim
+        }
+        const v = function (xAdim:number):number {
+            return v1D + (v2D - v1D) * xAdim
+        }
+        const w = function (xAdim:number):number {
+            return w1D + (w2D - w1D) * xAdim
         }
 
-        const M = function (xAdim:number) {
-            return 0
-        }
-
-        return new Forces(N(xAdim), V(xAdim), M(xAdim))
+        const N = -(N1 + (n(0) + n(xAdim)) * x / 2)
+        const V = -(V1 + (v(0) + v(xAdim)) * x / 2)
+        const M = 0
+        9
+        return new Forces(N, V, M)
     }
 }

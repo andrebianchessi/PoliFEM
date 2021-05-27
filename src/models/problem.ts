@@ -154,12 +154,12 @@ export class Problem {
 
         for (const l of this.distributedLoads) {
             const nDivs = 25
-            const scalingFactor = arrowsLength / Math.max(Math.sqrt(l.l1Local.x * l.l1Local.x + l.l1Local.y * l.l1Local.y), Math.sqrt(l.l2Local.x * l.l2Local.x + l.l2Local.y * l.l2Local.y))
+            const scalingFactor = arrowsLength / Math.max(Math.sqrt(l.l1PerLengthLocal.x * l.l1PerLengthLocal.x + l.l1PerLengthLocal.y * l.l1PerLengthLocal.y), Math.sqrt(l.l2PerLengthLocal.x * l.l2PerLengthLocal.x + l.l2PerLengthLocal.y * l.l2PerLengthLocal.y))
             for (let i = 0; i <= nDivs; i++) {
-                const x = l.l1Local.node.x + (l.l2Local.node.x - l.l1Local.node.x) / nDivs * i
-                const y = l.l1Local.node.y + (l.l2Local.node.y - l.l1Local.node.y) / nDivs * i
-                let lx = -(l.l1Local.x + (l.l2Local.x - l.l1Local.x) / nDivs * i)
-                let ly = (l.l1Local.y + (l.l2Local.y - l.l1Local.y) / nDivs * i)
+                const x = l.l1PerLengthLocal.node.x + (l.l2PerLengthLocal.node.x - l.l1PerLengthLocal.node.x) / nDivs * i
+                const y = l.l1PerLengthLocal.node.y + (l.l2PerLengthLocal.node.y - l.l1PerLengthLocal.node.y) / nDivs * i
+                let lx = -(l.l1PerLengthLocal.x + (l.l2PerLengthLocal.x - l.l1PerLengthLocal.x) / nDivs * i)
+                let ly = (l.l1PerLengthLocal.y + (l.l2PerLengthLocal.y - l.l1PerLengthLocal.y) / nDivs * i)
                 const magnitude = Math.sqrt(lx * lx + ly * ly).toString()
                 lx = lx * scalingFactor
                 ly = ly * scalingFactor

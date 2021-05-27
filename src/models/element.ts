@@ -179,32 +179,32 @@ export class Element {
         const x = l * xAdim
         const nodalLoads = this.getNodalLoads(U, p)
 
-        let n1 = 0
-        let v1 = 0
-        let w1 = 0
-        let n2 = 0
-        let v2 = 0
-        let w2 = 0
+        let fx1 = 0
+        let fy1 = 0
+        let fw1 = 0
+        let fx2 = 0
+        let fy2 = 0
+        let fw2 = 0
 
         for (const dl of this.distributedLoads) {
-            n1 += dl.l1.x
-            v1 += dl.l1.y
-            w1 += dl.l1.w
-            n2 += dl.l2.x
-            v2 += dl.l2.y
-            w2 += dl.l2.w
+            fx1 += dl.l1.x
+            fy1 += dl.l1.y
+            fw1 += dl.l1.w
+            fx2 += dl.l2.x
+            fy2 += dl.l2.y
+            fw2 += dl.l2.w
         }
 
         const t = getT_6x6(this.angle)
         const f = mult([
             t,
             math.matrix!([
-                [n1],
-                [v1],
-                [w1],
-                [n2],
-                [v2],
-                [w2]
+                [fx1],
+                [fy1],
+                [fw1],
+                [fx2],
+                [fy2],
+                [fw2]
             ])
         ]) as Matrix
 
@@ -215,23 +215,23 @@ export class Element {
         // const V2 = nodalLoads.Y2 - f.get([4, 0])
         // const M2 = nodalLoads.M2 - f.get([5, 0])
 
-        let n1D = 0
-        let v1D = 0
-        let n2D = 0
-        let v2D = 0
+        let n1 = 0
+        let v1 = 0
+        let n2 = 0
+        let v2 = 0
 
         for (const dl of this.distributedLoads) {
-            n1D += dl.l1Local.x
-            v1D += dl.l1Local.y
-            n2D += dl.l2Local.x
-            v2D += dl.l2Local.y
+            n1 += dl.l1PerLengthLocal.x
+            v1 += dl.l1PerLengthLocal.y
+            n2 += dl.l2PerLengthLocal.x
+            v2 += dl.l2PerLengthLocal.y
         }
 
         const n = function (xAdim:number):number {
-            return n1D + (n2D - n1D) * xAdim
+            return n1 + (n2 - n1) * xAdim
         }
         const v = function (xAdim:number):number {
-            return v1D + (v2D - v1D) * xAdim
+            return v1 + (v2 - v1) * xAdim
         }
 
         const N = -(N1 + (n(0) + n(xAdim)) * x / 2)

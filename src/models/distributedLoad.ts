@@ -11,8 +11,8 @@ export class DistributedLoad {
     e: Element
     l1: Load
     l2: Load
-    l1Local: Load
-    l2Local: Load
+    l1PerLengthLocal: Load
+    l2PerLengthLocal: Load
     constructor (e: Element, x1:number, y1:number, x2:number, y2:number, p:Problem) {
         this.e = e
         const l = e.length()
@@ -56,11 +56,11 @@ export class DistributedLoad {
         const fLocal = mult([t, fGlobal]) as Matrix
 
         if (e.type === 'Truss') {
-            this.l1Local = new Load(fLocal.get([0, 0]), fLocal.get([0, 1]), 0, e.n1, p, false)
-            this.l2Local = new Load(fLocal.get([0, 2]), fLocal.get([0, 3]), 0, e.n2, p, false)
+            this.l1PerLengthLocal = new Load(fLocal.get([0, 0]), fLocal.get([0, 1]), 0, e.n1, p, false)
+            this.l2PerLengthLocal = new Load(fLocal.get([0, 2]), fLocal.get([0, 3]), 0, e.n2, p, false)
         } else {
-            this.l1Local = new Load(fLocal.get([0, 0]), fLocal.get([1, 0]), fLocal.get([2, 0]), e.n1, p, false)
-            this.l2Local = new Load(fLocal.get([3, 0]), fLocal.get([4, 0]), fLocal.get([5, 0]), e.n2, p, false)
+            this.l1PerLengthLocal = new Load(fLocal.get([0, 0]), fLocal.get([1, 0]), fLocal.get([2, 0]), e.n1, p, false)
+            this.l2PerLengthLocal = new Load(fLocal.get([3, 0]), fLocal.get([4, 0]), fLocal.get([5, 0]), e.n2, p, false)
         }
         e.distributedLoads.push(this)
     }

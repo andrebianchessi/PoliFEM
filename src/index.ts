@@ -7,11 +7,11 @@ import { FallingBeam } from './tests/fallingBeam'
 import { StaticTruss } from './tests/staticTruss'
 import { TrussAxialImpact } from './tests/trussAxialImpact'
 
-StaticTruss()
-TrussAxialImpact()
-FallingBeam()
-BeamModal()
-BeamDynamic()
+// StaticTruss()
+// TrussAxialImpact()
+// FallingBeam()
+// BeamModal()
+// BeamDynamic()
 BridgeModal()
-BridgeStatic()
-BridgeDynamic()
+// BridgeStatic()
+// BridgeDynamic()

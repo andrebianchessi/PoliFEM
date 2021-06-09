@@ -10,7 +10,7 @@ import { Load } from '../models/load'
 export function TrussAxialImpact () {
     console.log('Truss axial impact')
 
-    const timeStep = 0.120000005
+    const timeStep = 0.00000001
     const duration = 300 * 1 / 1000000
     const nElements = 80
     const finalX = 20

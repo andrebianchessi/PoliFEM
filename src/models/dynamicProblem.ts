@@ -158,12 +158,14 @@ export class DynamicProblem extends Problem {
             let uDotDotPresent = this.Udotdot![0]
 
             let B: Matrix
-            const Keff: Matrix = sum([
-                mult([1 / (beta * dt * dt), this.M!]),
-                this.K!
-            ]) as Matrix
+            let Keff: Matrix
             while (t < this.duration!) {
                 timeStepNumber++
+
+                Keff = sum([
+                    mult([1 / (beta * dt * dt), this.M!]),
+                    this.K!
+                ]) as Matrix
 
                 B = sum([
                     this.F!,

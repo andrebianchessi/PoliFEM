@@ -11,7 +11,7 @@ import { Node } from './node'
 import { Problem } from './problem'
 import { getEigs } from '../functions/getEigs'
 import { InitialSpeed } from './initialSpeed'
-import { beta, gamma, timeStepsToRecalculateK } from '../constants'
+import { beta, gamma } from '../constants'
 import { StaticProblem } from './staticProblem'
 
 export class DynamicProblem extends Problem {
@@ -28,7 +28,6 @@ export class DynamicProblem extends Problem {
     Udotdot?: Matrix[]
     NaturalFrequencies: number[]
     ModesOfVibration: number[][]
-    dynamicK: boolean
 
     constructor (timeStep?: number, duration?: number) {
         super()
@@ -39,7 +38,6 @@ export class DynamicProblem extends Problem {
         this.NaturalFrequencies = []
         this.ModesOfVibration = []
         this.initialSpeeds = []
-        this.dynamicK = false
     }
 
     build () {
@@ -118,9 +116,7 @@ export class DynamicProblem extends Problem {
         if (method === 'Explicit') {
             let uPast = sum([uPresent, mult([-dt, this.Udot![0]]), mult([dt * dt / 2, this.Udotdot![0]])])
 
-            let timeStepNumber = 0
             while (t < this.duration!) {
-                timeStepNumber++
                 const uNext = mult([
                     mult([dt * dt, this.Minv!]),
                     sum([
@@ -137,19 +133,9 @@ export class DynamicProblem extends Problem {
                 this.U!.push(uPresent)
                 t += dt
                 this.t.push(t)
-
-                if (this.dynamicK) {
-                    // Stiffness matrix is recalculated every time step
-                    if (timeStepNumber === timeStepsToRecalculateK) {
-                        timeStepNumber = 0
-                        this.buildK(uPresent)
-                        this.applyBC()
-                    }
-                }
             }
         }
         if (method === 'Implicit') {
-            let timeStepNumber = 0
             let uNext: Matrix
             let uDotNext: Matrix
             let uDotDotNext: Matrix
@@ -160,8 +146,6 @@ export class DynamicProblem extends Problem {
             let B: Matrix
             let Keff: Matrix
             while (t < this.duration!) {
-                timeStepNumber++
-
                 Keff = sum([
                     mult([1 / (beta * dt * dt), this.M!]),
                     this.K!
@@ -229,15 +213,6 @@ export class DynamicProblem extends Problem {
                 uDotPresent = uDotNext
                 uDotDotPresent = uDotDotNext
                 t += dt
-
-                if (this.dynamicK) {
-                    // Stiffness matrix is recalculated every time step
-                    if (timeStepNumber === timeStepsToRecalculateK) {
-                        timeStepNumber = 0
-                        this.buildK(uPresent)
-                        this.applyBC()
-                    }
-                }
             }
         }
     }

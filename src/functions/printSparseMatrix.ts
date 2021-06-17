@@ -9,10 +9,12 @@ export function PrintSparseMatrix (m:Matrix, showValues: boolean = true) {
         for (let j = 0; j < nCols; j++) {
             let value = m.get([i, j])
             if (!showValues) {
-                if (value !== 0) {
-                    value = 'x'
-                } else {
+                if (value === 0) {
                     value = '0'
+                } else if (value === 1) {
+                    value = '1'
+                } else {
+                    value = 'x'
                 }
             }
             row += math.format!(value, { precision: 2 }) + ' '

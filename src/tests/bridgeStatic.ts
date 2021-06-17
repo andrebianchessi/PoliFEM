@@ -4,7 +4,7 @@ import { BoundaryCondition } from '../models/boundaryCondition'
 import { StaticProblem } from '../models/staticProblem'
 
 /**
- * Test of static analisys of a truss bridge
+ * Test of static analysis of a truss bridge
  */
 export function BridgeStatic () {
     console.log('Bridge static test')

@@ -7,7 +7,7 @@ import { Annotations } from 'plotly.js'
 import { Element } from './element'
 
 export class StaticProblem extends Problem {
-    U?: Matrix
+    declare U?: Matrix
     solve () {
         this.build()
 
@@ -49,7 +49,7 @@ export class StaticProblem extends Problem {
 
     /**
      *
-     * @param minMagnitude Minumum load magnitude to be ploted
+     * @param minMagnitude Minimum load magnitude to be plotted
      */
     plotExternalLoads (minMagnitude: number = 0) {
         const arrowsLength = 100

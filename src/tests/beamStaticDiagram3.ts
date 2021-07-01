@@ -4,8 +4,8 @@ import { Element } from '../models/element'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
 
-export function BeamStaticDiagram2 () {
-    console.log('Static beam diagram 2 test')
+export function BeamStaticDiagram3 () {
+    console.log('Static beam diagram 3 test')
 
     const properties = { E: 29 * 1000000, A: 20, I: 1800 }
 
@@ -20,7 +20,7 @@ export function BeamStaticDiagram2 () {
     const e3 = new Element('Frame', nB, nD, properties, p)
 
     new DistributedLoad(e2, 0, -1200, 0, -1200, p)
-    new BoundaryCondition(nA, 'Pin', p)
+    new BoundaryCondition(nA, 'Fix', p)
     new BoundaryCondition(nC, 'RollerX', p)
     new BoundaryCondition(nD, 'RollerX', p)
     p.plot()

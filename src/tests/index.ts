@@ -8,6 +8,7 @@ import { FallingBeam } from './fallingBeam'
 import { BeamStaticDiagram1 } from './beamStaticDiagram1'
 import { StaticTruss } from './staticTruss'
 import { TrussAxialImpact } from './trussAxialImpact'
+import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 
 // Tests
 // StaticTruss()
@@ -20,3 +21,4 @@ import { TrussAxialImpact } from './trussAxialImpact'
 // BridgeStatic()
 // BridgeDynamic()
 BeamStaticDiagram1()
+BeamStaticDiagram2()

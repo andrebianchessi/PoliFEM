@@ -24,7 +24,7 @@ export function BeamStaticDiagram1 () {
     new BoundaryCondition(n3, 'Fix', p)
     p.plot()
     p.solve()
-    p.plotExternalLoads(1)
+    p.plotExternalLoads(0)
     p.plotForcesDiagram(e1)
     p.plotForcesDiagram(e2)
 

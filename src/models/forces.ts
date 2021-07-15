@@ -1,9 +1,9 @@
 export class Forces {
-    N: number // normal
-    V: number // shear
-    M: number // moment
+    N: (xAdim: number) => number // normal
+    V: (xAdim: number) => number // shear
+    M: (xAdim: number) => number // moment
 
-    constructor (N:number, V:number, M:number) {
+    constructor (N:(xAdim: number) => number, V:(xAdim: number) => number, M:(xAdim: number) => number) {
         this.N = N
         this.V = V
         this.M = M

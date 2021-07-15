@@ -21,4 +21,4 @@ import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 // BridgeStatic()
 // BridgeDynamic()
 BeamStaticDiagram1()
-BeamStaticDiagram2()
+// BeamStaticDiagram2()

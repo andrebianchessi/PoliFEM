@@ -125,11 +125,11 @@ export class StaticProblem extends Problem {
         const V: number[] = []
         const M: number[] = []
         const X: number[] = []
+        const forces = e.getForces(this.U!, this)
         for (let x = 0; x < 1.02; x += 0.02) {
-            const forces = e.getForces(this.U!, this, x)
-            N.push(forces.N)
-            V.push(forces.V)
-            M.push(-forces.M)
+            N.push(forces.N(x))
+            V.push(forces.V(x))
+            M.push(-forces.M(x))
             X.push(x)
         }
         const data: any[] = [{ x: X, y: N, name: 'N', hoverinfo: 'y' }, { x: X, y: V, name: 'V', hoverinfo: 'y' }, { x: X, y: M, name: 'M', hoverinfo: 'y' }]

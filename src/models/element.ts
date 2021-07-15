@@ -171,13 +171,15 @@ export class Element {
      *  Returns forces and moments at adimensional x location
      * @param U Global displacement vector
      * @param p Problem instance
-     * @param xAdim Adimensional x
      *              (x=0 is at node 1 and x=1 is at node 2)
      */
-    getForces (U: Matrix, p: StaticProblem, xAdim: number): Forces {
+    getForces (U: Matrix, p: StaticProblem): Forces {
         const l = this.length()
-        const x = l * xAdim
         const nodalLoads = this.getNodalLoads(U, p)
+
+        const x = function (xAdim: number):number {
+            return xAdim * l
+        }
 
         let fx1 = 0
         let fy1 = 0
@@ -234,19 +236,37 @@ export class Element {
             return v1 + (v2 - v1) * xAdim
         }
 
-        const N = -(N1 + (n(0) + n(xAdim)) * x / 2)
-        const V = V1 + (v(0) + v(xAdim)) * x / 2
-
-        const s1 = (v(0) * x)
-        const x1 = x / 2
-        const s2 = (v(xAdim) - v(0)) * x / 2
-        const x2 = 2 / 3 * x
-        let xG = (s1 * x1 + s2 * x2) / (s1 + s2)
-        if (isNaN(xG)) {
-            xG = 0
+        const N = function (xAdim:number): number {
+            return -(N1 + (n(0) + n(xAdim)) * xAdim / l / 2)
+        }
+        const V = function (xAdim:number): number {
+            return V1 + (v(0) + v(xAdim)) * xAdim / l / 2
         }
 
-        const M = -(M1 + (v(0) + v(xAdim)) * x / 2 * xG - V * x)
+        const s1 = function (xAdim:number):number {
+            return (v(0) * x(xAdim))
+        }
+        const x1 = function (xAdim:number):number {
+            return x(xAdim) / 2
+        }
+        const s2 = function (xAdim:number):number {
+            return (v(xAdim) - v(0)) * x(xAdim) / 2
+        }
+
+        const x2 = function (xAdim:number):number {
+            return 2 / 3 * x(xAdim)
+        }
+        const xG = function (xAdim:number):number {
+            let r = (s1(xAdim) * x1(xAdim) + s2(xAdim) * x2(xAdim)) / (s1(xAdim) + s2(xAdim))
+            if (isNaN(r)) {
+                r = 0
+            }
+            return r
+        }
+
+        const M = function (xAdim:number): number {
+            return -(M1 + (v(0) + v(xAdim)) * x(xAdim) / 2 * xG(xAdim) - V(xAdim) * x(xAdim))
+        }
         return new Forces(N, V, M)
     }
 }

@@ -27,6 +27,8 @@
     "eslint-plugin-promise": "^4.3.1"
   },
   "dependencies": {
+    "@types/line-reader": "0.0.34",
+    "line-reader": "^0.4.0",
     "mathjs": "^9.4.0",
     "ml-matrix": "^6.8.0",
     "nodeplotlib": "^0.7.3",

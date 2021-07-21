@@ -9,7 +9,7 @@ import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
 import { InitialSpeed } from './initialSpeed'
 import { bcColor, initSpeedColor, loadColor, distLoadColor } from '../constants'
-import { DistributedLoad } from './distributedLoad'
+import { StructuralDistributedLoad } from './structuralDistributedLoad'
 import { SolidElement } from './solidElement'
 
 export class Problem {
@@ -21,7 +21,7 @@ export class Problem {
     structuralElementCount: number
     solidElementCount: number
     loads: Load[]
-    distributedLoads: DistributedLoad[]
+    structuralDistributedLoads: StructuralDistributedLoad[]
     boundaryConditions: BoundaryCondition[]
     initialSpeeds?: InitialSpeed[]
     K?: Matrix
@@ -38,7 +38,7 @@ export class Problem {
         this.structuralElementCount = 0
         this.solidElementCount = 0
         this.loads = []
-        this.distributedLoads = []
+        this.structuralDistributedLoads = []
         this.boundaryConditions = []
         this.dof = 0
     }
@@ -157,7 +157,7 @@ export class Problem {
             }
         }
 
-        for (const l of this.distributedLoads) {
+        for (const l of this.structuralDistributedLoads) {
             const nDivs = 25
             const scalingFactor = arrowsLength / Math.max(Math.sqrt(l.l1PerLengthLocal.x * l.l1PerLengthLocal.x + l.l1PerLengthLocal.y * l.l1PerLengthLocal.y), Math.sqrt(l.l2PerLengthLocal.x * l.l2PerLengthLocal.x + l.l2PerLengthLocal.y * l.l2PerLengthLocal.y))
             for (let i = 0; i <= nDivs; i++) {

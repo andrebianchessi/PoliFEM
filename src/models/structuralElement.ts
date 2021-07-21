@@ -3,7 +3,7 @@ import { mult } from '../functions/mult'
 // eslint-disable-next-line camelcase
 import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
 import { Angle } from './angleInRadians'
-import { DistributedLoad } from './distributedLoad'
+import { StructuralDistributedLoad } from './structuralDistributedLoad'
 import { Forces } from './forces'
 import { FrameProperties } from './frameProperties'
 import { MassMatrix } from './massMatrix'
@@ -24,7 +24,7 @@ export class StructuralElement {
     properties: FrameProperties | TrussProperties
     K: StiffnessMatrix
     M?: MassMatrix
-    distributedLoads: DistributedLoad[]
+    distributedLoads: StructuralDistributedLoad[]
     angle: Angle
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {

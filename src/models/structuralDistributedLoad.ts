@@ -7,7 +7,7 @@ import { Load } from './load'
 import { math } from './math'
 import { Problem } from './problem'
 
-export class DistributedLoad {
+export class StructuralDistributedLoad {
     e: StructuralElement
     l1: Load
     l2: Load
@@ -28,7 +28,7 @@ export class DistributedLoad {
             (-1 / 20 * y2 - 1 / 30 * y1) * l * l,
             e.n2, p, true, true
         )
-        p.distributedLoads.push(this)
+        p.structuralDistributedLoads.push(this)
 
         let fGlobal: Matrix
         let t: Matrix

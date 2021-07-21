@@ -1,5 +1,6 @@
 import { MassMatrix } from './massMatrix'
 import { Problem } from './problem'
+import { SolidElementProperties } from './solidElementProperties'
 import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class SolidElement {
@@ -8,7 +9,7 @@ export class SolidElement {
     index: number
     K: StiffnessMatrix
     M?: MassMatrix
-    constructor (p: Problem) {
+    constructor (properties: SolidElementProperties, p: Problem) {
         SolidElement.count += 1
         this.index = SolidElement.count
         this.K = new StiffnessMatrix(this, 'PlaneStress')

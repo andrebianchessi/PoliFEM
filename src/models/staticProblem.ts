@@ -20,12 +20,12 @@ export class StaticProblem extends Problem {
     }
 
     plotDisplacements (displacementScaleFactor: number) {
-        const dataAndLayout = this.problemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         let first = true
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             const xd = []
             const yd = []
             const displacements = []
@@ -53,7 +53,7 @@ export class StaticProblem extends Problem {
      */
     plotExternalLoads (minMagnitude: number = 0) {
         const arrowsLength = 100
-        const dataAndLayout = this.problemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData()
         const data = dataAndLayout[0]
 
         const arrows:Partial<Annotations>[] = []

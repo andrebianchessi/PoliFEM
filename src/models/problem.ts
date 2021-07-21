@@ -10,13 +10,16 @@ import { Matrix } from 'mathjs'
 import { InitialSpeed } from './initialSpeed'
 import { bcColor, initSpeedColor, loadColor, distLoadColor } from '../constants'
 import { DistributedLoad } from './distributedLoad'
+import { SolidElement } from './solidElement'
 
 export class Problem {
     dof: number // degrees of freedom
     nodes: Map<number, Map<number, Node>>
     nodeCount: number
-    elements: Map<number, StructuralElement>
-    elementCount: number
+    structuralElements: Map<number, StructuralElement>
+    solidElements: Map<number, SolidElement>
+    structuralElementCount: number
+    solidElementCount: number
     loads: Load[]
     distributedLoads: DistributedLoad[]
     boundaryConditions: BoundaryCondition[]
@@ -30,8 +33,10 @@ export class Problem {
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
         this.nodeCount = 0
-        this.elements = new Map<number, StructuralElement>()
-        this.elementCount = 0
+        this.structuralElements = new Map<number, StructuralElement>()
+        this.solidElements = new Map<number, SolidElement>()
+        this.structuralElementCount = 0
+        this.solidElementCount = 0
         this.loads = []
         this.distributedLoads = []
         this.boundaryConditions = []
@@ -50,7 +55,7 @@ export class Problem {
         this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
 
         // Build stiffness matrix
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             let localIndices: number[] = []
             let globalIndices: number[] = []
             if (e.type === 'Frame') {
@@ -104,14 +109,14 @@ export class Problem {
     }
 
     plot () {
-        const dataAndLayout = this.problemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         plot(data, layout)
     }
 
-    problemDescriptionPlotData (): [Plot[], Layout] {
+    structuralProblemDescriptionPlotData (): [Plot[], Layout] {
         const arrowsLength = 100
         const arrows:Partial<Annotations>[] = []
         const momentsX = []
@@ -227,7 +232,7 @@ export class Problem {
         ]
 
         let first = true
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             const x = []
             const y = []
             const nodesText = []

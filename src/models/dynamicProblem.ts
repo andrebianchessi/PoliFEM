@@ -60,7 +60,7 @@ export class DynamicProblem extends Problem {
     buildM () {
         this.M = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
         // Build mass matrix
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             e.M = new MassMatrix(e, e.type)
             let localIndices: number[] = []
             let globalIndices: number[] = []
@@ -259,7 +259,7 @@ export class DynamicProblem extends Problem {
         plot([{ x: this.t, y: uNodeI }])
     }
 
-    plotElementTension (e: StructuralElement) {
+    plotStructuralElementTension (e: StructuralElement) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
             sigmaElementI.push(e.getNormalTension(this.U![i], this as unknown as StaticProblem))
@@ -272,12 +272,12 @@ export class DynamicProblem extends Problem {
             console.log('Only ' + this.ModesOfVibration.length + ' modes of vibration calculated')
             return
         }
-        const dataAndLayout = this.problemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData()
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         let first = true
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             const xd = []
             const yd = []
             for (const n of [e.n1, e.n2]) {

@@ -96,8 +96,8 @@ export class StructuralElement {
         this.properties = properties
         this.K = new StiffnessMatrix(this, type)
 
-        p.elements.set(p.elementCount, this)
-        p.elementCount += 1
+        p.structuralElements.set(p.structuralElementCount, this)
+        p.structuralElementCount += 1
     }
 
     length ():number {

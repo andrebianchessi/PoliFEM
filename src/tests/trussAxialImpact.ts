@@ -1,5 +1,5 @@
 import { BoundaryCondition } from '../models/boundaryCondition'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { Load } from '../models/load'
@@ -23,7 +23,7 @@ export function TrussAxialImpact () {
     for (let i = 0; i < nElements; i++) {
         n1 = Node.get(i * elementLength, 0, p)
         n2 = Node.get((i + 1) * elementLength, 0, p)
-        new Element('Truss', n1, n2, properties, p)
+        new StructuralElement('Truss', n1, n2, properties, p)
     }
     new BoundaryCondition(n2!, 'Pin', p)
     new Load(100, 0, 0, Node.get(0, 0, p), p)

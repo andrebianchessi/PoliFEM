@@ -1,6 +1,6 @@
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { DistributedLoad } from '../models/distributedLoad'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
 
@@ -15,9 +15,9 @@ export function BeamStaticDiagram2 () {
     const nB = Node.get(10, 0, p)
     const nC = Node.get(30, 0, p)
     const nD = Node.get(10, -15, p)
-    const e1 = new Element('Frame', nA, nB, properties, p)
-    const e2 = new Element('Frame', nB, nC, properties, p)
-    const e3 = new Element('Frame', nB, nD, properties, p)
+    const e1 = new StructuralElement('Frame', nA, nB, properties, p)
+    const e2 = new StructuralElement('Frame', nB, nC, properties, p)
+    const e3 = new StructuralElement('Frame', nB, nD, properties, p)
 
     new DistributedLoad(e2, 0, -1200, 0, -1200, p)
     new BoundaryCondition(nA, 'Pin', p)

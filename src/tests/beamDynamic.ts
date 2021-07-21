@@ -1,7 +1,7 @@
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { DynamicLoad } from '../models/dynamicLoad'
 
 /**
@@ -24,7 +24,7 @@ export function BeamDynamic () {
     for (let i = 0; i < nElements; i++) {
         n1 = Node.get(i * elementLength, 0, p)
         n2 = Node.get((i + 1) * elementLength, 0, p)
-        new Element('Frame', n1, n2, properties, p)
+        new StructuralElement('Frame', n1, n2, properties, p)
     }
 
     new BoundaryCondition(Node.get(0, 0, p), 'Fix', p)

@@ -6,7 +6,7 @@ Test of a truss bar structure
 
 import { checkResult } from '../functions/checkResult'
 import { BoundaryCondition } from '../models/boundaryCondition'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { Load } from '../models/load'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
@@ -25,9 +25,9 @@ export function StaticTruss ():boolean {
     const n3 = Node.get(1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
     const n4 = Node.get(-1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
 
-    const e1 = new Element('Truss', n3, n1, properties, p)
-    new Element('Truss', n1, n2, properties, p)
-    new Element('Truss', n4, n1, properties, p)
+    const e1 = new StructuralElement('Truss', n3, n1, properties, p)
+    new StructuralElement('Truss', n1, n2, properties, p)
+    new StructuralElement('Truss', n4, n1, properties, p)
 
     new Load(20000 * Math.cos(45 * Math.PI / 180), 20000 * Math.sin(45 * Math.PI / 180), 0, n1, p)
 

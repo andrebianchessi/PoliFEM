@@ -2,18 +2,18 @@
 import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { Load } from './load'
 import { math } from './math'
 import { Problem } from './problem'
 
 export class DistributedLoad {
-    e: Element
+    e: StructuralElement
     l1: Load
     l2: Load
     l1PerLengthLocal: Load
     l2PerLengthLocal: Load
-    constructor (e: Element, x1:number, y1:number, x2:number, y2:number, p:Problem) {
+    constructor (e: StructuralElement, x1:number, y1:number, x2:number, y2:number, p:Problem) {
         this.e = e
         const l = e.length()
         this.l1 = new Load(

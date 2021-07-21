@@ -4,7 +4,7 @@ import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { sum } from '../functions/sum'
 import { DynamicLoad } from './dynamicLoad'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
 import { Node } from './node'
@@ -17,13 +17,13 @@ import { StaticProblem } from './staticProblem'
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
     initialSpeeds: InitialSpeed[]
-    M?: Matrix
+    declare M?: Matrix
     Minv?: Matrix
     FDynamic?: (t:number) => Matrix
     timeStep?: number
     duration?: number
     t: number[]
-    U?: Matrix[]
+    declare U?: Matrix[]
     Udot?: Matrix[]
     Udotdot?: Matrix[]
     NaturalFrequencies: number[]
@@ -259,7 +259,7 @@ export class DynamicProblem extends Problem {
         plot([{ x: this.t, y: uNodeI }])
     }
 
-    plotElementTension (e: Element) {
+    plotElementTension (e: StructuralElement) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
             sigmaElementI.push(e.getNormalTension(this.U![i], this as unknown as StaticProblem))

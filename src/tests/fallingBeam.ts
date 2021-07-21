@@ -2,7 +2,7 @@ import { BoundaryCondition } from '../models/boundaryCondition'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { InitialSpeed } from '../models/initialSpeed'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 
 /**
  * Simulates beam pinned at one end that falls into a support
@@ -27,7 +27,7 @@ export function FallingBeam () {
         n2 = Node.get((i + 1) * elementLength, 0, p)
         beamNodes.push(n1)
         beamNodes.push(n2)
-        new Element('Frame', n1, n2, properties, p)
+        new StructuralElement('Frame', n1, n2, properties, p)
         new InitialSpeed(n2, 'Y', -w * n2.x, p)
     }
     new BoundaryCondition(Node.get(0, 0, p), 'Pin', p)

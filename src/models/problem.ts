@@ -1,4 +1,4 @@
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { Node } from './node'
 import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
@@ -15,7 +15,7 @@ export class Problem {
     dof: number // degrees of freedom
     nodes: Map<number, Map<number, Node>>
     nodeCount: number
-    elements: Map<number, Element>
+    elements: Map<number, StructuralElement>
     elementCount: number
     loads: Load[]
     distributedLoads: DistributedLoad[]
@@ -30,7 +30,7 @@ export class Problem {
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
         this.nodeCount = 0
-        this.elements = new Map<number, Element>()
+        this.elements = new Map<number, StructuralElement>()
         this.elementCount = 0
         this.loads = []
         this.distributedLoads = []

@@ -4,7 +4,7 @@ import { Problem } from './problem'
 import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { Annotations } from 'plotly.js'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 
 export class StaticProblem extends Problem {
     declare U?: Matrix
@@ -120,7 +120,7 @@ export class StaticProblem extends Problem {
         plot(data, layout)
     }
 
-    plotForcesDiagram (e: Element) {
+    plotForcesDiagram (e: StructuralElement) {
         const N: number[] = []
         const V: number[] = []
         const M: number[] = []

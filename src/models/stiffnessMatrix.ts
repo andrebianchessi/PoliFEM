@@ -1,7 +1,7 @@
 import { Matrix } from 'mathjs'
 // eslint-disable-next-line camelcase
 import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'
 import { TrussProperties } from './trussProperties'
@@ -12,7 +12,7 @@ export class StiffnessMatrix {
     k: Matrix
     kLocal:Matrix
 
-    constructor (element: Element, type: 'Frame' | 'Truss') {
+    constructor (element: StructuralElement, type: 'Frame' | 'Truss') {
         let t
 
         this.type = type

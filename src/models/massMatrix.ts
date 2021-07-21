@@ -1,5 +1,5 @@
 import { Matrix } from 'mathjs'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'
 import { TrussProperties } from './trussProperties'
@@ -9,7 +9,7 @@ export class MassMatrix {
     type: 'Truss' | 'Frame'
     m?: Matrix
 
-    constructor (element: Element, type: 'Truss' | 'Frame') {
+    constructor (element: StructuralElement, type: 'Truss' | 'Frame') {
         this.type = type
         switch (type) {
         case 'Truss': {

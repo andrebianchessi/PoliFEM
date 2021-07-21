@@ -15,7 +15,7 @@ import { StaticProblem } from './staticProblem'
 import { StiffnessMatrix } from './stiffnessMatrix'
 import { TrussProperties } from './trussProperties'
 
-export class Element {
+export class StructuralElement {
     static count = 0
     index: number
     type: 'Frame' | 'Truss'
@@ -28,8 +28,8 @@ export class Element {
     angle: Angle
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
-        Element.count += 1
-        this.index = Element.count
+        StructuralElement.count += 1
+        this.index = StructuralElement.count
         this.distributedLoads = []
         if (type === 'Frame') {
             if ((properties as FrameProperties).I == null) {

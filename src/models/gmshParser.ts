@@ -14,8 +14,19 @@ export class GmshParser {
      */
     readMshFile (mshFilePath: string) {
         const lines = require('fs').readFileSync(mshFilePath, 'utf-8').split('\n').filter(Boolean)
+        let region: ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements' = ''
+        const regions = ['MeshFormat', 'PhysicalNames', 'Entities', 'Nodes', 'Elements']
         for (const [lineIndex, line] of lines.entries()) {
-            console.log(line)
+            for (const r of regions) {
+                if (region === '' && line === '$' + r) {
+                    region = r as ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements'
+                }
+                if (region === r && line === '$End' + r) {
+                    region = ''
+                }
+            }
+
+            console.log(region)
             console.log(lineIndex)
         }
     }

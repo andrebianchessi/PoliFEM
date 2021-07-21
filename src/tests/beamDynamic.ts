@@ -7,7 +7,7 @@ import { DynamicLoad } from '../models/dynamicLoad'
 /**
  * Implicit dynamic analisys of beam fixed at one end
  */
-export function BeamDynamic () {
+export function BeamDynamic (showPlots: boolean) {
     console.log('Beam dynamic test')
 
     const timeStep = 0.00001
@@ -31,8 +31,10 @@ export function BeamDynamic () {
 
     new DynamicLoad(function (t) { return 0 }, function (t) { return -1 }, function (t) { return 0 }, n2!, p)
 
-    p.plot()
-
-    p.solveTimeHistory('Implicit')
-    p.plotNodeYDisplacement(n2!)
+    if (showPlots) {
+        p.plot()
+        p.solveTimeHistory('Implicit')
+        p.plotNodeYDisplacement(n2!)
+    }
+    console.log('ok')
 }

@@ -7,7 +7,7 @@ import { StaticProblem } from '../models/staticProblem'
 /**
  * Test of modal analisys of a truss bridge
  */
-export function BridgeModal () {
+export function BridgeModal (showPlots: boolean) {
     console.log('Bridge modal test 2')
 
     const L = 1100 // bridge length
@@ -62,11 +62,13 @@ export function BridgeModal () {
     }
 
     pDynamic.solveModal()
-    const displacementScale = 100
-    pDynamic.plotModeOfVibration(0, displacementScale)
-    pDynamic.plotModeOfVibration(1, displacementScale)
-    pDynamic.plotModeOfVibration(2, displacementScale)
-    pDynamic.plotModeOfVibration(3, displacementScale)
+    if (showPlots) {
+        const displacementScale = 100
+        pDynamic.plotModeOfVibration(0, displacementScale)
+        pDynamic.plotModeOfVibration(1, displacementScale)
+        pDynamic.plotModeOfVibration(2, displacementScale)
+        pDynamic.plotModeOfVibration(3, displacementScale)
+    }
 
     console.log('ok')
 }

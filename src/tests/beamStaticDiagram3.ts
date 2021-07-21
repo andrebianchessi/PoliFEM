@@ -4,7 +4,7 @@ import { StructuralElement } from '../models/structuralElement'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
 
-export function BeamStaticDiagram3 () {
+export function BeamStaticDiagram3 (showPlots: boolean) {
     console.log('Static beam diagram 3 test')
 
     const properties = { E: 29 * 1000000, A: 20, I: 1800 }
@@ -23,12 +23,15 @@ export function BeamStaticDiagram3 () {
     new BoundaryCondition(nA, 'Fix', p)
     new BoundaryCondition(nC, 'RollerX', p)
     new BoundaryCondition(nD, 'RollerX', p)
-    p.plot()
+
     p.solve()
-    p.plotDisplacements(10)
-    p.plotForcesDiagram(e1)
-    p.plotForcesDiagram(e2)
-    p.plotForcesDiagram(e3)
+    if (showPlots) {
+        p.plot()
+        p.plotDisplacements(10)
+        p.plotForcesDiagram(e1)
+        p.plotForcesDiagram(e2)
+        p.plotForcesDiagram(e3)
+    }
 
     console.log('ok')
 }

@@ -7,7 +7,7 @@ import { Load } from '../models/load'
 /**
  * Test of dynamic analisys of a truss bridge
  */
-export function BridgeDynamic () {
+export function BridgeDynamic (showPlots: boolean) {
     console.log('Bridge dynamic test')
 
     const load = 100
@@ -64,9 +64,12 @@ export function BridgeDynamic () {
 
     new Load(0, -load, 0, archNodes[2], p)
 
-    p.plot()
     p.solveTimeHistory('Implicit')
-    p.plotNodeYDisplacement(floorNodes[3])
+
+    if (showPlots) {
+        p.plot()
+        p.plotNodeYDisplacement(floorNodes[3])
+    }
 
     console.log('ok')
 }

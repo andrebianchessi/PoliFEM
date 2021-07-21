@@ -11,13 +11,14 @@ import { TrussAxialImpact } from './trussAxialImpact'
 import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 
 // Tests
-StaticTruss()
-TrussAxialImpact()
-FallingBeam()
-BeamModal()
-BeamDynamic()
-BridgeModal()
-BridgeStatic()
-BridgeDynamic()
-BeamStaticDiagram1()
-BeamStaticDiagram2()
+const showPlots = false
+StaticTruss(showPlots)
+TrussAxialImpact(showPlots)
+FallingBeam(showPlots)
+BeamModal(showPlots)
+BeamDynamic(showPlots)
+BridgeModal(showPlots)
+BridgeStatic(showPlots)
+BridgeDynamic(showPlots)
+BeamStaticDiagram1(showPlots)
+BeamStaticDiagram2(showPlots)

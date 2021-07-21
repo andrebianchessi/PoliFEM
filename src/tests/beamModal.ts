@@ -6,7 +6,7 @@ import { StructuralElement } from '../models/structuralElement'
 /**
  * Modal analisys of beam pinned at both ends
  */
-export function BeamModal () {
+export function BeamModal (showPlots: boolean) {
     console.log('Beam modal test')
 
     const nElements = 40
@@ -24,11 +24,15 @@ export function BeamModal () {
     }
     new BoundaryCondition(Node.get(0, 0, p), 'Pin', p)
     new BoundaryCondition(n2!, 'Pin', p)
-    p.plot()
 
     p.solveModal()
-    p.plotModeOfVibration(0)
-    p.plotModeOfVibration(1)
-    p.plotModeOfVibration(2)
-    p.plotModeOfVibration(3)
+
+    if (showPlots) {
+        p.plot()
+        p.plotModeOfVibration(0)
+        p.plotModeOfVibration(1)
+        p.plotModeOfVibration(2)
+        p.plotModeOfVibration(3)
+    }
+    console.log('ok')
 }

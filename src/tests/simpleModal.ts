@@ -6,7 +6,7 @@ import { Node } from '../models/node'
 /**
  * Test of modal analysis of simple (triangular) truss structure
  */
-export async function SimpleModal () {
+export async function SimpleModal (showPlots: boolean) {
     console.log('Modal truss test')
     const p = new DynamicProblem()
 
@@ -24,8 +24,12 @@ export async function SimpleModal () {
     new BoundaryCondition(n3, 'RollerX', p)
 
     p.solveModal()
-    p.plotModeOfVibration(0, 10)
-    p.plotModeOfVibration(1, 10)
-    p.plotModeOfVibration(2, 10)
+
+    if (showPlots) {
+        p.plotModeOfVibration(0, 10)
+        p.plotModeOfVibration(1, 10)
+        p.plotModeOfVibration(2, 10)
+    }
+
     console.log('ok')
 }

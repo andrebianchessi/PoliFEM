@@ -6,7 +6,7 @@ import { StaticProblem } from '../models/staticProblem'
 /**
  * Test of static analysis of a truss bridge
  */
-export function BridgeStatic () {
+export function BridgeStatic (showPlots: boolean) {
     console.log('Bridge static test')
 
     const L = 1100 // bridge length
@@ -59,8 +59,10 @@ export function BridgeStatic () {
     new BoundaryCondition(archNodes[2], 'YDisplacement', p, -L / 10)
 
     p.solve()
-    p.plotDisplacements(1 / 10)
-    p.plotExternalLoads(10 ** (-6))
+    if (showPlots) {
+        p.plotDisplacements(1 / 10)
+        p.plotExternalLoads(10 ** (-6))
+    }
 
     console.log('ok')
 }

@@ -14,7 +14,7 @@ import { StaticProblem } from '../models/staticProblem'
 /**
  * Test of a truss bar structure
  */
-export function StaticTruss ():boolean {
+export function StaticTruss (showPlots: boolean) :boolean {
     console.log('Static truss test')
     const p = new StaticProblem()
 
@@ -36,9 +36,11 @@ export function StaticTruss ():boolean {
     new BoundaryCondition(n4, 'Fix', p)
 
     p.solve()
-    p.plotDisplacements(10)
-    p.plotExternalLoads()
-    p.plotForcesDiagram(e1)
+    if (showPlots) {
+        p.plotDisplacements(10)
+        p.plotExternalLoads()
+        p.plotForcesDiagram(e1)
+    }
 
     return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

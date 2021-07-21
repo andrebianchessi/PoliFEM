@@ -7,7 +7,7 @@ import { StructuralElement } from '../models/structuralElement'
 /**
  * Simulates beam pinned at one end that falls into a support
  */
-export function FallingBeam () {
+export function FallingBeam (showPlots: boolean) {
     console.log('Falling beam test')
 
     const timeStep = 0.000001
@@ -32,9 +32,12 @@ export function FallingBeam () {
     }
     new BoundaryCondition(Node.get(0, 0, p), 'Pin', p)
     new BoundaryCondition(n2!, 'RollerX', p)
-    p.plot()
 
     p.solveTimeHistory('Implicit')
-    p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
-    p.plotNodeYDisplacement(beamNodes[3])
+
+    if (showPlots) {
+        p.plot()
+        p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
+        p.plotNodeYDisplacement(beamNodes[3])
+    }
 }

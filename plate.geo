@@ -1,4 +1,5 @@
 elementSize = 0.5;
+reductionFactor = 2.0;
 plateWidth = 5.0;
 plateHeight = 10.0;
 holeRadius = 2.0;
@@ -6,8 +7,8 @@ Point(1) = {0,0,0, elementSize};
 Point(2) = {plateWidth,0,0, elementSize};
 Point(3) = {plateWidth,plateHeight,0, elementSize};
 Point(4) = {0,plateHeight,0, elementSize};
-Point(5) = {plateWidth-holeRadius,0,0, elementSize};
-Point(6) = {plateWidth,holeRadius,0, elementSize};
+Point(5) = {plateWidth-holeRadius,0,0, elementSize/reductionFactor};
+Point(6) = {plateWidth,holeRadius,0, elementSize/reductionFactor};
 
 Line(1) = {1,5};
 Circle(2) = {5,2,6};
@@ -23,3 +24,6 @@ Physical Curve("Top") = {4};
 Physical Curve("Right") = {3};
 
 Mesh.SaveAll=1;
+
+// Mesh.ElementOrder = 2;
+// Mesh.HighOrderOptimize = 2;

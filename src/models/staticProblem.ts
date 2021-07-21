@@ -19,8 +19,8 @@ export class StaticProblem extends Problem {
         return mult([this.KWithoutBC!, this.U!]) as Matrix
     }
 
-    plotDisplacements (displacementScaleFactor: number) {
-        const dataAndLayout = this.structuralProblemDescriptionPlotData()
+    plotDisplacements (title: string, displacementScaleFactor: number) {
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
@@ -43,7 +43,6 @@ export class StaticProblem extends Problem {
             data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
-        layout.title = 'Original and deformed structure'
         plot(data, layout)
     }
 
@@ -51,9 +50,9 @@ export class StaticProblem extends Problem {
      *
      * @param minMagnitude Minimum load magnitude to be plotted
      */
-    plotExternalLoads (minMagnitude: number = 0) {
+    plotExternalLoads (title: string, minMagnitude: number = 0) {
         const arrowsLength = 100
-        const dataAndLayout = this.structuralProblemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
 
         const arrows:Partial<Annotations>[] = []
@@ -113,14 +112,14 @@ export class StaticProblem extends Problem {
         const layout:Layout = {
             hovermode: 'closest',
             annotations: arrows,
-            title: 'External loads'
+            title: title
         }
 
         data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
         plot(data, layout)
     }
 
-    plotForcesDiagram (e: StructuralElement) {
+    plotForcesDiagram (title: string, e: StructuralElement) {
         const N: number[] = []
         const V: number[] = []
         const M: number[] = []
@@ -134,6 +133,9 @@ export class StaticProblem extends Problem {
         }
         const data: any[] = [{ x: X, y: N, name: 'N', hoverinfo: 'y' }, { x: X, y: V, name: 'V', hoverinfo: 'y' }, { x: X, y: M, name: 'M', hoverinfo: 'y' }]
         data.push({ x: [0, 1], y: [N[0] * 1.01, N[0] * 1.01], text: ['x:' + e.n1.x + ' y:' + e.n1.y, 'x:' + e.n2.x + ' y:' + e.n2.y], hoverinfo: 'text', name: 'Nodes', mode: 'markers', type: 'scatter' })
-        plot(data)
+        const layout:Layout = {
+            title: title
+        }
+        plot(data, layout)
     }
 }

@@ -26,11 +26,11 @@ export function BeamStaticDiagram3 (showPlots: boolean) {
 
     p.solve()
     if (showPlots) {
-        p.plot()
-        p.plotDisplacements(10)
-        p.plotForcesDiagram(e1)
-        p.plotForcesDiagram(e2)
-        p.plotForcesDiagram(e3)
+        p.plot('Problem description')
+        p.plotDisplacements('Title', 10)
+        p.plotForcesDiagram('Title', e1)
+        p.plotForcesDiagram('Title', e2)
+        p.plotForcesDiagram('Title', e3)
     }
 
     console.log('ok')

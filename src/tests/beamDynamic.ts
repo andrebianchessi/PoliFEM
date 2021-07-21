@@ -32,9 +32,9 @@ export function BeamDynamic (showPlots: boolean) {
     new DynamicLoad(function (t) { return 0 }, function (t) { return -1 }, function (t) { return 0 }, n2!, p)
 
     if (showPlots) {
-        p.plot()
+        p.plot('Problem description')
         p.solveTimeHistory('Implicit')
-        p.plotNodeYDisplacement(n2!)
+        p.plotNodeYDisplacement('Title', n2!)
     }
     console.log('ok')
 }

@@ -11,7 +11,7 @@ import { TrussAxialImpact } from './trussAxialImpact'
 import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 
 // Tests
-const showPlots = false
+const showPlots = true
 StaticTruss(showPlots)
 TrussAxialImpact(showPlots)
 FallingBeam(showPlots)

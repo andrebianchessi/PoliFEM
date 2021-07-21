@@ -108,15 +108,15 @@ export class Problem {
         }
     }
 
-    plot () {
-        const dataAndLayout = this.structuralProblemDescriptionPlotData()
+    plot (title: string) {
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         plot(data, layout)
     }
 
-    structuralProblemDescriptionPlotData (): [Plot[], Layout] {
+    structuralProblemDescriptionPlotData (title: string): [Plot[], Layout] {
         const arrowsLength = 100
         const arrows:Partial<Annotations>[] = []
         const momentsX = []
@@ -248,7 +248,7 @@ export class Problem {
         const layout:Layout = {
             hovermode: 'closest',
             annotations: arrows,
-            title: 'Problem description'
+            title: title
         }
         return [data, layout]
     }

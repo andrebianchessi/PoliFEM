@@ -26,9 +26,9 @@ export async function SimpleModal (showPlots: boolean) {
     p.solveModal()
 
     if (showPlots) {
-        p.plotModeOfVibration(0, 10)
-        p.plotModeOfVibration(1, 10)
-        p.plotModeOfVibration(2, 10)
+        p.plotModeOfVibration('Title', 0, 10)
+        p.plotModeOfVibration('Title', 1, 10)
+        p.plotModeOfVibration('Title', 2, 10)
     }
 
     console.log('ok')

@@ -28,11 +28,11 @@ export function BeamModal (showPlots: boolean) {
     p.solveModal()
 
     if (showPlots) {
-        p.plot()
-        p.plotModeOfVibration(0)
-        p.plotModeOfVibration(1)
-        p.plotModeOfVibration(2)
-        p.plotModeOfVibration(3)
+        p.plot('Problem description')
+        p.plotModeOfVibration('Title', 0)
+        p.plotModeOfVibration('Title', 1)
+        p.plotModeOfVibration('Title', 2)
+        p.plotModeOfVibration('Title', 3)
     }
     console.log('ok')
 }

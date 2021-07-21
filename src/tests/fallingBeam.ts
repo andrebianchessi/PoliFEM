@@ -36,8 +36,8 @@ export function FallingBeam (showPlots: boolean) {
     p.solveTimeHistory('Implicit')
 
     if (showPlots) {
-        p.plot()
-        p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
-        p.plotNodeYDisplacement(beamNodes[3])
+        p.plot('Problem description')
+        p.plotNodeYDisplacement('Title', beamNodes[Math.floor(beamNodes.length / 2)])
+        p.plotNodeYDisplacement('Title', beamNodes[3])
     }
 }

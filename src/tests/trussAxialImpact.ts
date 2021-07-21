@@ -31,8 +31,8 @@ export function TrussAxialImpact (showPlots: boolean) {
     p.solveTimeHistory('Explicit')
 
     if (showPlots) {
-        p.plot()
-        p.plotStructuralElementTension(p.structuralElements.get(25)!)
+        p.plot('Problem description')
+        p.plotStructuralElementTension('Title', p.structuralElements.get(25)!)
     }
 
     console.log('ok')

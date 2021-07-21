@@ -67,8 +67,8 @@ export function BridgeDynamic (showPlots: boolean) {
     p.solveTimeHistory('Implicit')
 
     if (showPlots) {
-        p.plot()
-        p.plotNodeYDisplacement(floorNodes[3])
+        p.plot('Problem description')
+        p.plotNodeYDisplacement('Title', floorNodes[3])
     }
 
     console.log('ok')

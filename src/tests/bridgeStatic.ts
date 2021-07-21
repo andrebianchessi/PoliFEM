@@ -60,8 +60,8 @@ export function BridgeStatic (showPlots: boolean) {
 
     p.solve()
     if (showPlots) {
-        p.plotDisplacements(1 / 10)
-        p.plotExternalLoads(10 ** (-6))
+        p.plotDisplacements('Title', 1 / 10)
+        p.plotExternalLoads('Title', 10 ** (-6))
     }
 
     console.log('ok')

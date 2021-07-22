@@ -56,7 +56,7 @@ export class GmshParser {
     elementsLines: string[]
 
     physicalNames: Map<number, PhysicalName>
-    pointEntities: PointEntity[]
+    pointEntities: Map<number, PointEntity>
     curveEntities: CurveEntity[]
     surfaceEntities: SurfaceEntity[]
 
@@ -68,7 +68,7 @@ export class GmshParser {
         this.elementsLines = []
 
         this.physicalNames = new Map<number, PhysicalName>()
-        this.pointEntities = []
+        this.pointEntities = new Map<number, PointEntity>()
         this.curveEntities = []
         this.surfaceEntities = []
     }
@@ -150,7 +150,7 @@ export class GmshParser {
                 for (let t = 0; t < nPhysicalTags; t++) {
                     physicalTags.push(this.physicalNames.get(+nums[5 + t])!)
                 }
-                this.pointEntities.push({
+                this.pointEntities.set(tag, {
                     tag: tag,
                     x: x,
                     y: y,
@@ -159,7 +159,40 @@ export class GmshParser {
                 })
                 i++
             }
-            console.log(this.pointEntities)
+            // curveEntities
+            for (let c = 0; c < nCurves; c++) {
+                const nums = this.entitiesLines[i].match(numberRegex)!
+                const tag = +nums[0]
+                const minX = +nums[1]
+                const minY = +nums[2]
+                const minZ = +nums[3]
+                const maxX = +nums[4]
+                const maxY = +nums[5]
+                const maxZ = +nums[6]
+                const nPhysicalNames = +nums[7]
+                const physicalNames:PhysicalName[] = []
+                for (let t = 0; t < nPhysicalNames; t++) {
+                    physicalNames.push(this.physicalNames.get(+nums[8 + t])!)
+                }
+                const nPoints = +nums[8 + nPhysicalNames]
+                const pointEntities:PointEntity[] = []
+                for (let p = 0; p < nPoints; p++) {
+                    pointEntities.push(this.pointEntities.get(+nums[9 + p])!)
+                }
+                this.curveEntities.push({
+                    tag: tag,
+                    minX: minX,
+                    minY: minY,
+                    minZ: minZ,
+                    maxX: maxX,
+                    maxY: maxY,
+                    maxZ: maxZ,
+                    physicalNames: physicalNames,
+                    points: pointEntities
+                })
+                i++
+            }
+            console.log(this.curveEntities)
         }
     }
 }

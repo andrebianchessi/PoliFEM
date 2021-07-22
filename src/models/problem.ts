@@ -54,8 +54,18 @@ export class Problem {
         // Initialize matrix
         this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
 
+        function addToMatrix (localIndices: number[], globalIndices: number[],
+            e: StructuralElement|SolidElement, p: Problem) {
+            for (let i = 0; i < localIndices.length; i++) {
+                for (let j = 0; j < localIndices.length; j++) {
+                    const initialVal = p.K!.get([globalIndices[i]!, globalIndices[j]!])!
+                        p.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
+                }
+            }
+        }
+
         // Build stiffness matrix
-        for (const [, e] of this.structuralElements) {
+        for (const e of this.structuralElements.values()) {
             let localIndices: number[] = []
             let globalIndices: number[] = []
             if (e.type === 'Frame') {
@@ -65,12 +75,14 @@ export class Problem {
                 localIndices = [0, 1, 2, 3]
                 globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!]
             }
-            for (let i = 0; i < localIndices.length; i++) {
-                for (let j = 0; j < localIndices.length; j++) {
-                    const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
-                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
-                }
-            }
+            addToMatrix(localIndices, globalIndices, e, this)
+        }
+        for (const e of this.solidElements.values()) {
+            let localIndices: number[] = []
+            let globalIndices: number[] = []
+            localIndices = [0, 1, 2, 3, 4, 5]
+            globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!, e.n3.uIndex!, e.n2.vIndex!]
+            addToMatrix(localIndices, globalIndices, e, this)
         }
     }
 

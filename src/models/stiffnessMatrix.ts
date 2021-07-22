@@ -70,8 +70,23 @@ export class StiffnessMatrix {
         } else {
             switch (type) {
             case 'PlaneStress': {
-                this.kLocal = math.matrix!()
-                this.k = math.matrix!()
+                // this.kLocal = math.matrix!([
+                //     [1, 1, 1, 1, 1, 1],
+                //     [1, 1, 1, 1, 1, 1],
+                //     [1, 1, 1, 1, 1, 1],
+                //     [1, 1, 1, 1, 1, 1],
+                //     [1, 1, 1, 1, 1, 1],
+                //     [1, 1, 1, 1, 1, 1]
+
+                // ])
+                this.k = math.matrix!([
+                    [1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1]
+                ])
             }
             }
         }

@@ -39,11 +39,18 @@ type Node = {
     x: number
     y: number
     z: number
+    entity: (PointEntity|CurveEntity|SurfaceEntity)
 }
 type Element = {
     tag: number
     entities: (PointEntity|CurveEntity|SurfaceEntity)[]
     nodes: Node[]
+}
+
+type xyz = {
+    x:number,
+    y:number,
+    z:number
 }
 export class GmshParser {
     p: Problem
@@ -60,6 +67,8 @@ export class GmshParser {
     curveEntities: Map<number, CurveEntity>
     surfaceEntities: Map<number, SurfaceEntity>
 
+    nodes: Map<number, Node>
+
     constructor (p:Problem) {
         this.p = p
         this.physicalNamesLines = []
@@ -71,6 +80,8 @@ export class GmshParser {
         this.pointEntities = new Map<number, PointEntity>()
         this.curveEntities = new Map<number, CurveEntity>()
         this.surfaceEntities = new Map<number, SurfaceEntity>()
+
+        this.nodes = new Map<number, Node>()
     }
 
     /**
@@ -225,7 +236,64 @@ export class GmshParser {
                 })
                 i++
             }
-            console.log(this.surfaceEntities)
+        }
+
+        // Parse Nodes
+        if (this.nodesLines.length > 0) {
+            const nums = this.nodesLines[0].match(numberRegex)!
+            const nEntities = +nums[0]
+            // const nNodes = +nums[1]
+            // const minNodeTag = +nums[2]
+            // const maxNodeTag = +nums[3]
+            let i = 1
+            for (let e = 0; e < nEntities; e++) {
+                const nums = this.nodesLines[i].match(numberRegex)!
+                const entityDim = +nums[0]
+                const entityTag = +nums[1]
+                let entity: PointEntity|CurveEntity|SurfaceEntity
+                if (entityDim === 0) {
+                    entity = this.pointEntities.get(entityTag)!
+                }
+                if (entityDim === 1) {
+                    entity = this.curveEntities.get(entityTag)!
+                }
+                if (entityDim === 2) {
+                    entity = this.surfaceEntities.get(entityTag)!
+                }
+                // const isParametric = (nums[2] === '1')
+                const nNodes = +nums[3]
+
+                i++
+                const nodeTags: number[] = []
+                const nodeXYZ: xyz[] = []
+                for (let n = 0; n < nNodes; n++) {
+                    const nums = this.nodesLines[i].match(numberRegex)!
+                    nodeTags.push(+nums[0])
+                    i++
+                }
+                for (let n = 0; n < nNodes; n++) {
+                    const nums = this.nodesLines[i].match(numberRegex)!
+                    nodeXYZ.push({
+                        x: +nums[0],
+                        y: +nums[1],
+                        z: +nums[2]
+                    })
+                    i++
+                }
+                for (let n = 0; n < nNodes; n++) {
+                    const tag = nodeTags[n]
+                    const xyz = nodeXYZ[n]
+                    const node: Node = {
+                        tag: tag,
+                        x: xyz.x,
+                        y: xyz.y,
+                        z: xyz.z,
+                        entity: entity!
+                    }
+                    this.nodes.set(tag, node)
+                }
+            }
+            console.log(this.nodes)
         }
     }
 }

@@ -12,7 +12,7 @@ import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 import { Solid } from './solid'
 
 // Tests
-// const showPlots = true
+const showPlots = true
 // StaticTruss(showPlots)
 // TrussAxialImpact(showPlots)
 // FallingBeam(showPlots)
@@ -22,5 +22,5 @@ import { Solid } from './solid'
 // BridgeStatic(showPlots)
 // BridgeDynamic(showPlots)
 // BeamStaticDiagram1(showPlots)
-// BeamStaticDiagram2(showPlots)
-Solid()
+BeamStaticDiagram2(showPlots)
+// Solid()

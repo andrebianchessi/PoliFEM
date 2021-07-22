@@ -40,17 +40,20 @@ export class StructuralElement {
         this.n1 = n1
         this.n2 = n2
 
-        if (this.n2.x !== this.n1.x) {
-            this.angle = new Angle(Math.atan((this.n2.y - this.n1.y) / (this.n2.x - this.n1.x)))
-        } else {
-            this.angle = new Angle(Math.PI / 2)
-        }
-        if (this.n2.y === this.n1.y) {
+        if (this.n2.x === this.n1.x) {
+            if (n1.y < n2.y) {
+                this.angle = new Angle(Math.PI / 2)
+            } else {
+                this.angle = new Angle(-Math.PI / 2)
+            }
+        } else if (this.n2.y === this.n1.y) {
             if (this.n1.x < this.n2.x) {
                 this.angle = new Angle(0)
             } else {
                 this.angle = new Angle(Math.PI)
             }
+        } else {
+            this.angle = new Angle(Math.atan((this.n2.y - this.n1.y) / (this.n2.x - this.n1.x)))
         }
 
         if (type === 'Frame') {

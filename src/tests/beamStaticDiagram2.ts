@@ -18,7 +18,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     const nD = Node.get(10, -15, p)
     const e1 = new StructuralElement('Frame', nA, nB, properties, p)
     const e2 = new StructuralElement('Frame', nB, nC, properties, p)
-    const e3 = new StructuralElement('Frame', nB, nD, properties, p)
+    const e3 = new StructuralElement('Frame', nD, nB, properties, p)
 
     new StructuralDistributedLoad(e2, 0, -1200, 0, -1200, p)
     new BoundaryCondition(nA, 'Pin', p)
@@ -28,7 +28,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     PrintSparseMatrix(p.KWithoutBC!)
     showPlots = true
     if (showPlots) {
-        // p.plotDisplacements('Original and deformed structure (displacements scaled by 10000)', 10000)
+        p.plotDisplacements('Original and deformed structure (displacements scaled by 10000)', 10000)
         p.plotExternalLoads('External loads', 1)
         // p.plotForcesDiagram('Forces diagam on element A-B', e1)
         // p.plotForcesDiagram('Forces diagam on element B-C', e2)

@@ -28,11 +28,11 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     PrintSparseMatrix(p.KWithoutBC!)
     showPlots = true
     if (showPlots) {
-        p.plotDisplacements('Original and deformed structure (displacements scaled by 10000)', 10000)
+        // p.plotDisplacements('Original and deformed structure (displacements scaled by 10000)', 10000)
         p.plotExternalLoads('External loads', 1)
-        p.plotForcesDiagram('Forces diagam on element A-B', e1)
-        p.plotForcesDiagram('Forces diagam on element B-C', e2)
-        p.plotForcesDiagram('Forces diagam on element B-D', e3)
+        // p.plotForcesDiagram('Forces diagam on element A-B', e1)
+        // p.plotForcesDiagram('Forces diagam on element B-C', e2)
+        // p.plotForcesDiagram('Forces diagam on element B-D', e3)
     }
 
     console.log('ok')

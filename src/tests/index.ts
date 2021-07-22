@@ -21,6 +21,6 @@ const showPlots = true
 // BridgeModal(showPlots)
 // BridgeStatic(showPlots)
 // BridgeDynamic(showPlots)
-// BeamStaticDiagram1(showPlots)
-BeamStaticDiagram2(showPlots)
+BeamStaticDiagram1(showPlots)
+// BeamStaticDiagram2(showPlots)
 // Solid()

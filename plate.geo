@@ -22,8 +22,9 @@ Plane Surface(1) = {1};
 Physical Curve("Bottom") = {1};
 Physical Curve("Top") = {4};
 Physical Curve("Right") = {3};
+Physical Surface("Domain") = {1};
 
-Mesh.SaveAll=1;
+// Mesh.SaveAll=1;
 
 // Mesh.ElementOrder = 2;
 // Mesh.HighOrderOptimize = 2;

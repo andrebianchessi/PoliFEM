@@ -43,7 +43,7 @@ type Node = {
 }
 type Element = {
     tag: number
-    entities: (PointEntity|CurveEntity|SurfaceEntity)[]
+    entity: (PointEntity|CurveEntity|SurfaceEntity)
     nodes: Node[]
 }
 
@@ -68,6 +68,7 @@ export class GmshParser {
     surfaceEntities: Map<number, SurfaceEntity>
 
     nodes: Map<number, Node>
+    elements: Map<number, Element>
 
     constructor (p:Problem) {
         this.p = p
@@ -82,6 +83,7 @@ export class GmshParser {
         this.surfaceEntities = new Map<number, SurfaceEntity>()
 
         this.nodes = new Map<number, Node>()
+        this.elements = new Map<number, Element>()
     }
 
     /**
@@ -293,7 +295,55 @@ export class GmshParser {
                     this.nodes.set(tag, node)
                 }
             }
-            console.log(this.nodes)
         }
+
+        // Parse elements
+        if (this.elementsLines.length > 0) {
+            const nums = this.elementsLines[0].match(numberRegex)!
+            const nEntities = +nums[0]
+            // const nElements = +nums[1]
+            // const minElementTag = +nums[2]
+            // const maxElementTag = +nums[3]
+
+            let i = 1
+            for (let e = 0; e < nEntities; e++) {
+                const nums = this.elementsLines[i].match(numberRegex)!
+                const entityDim = +nums[0]
+                const entityTag = +nums[1]
+                const elementType = +nums[2]
+                const nElements = +nums[3]
+                if (elementType !== 1 && elementType !== 2 && elementType !== 15) {
+                    throw new Error('Only point, lines and triangular elements are supported')
+                }
+                let entity: PointEntity|CurveEntity|SurfaceEntity
+                if (entityDim === 0) {
+                    entity = this.pointEntities.get(entityTag)!
+                }
+                if (entityDim === 1) {
+                    entity = this.curveEntities.get(entityTag)!
+                }
+                if (entityDim === 2) {
+                    entity = this.surfaceEntities.get(entityTag)!
+                }
+                i++
+                for (let el = 0; el < nElements; el++) {
+                    const nums = this.elementsLines[i].match(numberRegex)!
+                    const tag = +nums[0]
+                    const nodes: Node[] = []
+                    for (let t = 1; t < nums.length; t++) {
+                        nodes.push(this.nodes.get(+nums[t])!)
+                    }
+                    const element:Element = {
+                        tag: tag,
+                        entity: entity!,
+                        nodes: nodes
+                    }
+                    this.elements.set(tag, element)
+
+                    i++
+                }
+            }
+        }
+        console.log(this.elements)
     }
 }

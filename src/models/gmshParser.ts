@@ -1,6 +1,7 @@
 import { Problem } from './problem'
 export class GmshParser {
     p: Problem
+    thickness?: number
     nodesFromTag: Map<string, Node[]>
     constructor (p:Problem) {
         this.p = p
@@ -12,7 +13,8 @@ export class GmshParser {
      * @param p
      * @param mshFilePath
      */
-    readMshFile (mshFilePath: string) {
+    readMshFile (mshFilePath: string, domainThickness: number) {
+        this.thickness = domainThickness
         const lines = require('fs').readFileSync(mshFilePath, 'utf-8').split('\n').filter(Boolean)
         let region: ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements' = ''
         const regions = ['MeshFormat', 'PhysicalNames', 'Entities', 'Nodes', 'Elements']

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { StructuralDistributedLoad } from '../models/structuralDistributedLoad'
 import { StructuralElement } from '../models/structuralElement'
@@ -24,15 +25,15 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     new BoundaryCondition(nA, 'Pin', p)
     new BoundaryCondition(nC, 'RollerX', p)
     new BoundaryCondition(nD, 'RollerX', p)
+
     p.solve()
-    PrintSparseMatrix(p.KWithoutBC!)
     showPlots = true
     if (showPlots) {
-        p.plotDisplacements('Original and deformed structure (displacements scaled by 10000)', 10000)
-        p.plotExternalLoads('External loads', 1)
-        // p.plotForcesDiagram('Forces diagam on element A-B', e1)
-        // p.plotForcesDiagram('Forces diagam on element B-C', e2)
-        // p.plotForcesDiagram('Forces diagam on element B-D', e3)
+        p.plotDisplacements('Ex2: Original and deformed structure', 100000)
+        p.plotExternalLoads('Ex2: External loads', 1)
+        // p.plotForcesDiagram('Ex2: Forces diagam on element A-B', e1)
+        // p.plotForcesDiagram('Ex2: Forces diagam on element B-C', e2)
+        // p.plotForcesDiagram('Ex2: Forces diagam on element B-D', e3)
     }
 
     console.log('ok')

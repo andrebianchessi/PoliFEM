@@ -13,6 +13,7 @@ export async function Solid () {
     g.readMshFile('./plate.msh', 1, properties)
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'Fix')
+    p.build()
     console.log(p)
     console.log('ok')
 }

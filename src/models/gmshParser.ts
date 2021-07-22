@@ -54,11 +54,15 @@ export class GmshParser {
     nodesLines: string[]
     elementsLines: string[]
 
+    physicalNames: PhysicalName[]
+
     constructor (p:Problem) {
         this.p = p
         this.physicalNamesLines = []
         this.nodesLines = []
         this.elementsLines = []
+
+        this.physicalNames = []
     }
 
     /**
@@ -68,6 +72,7 @@ export class GmshParser {
      */
     async readMshFile (mshFilePath: string, domainThickness: number) {
         const numberRegex = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g
+        const stringRegex = /".*"/g
         this.thickness = domainThickness
         const lines = require('fs').readFileSync(mshFilePath, 'utf-8').split('\n').filter(Boolean)
         let region: ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements' = ''
@@ -80,7 +85,7 @@ export class GmshParser {
                 if (region === '' && lines[lineIndex - 1] === '$' + r) {
                     region = r as ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements'
                 }
-                if (region === r && lines[lineIndex - 1] === '$End' + r) {
+                if (region === r && lines[lineIndex] === '$End' + r) {
                     region = ''
                 }
             }
@@ -103,7 +108,16 @@ export class GmshParser {
             }
         }
 
-        // Get data line by line
-        const i = 0
+        // Parse PhysicalNames
+        if (this.physicalNamesLines.length > 0) {
+            let i = 1
+            while (i < this.physicalNamesLines.length) {
+                const nums = this.physicalNamesLines[i].match(numberRegex)!
+                let name = this.physicalNamesLines[i].match(stringRegex)![0]
+                name = name.replace('"', '').replace('"', '')
+                this.physicalNames.push({ dimension: +nums[0], tag: +nums[1], name: name })
+                i++
+            }
+        }
     }
 }

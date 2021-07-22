@@ -17,7 +17,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     const nC = Node.get(30, 0, p)
     const nD = Node.get(10, -15, p)
     const e1 = new StructuralElement('Frame', nA, nB, properties, p)
-    const e2 = new StructuralElement('Frame', nC, nB, properties, p)
+    const e2 = new StructuralElement('Frame', nB, nC, properties, p)
     const e3 = new StructuralElement('Frame', nB, nD, properties, p)
 
     new StructuralDistributedLoad(e2, 0, -1200, 0, -1200, p)

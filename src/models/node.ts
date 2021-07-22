@@ -1,6 +1,7 @@
 import { Problem } from './problem'
 
 export class Node {
+    static firstNodeIndex = 0
     x: number;
     y: number;
     index: number;
@@ -11,7 +12,7 @@ export class Node {
     private constructor (x:number, y:number, index: number) {
         this.x = x
         this.y = y
-        this.index = index
+        this.index = index + Node.firstNodeIndex
     }
 
     static get (x:number, y:number, p:Problem): Node {

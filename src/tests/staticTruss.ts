@@ -17,7 +17,6 @@ import { StaticProblem } from '../models/staticProblem'
 export function StaticTruss (showPlots: boolean) :boolean {
     console.log('Static truss test')
     const p = new StaticProblem()
-
     const properties = { E: 206000000000, A: 1 / 10000 }
 
     const n1 = Node.get(0, 0, p)

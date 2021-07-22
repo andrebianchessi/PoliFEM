@@ -10,7 +10,7 @@ type PointEntity = {
     x: number
     y: number
     z: number
-    physicalNames: PhysicalName[]
+    physicalTags: PhysicalName[]
 }
 type CurveEntity = {
     tag: number
@@ -51,18 +51,26 @@ export class GmshParser {
 
     // lists of msh file lines
     physicalNamesLines: string[]
+    entitiesLines: string[]
     nodesLines: string[]
     elementsLines: string[]
 
-    physicalNames: PhysicalName[]
+    physicalNames: Map<number, PhysicalName>
+    pointEntities: PointEntity[]
+    curveEntities: CurveEntity[]
+    surfaceEntities: SurfaceEntity[]
 
     constructor (p:Problem) {
         this.p = p
         this.physicalNamesLines = []
+        this.entitiesLines = []
         this.nodesLines = []
         this.elementsLines = []
 
-        this.physicalNames = []
+        this.physicalNames = new Map<number, PhysicalName>()
+        this.pointEntities = []
+        this.curveEntities = []
+        this.surfaceEntities = []
     }
 
     /**
@@ -100,6 +108,9 @@ export class GmshParser {
             if (region === 'PhysicalNames') {
                 this.physicalNamesLines.push(line)
             }
+            if (region === 'Entities') {
+                this.entitiesLines.push(line)
+            }
             if (region === 'Nodes') {
                 this.nodesLines.push(line)
             }
@@ -115,9 +126,40 @@ export class GmshParser {
                 const nums = this.physicalNamesLines[i].match(numberRegex)!
                 let name = this.physicalNamesLines[i].match(stringRegex)![0]
                 name = name.replace('"', '').replace('"', '')
-                this.physicalNames.push({ dimension: +nums[0], tag: +nums[1], name: name })
+                this.physicalNames.set(+nums[1], { dimension: +nums[0], tag: +nums[1], name: name })
                 i++
             }
+        }
+
+        // Parse entities
+        if (this.entitiesLines.length > 0) {
+            const nums = this.entitiesLines[0].match(numberRegex)!
+            const nPoints = +nums[0]
+            const nCurves = +nums[1]
+            const nSurfaces = +nums[2]
+            let i = 1
+            // pointEntities
+            for (let p = 0; p < nPoints; p++) {
+                const nums = this.entitiesLines[i].match(numberRegex)!
+                const tag = +nums[0]
+                const x = +nums[1]
+                const y = +nums[2]
+                const z = +nums[3]
+                const nPhysicalTags = +nums[4]
+                const physicalTags:PhysicalName[] = []
+                for (let t = 0; t < nPhysicalTags; t++) {
+                    physicalTags.push(this.physicalNames.get(+nums[5 + t])!)
+                }
+                this.pointEntities.push({
+                    tag: tag,
+                    x: x,
+                    y: y,
+                    z: z,
+                    physicalTags: physicalTags
+                })
+                i++
+            }
+            console.log(this.pointEntities)
         }
     }
 }

@@ -1,5 +1,7 @@
 import { Problem } from './problem'
 import { SolidElementProperties } from './solidElementProperties'
+import * as SolverNode from '../models/node'
+import { SolidElement } from './solidElement'
 
 type PhysicalName = {
     tag: number
@@ -12,6 +14,7 @@ type PointEntity = {
     y: number
     z: number
     physicalNames: PhysicalName[]
+    dimension: 0
 }
 type CurveEntity = {
     tag: number
@@ -23,6 +26,7 @@ type CurveEntity = {
     maxZ: number
     physicalNames: PhysicalName[]
     points: PointEntity[]
+    dimension: 1
 }
 type SurfaceEntity = {
     tag: number
@@ -34,6 +38,7 @@ type SurfaceEntity = {
     maxZ: number
     physicalNames: PhysicalName[]
     curves: CurveEntity[]
+    dimension: 2
 }
 type Node = {
     tag: number
@@ -57,6 +62,7 @@ type xyz = {
 export class GmshParser {
     p: Problem
     thickness?: number
+    properties?: SolidElementProperties
 
     // lists of msh file lines
     physicalNamesLines: string[]
@@ -93,16 +99,16 @@ export class GmshParser {
     }
 
     /**
-     * Adds nodes and elements from msh file
-     * currently only uniform domain properties
-     * are supported
+     * Reads msh file
      * @param p
      * @param mshFilePath
      */
-    async readMshFile (mshFilePath: string, domainThickness: number, domainProperties: SolidElementProperties) {
+    readMshFile (mshFilePath: string, domainThickness: number, domainProperties: SolidElementProperties) {
+        this.thickness = domainThickness
+        this.properties = domainProperties
+
         const numberRegex = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g
         const stringRegex = /".*"/g
-        this.thickness = domainThickness
         const lines = require('fs').readFileSync(mshFilePath, 'utf-8').split('\n').filter(Boolean)
         let region: ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements' = ''
         const regions = ['MeshFormat', 'PhysicalNames', 'Entities', 'Nodes', 'Elements']
@@ -176,7 +182,8 @@ export class GmshParser {
                     x: x,
                     y: y,
                     z: z,
-                    physicalNames: physicalNames
+                    physicalNames: physicalNames,
+                    dimension: 0
                 })
                 i++
             }
@@ -209,7 +216,8 @@ export class GmshParser {
                     maxY: maxY,
                     maxZ: maxZ,
                     physicalNames: physicalNames,
-                    points: pointEntities
+                    points: pointEntities,
+                    dimension: 1
                 })
                 i++
             }
@@ -242,7 +250,8 @@ export class GmshParser {
                     maxY: maxY,
                     maxZ: maxZ,
                     physicalNames: physicalNames,
-                    curves: curveEntities
+                    curves: curveEntities,
+                    dimension: 2
                 })
                 i++
             }
@@ -361,6 +370,22 @@ export class GmshParser {
         for (const [, n] of this.nodes) {
             for (const physicalName of n.entity.physicalNames) {
                 this.nodesFromPhysicalName.get(physicalName.name)!.push(n)
+            }
+        }
+    }
+
+    // Adds nodes and elements from msh file
+    // must be run after readMshFile
+    addNodesAndElements () {
+        for (const [, n] of this.nodes) {
+            SolverNode.Node.get(n.x, n.y, this.p)
+        }
+        for (const [, e] of this.elements) {
+            if (e.entity.dimension === 2) {
+                const n1 = SolverNode.Node.get(e.nodes[0].x, e.nodes[0].y, this.p)
+                const n2 = SolverNode.Node.get(e.nodes[1].x, e.nodes[1].y, this.p)
+                const n3 = SolverNode.Node.get(e.nodes[2].x, e.nodes[2].y, this.p)
+                new SolidElement(n1, n2, n3, this.properties!, this.p)
             }
         }
     }

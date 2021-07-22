@@ -9,6 +9,7 @@ export async function Solid () {
     const g = new GmshParser(p)
     const properties: SolidElementProperties = { E: 29 * 1000000, v: 0.3 }
     g.readMshFile('./plate.msh', 1, properties)
-
+    g.addNodesAndElements()
+    console.log(p)
     console.log('ok')
 }

@@ -6,7 +6,7 @@ export async function Solid () {
 
     const p = new StaticProblem()
     const g = new GmshParser(p)
-    g.readMshFile('./plate.msh')
+    g.readMshFile('./plate.msh', 1)
 
     console.log('ok')
 }

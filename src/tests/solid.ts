@@ -10,6 +10,7 @@ export async function Solid () {
     const properties: SolidElementProperties = { E: 29 * 1000000, v: 0.3 }
     g.readMshFile('./plate.msh', 1, properties)
     g.addNodesAndElements()
+    g.createBoundaryConditions('Bottom', 'Fix')
     console.log(p)
     console.log('ok')
 }

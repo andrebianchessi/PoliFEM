@@ -2,6 +2,7 @@ import { Problem } from './problem'
 import { SolidElementProperties } from './solidElementProperties'
 import * as SolverNode from '../models/node'
 import { SolidElement } from './solidElement'
+import { BoundaryCondition } from './boundaryCondition'
 
 type PhysicalName = {
     tag: number
@@ -46,7 +47,6 @@ type Node = {
     y: number
     z: number
     entity: (PointEntity|CurveEntity|SurfaceEntity)
-    entityDim: 0|1|2
 }
 type Element = {
     tag: number
@@ -79,6 +79,7 @@ export class GmshParser {
     elements: Map<number, Element>
 
     nodesFromPhysicalName: Map<string, Node[]>
+    nodeFromXY: Map<number, Map<number, Node>>
 
     constructor (p:Problem) {
         this.p = p
@@ -96,6 +97,7 @@ export class GmshParser {
         this.elements = new Map<number, Element>()
 
         this.nodesFromPhysicalName = new Map<string, Node[]>()
+        this.nodeFromXY = new Map<number, Map<number, Node>>()
     }
 
     /**
@@ -205,7 +207,7 @@ export class GmshParser {
                 const nPoints = +nums[8 + nPhysicalNames]
                 const pointEntities:PointEntity[] = []
                 for (let p = 0; p < nPoints; p++) {
-                    pointEntities.push(this.pointEntities.get(+nums[9 + p])!)
+                    pointEntities.push(this.pointEntities.get(Math.abs(+nums[9 + nPhysicalNames + p]))!)
                 }
                 this.curveEntities.set(tag, {
                     tag: tag,
@@ -239,7 +241,7 @@ export class GmshParser {
                 const nCurves = +nums[8 + nPhysicalNames]
                 const curveEntities:CurveEntity[] = []
                 for (let c = 0; c < nCurves; c++) {
-                    curveEntities.push(this.curveEntities.get(+nums[9 + c])!)
+                    curveEntities.push(this.curveEntities.get(+nums[9 + nPhysicalNames + c])!)
                 }
                 this.surfaceEntities.set(tag, {
                     tag: tag,
@@ -307,10 +309,13 @@ export class GmshParser {
                         x: xyz.x,
                         y: xyz.y,
                         z: xyz.z,
-                        entity: entity!,
-                        entityDim: entityDim as (0|1|2)
+                        entity: entity!
                     }
                     this.nodes.set(tag, node)
+                    if (!this.nodeFromXY.get(xyz.x)) {
+                        this.nodeFromXY.set(xyz.x, new Map<number, Node>())
+                    }
+                    this.nodeFromXY.get(xyz.x)!.set(xyz.y, node)
                 }
             }
         }
@@ -372,6 +377,24 @@ export class GmshParser {
                 this.nodesFromPhysicalName.get(physicalName.name)!.push(n)
             }
         }
+        for (const curveEntity of this.curveEntities.values()) {
+            for (const physicalName of curveEntity.physicalNames) {
+                for (const pointEntity of curveEntity.points) {
+                    const n = this.nodeFromXY.get(pointEntity.x)!.get(pointEntity.y)!
+                    this.nodesFromPhysicalName.get(physicalName.name)!.push(n)
+                }
+            }
+        }
+        for (const surfaceEntity of this.surfaceEntities.values()) {
+            for (const physicalName of surfaceEntity.physicalNames) {
+                for (const curveEntity of surfaceEntity.curves) {
+                    for (const pointEntity of curveEntity.points) {
+                        const n = this.nodeFromXY.get(pointEntity.x)!.get(pointEntity.y)!
+                        this.nodesFromPhysicalName.get(physicalName.name)!.push(n)
+                    }
+                }
+            }
+        }
     }
 
     // Adds nodes and elements from msh file
@@ -387,6 +410,15 @@ export class GmshParser {
                 const n3 = SolverNode.Node.get(e.nodes[2].x, e.nodes[2].y, this.p)
                 new SolidElement(n1, n2, n3, this.properties!, this.p)
             }
+        }
+    }
+
+    createBoundaryConditions (physicalName: string,
+        type: 'Fix' | 'RollerX' | 'RollerY' | 'Pin' | 'XDisplacement' | 'YDisplacement' | 'AngularDisplacement',
+        value:number = 0) {
+        for (const n of this.nodesFromPhysicalName.get(physicalName)!) {
+            const ns: SolverNode.Node = SolverNode.Node.get(n.x, n.y, this.p)
+            new BoundaryCondition(ns, type, this.p, value)
         }
     }
 }

@@ -3,6 +3,7 @@ import { SolidElementProperties } from './solidElementProperties'
 import * as SolverNode from '../models/node'
 import { SolidElement } from './solidElement'
 import { BoundaryCondition } from './boundaryCondition'
+import { Load } from './load'
 
 type PhysicalName = {
     tag: number
@@ -419,6 +420,14 @@ export class GmshParser {
         for (const n of this.nodesFromPhysicalName.get(physicalName)!) {
             const ns: SolverNode.Node = SolverNode.Node.get(n.x, n.y, this.p)
             new BoundaryCondition(ns, type, this.p, value)
+        }
+    }
+
+    createLoads (physicalName: string, x: number, y: number) {
+        for (const n of this.nodesFromPhysicalName.get(physicalName)!) {
+            const ns: SolverNode.Node = SolverNode.Node.get(n.x, n.y, this.p)
+            console.log(ns.x + '  ' + ns.y)
+            new Load(x, y, 0, ns, this.p)
         }
     }
 }

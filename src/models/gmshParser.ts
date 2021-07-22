@@ -1,8 +1,8 @@
 import { Problem } from './problem'
 
 type PhysicalName = {
-    dimension: number
     tag: number
+    dimension: number
     name: string
 }
 type PointEntity = {
@@ -34,7 +34,17 @@ type SurfaceEntity = {
     physicalNames: PhysicalName[]
     curves: CurveEntity[]
 }
-
+type Node = {
+    tag: number
+    x: number
+    y: number
+    z: number
+}
+type Element = {
+    tag: number
+    entities: (PointEntity|CurveEntity|SurfaceEntity)[]
+    nodes: Node[]
+}
 export class GmshParser {
     p: Problem
     thickness?: number

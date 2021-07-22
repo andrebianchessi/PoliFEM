@@ -57,8 +57,8 @@ export class GmshParser {
 
     physicalNames: Map<number, PhysicalName>
     pointEntities: Map<number, PointEntity>
-    curveEntities: CurveEntity[]
-    surfaceEntities: SurfaceEntity[]
+    curveEntities: Map<number, CurveEntity>
+    surfaceEntities: Map<number, SurfaceEntity>
 
     constructor (p:Problem) {
         this.p = p
@@ -69,8 +69,8 @@ export class GmshParser {
 
         this.physicalNames = new Map<number, PhysicalName>()
         this.pointEntities = new Map<number, PointEntity>()
-        this.curveEntities = []
-        this.surfaceEntities = []
+        this.curveEntities = new Map<number, CurveEntity>()
+        this.surfaceEntities = new Map<number, SurfaceEntity>()
     }
 
     /**
@@ -179,7 +179,7 @@ export class GmshParser {
                 for (let p = 0; p < nPoints; p++) {
                     pointEntities.push(this.pointEntities.get(+nums[9 + p])!)
                 }
-                this.curveEntities.push({
+                this.curveEntities.set(tag, {
                     tag: tag,
                     minX: minX,
                     minY: minY,
@@ -192,7 +192,40 @@ export class GmshParser {
                 })
                 i++
             }
-            console.log(this.curveEntities)
+            // surfaceEntities
+            for (let s = 0; s < nSurfaces; s++) {
+                const nums = this.entitiesLines[i].match(numberRegex)!
+                const tag = +nums[0]
+                const minX = +nums[1]
+                const minY = +nums[2]
+                const minZ = +nums[3]
+                const maxX = +nums[4]
+                const maxY = +nums[5]
+                const maxZ = +nums[6]
+                const nPhysicalNames = +nums[7]
+                const physicalNames:PhysicalName[] = []
+                for (let t = 0; t < nPhysicalNames; t++) {
+                    physicalNames.push(this.physicalNames.get(+nums[8 + t])!)
+                }
+                const nCurves = +nums[8 + nPhysicalNames]
+                const curveEntities:CurveEntity[] = []
+                for (let c = 0; c < nCurves; c++) {
+                    curveEntities.push(this.curveEntities.get(+nums[9 + c])!)
+                }
+                this.surfaceEntities.set(tag, {
+                    tag: tag,
+                    minX: minX,
+                    minY: minY,
+                    minZ: minZ,
+                    maxX: maxX,
+                    maxY: maxY,
+                    maxZ: maxZ,
+                    physicalNames: physicalNames,
+                    curves: curveEntities
+                })
+                i++
+            }
+            console.log(this.surfaceEntities)
         }
     }
 }

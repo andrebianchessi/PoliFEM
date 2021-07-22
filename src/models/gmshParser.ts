@@ -1,4 +1,5 @@
 import { Problem } from './problem'
+import { SolidElementProperties } from './solidElementProperties'
 
 type PhysicalName = {
     tag: number
@@ -10,7 +11,7 @@ type PointEntity = {
     x: number
     y: number
     z: number
-    physicalTags: PhysicalName[]
+    physicalNames: PhysicalName[]
 }
 type CurveEntity = {
     tag: number
@@ -40,6 +41,7 @@ type Node = {
     y: number
     z: number
     entity: (PointEntity|CurveEntity|SurfaceEntity)
+    entityDim: 0|1|2
 }
 type Element = {
     tag: number
@@ -70,6 +72,8 @@ export class GmshParser {
     nodes: Map<number, Node>
     elements: Map<number, Element>
 
+    nodesFromPhysicalName: Map<string, Node[]>
+
     constructor (p:Problem) {
         this.p = p
         this.physicalNamesLines = []
@@ -84,14 +88,18 @@ export class GmshParser {
 
         this.nodes = new Map<number, Node>()
         this.elements = new Map<number, Element>()
+
+        this.nodesFromPhysicalName = new Map<string, Node[]>()
     }
 
     /**
      * Adds nodes and elements from msh file
+     * currently only uniform domain properties
+     * are supported
      * @param p
      * @param mshFilePath
      */
-    async readMshFile (mshFilePath: string, domainThickness: number) {
+    async readMshFile (mshFilePath: string, domainThickness: number, domainProperties: SolidElementProperties) {
         const numberRegex = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g
         const stringRegex = /".*"/g
         this.thickness = domainThickness
@@ -159,16 +167,16 @@ export class GmshParser {
                 const y = +nums[2]
                 const z = +nums[3]
                 const nPhysicalTags = +nums[4]
-                const physicalTags:PhysicalName[] = []
+                const physicalNames:PhysicalName[] = []
                 for (let t = 0; t < nPhysicalTags; t++) {
-                    physicalTags.push(this.physicalNames.get(+nums[5 + t])!)
+                    physicalNames.push(this.physicalNames.get(+nums[5 + t])!)
                 }
                 this.pointEntities.set(tag, {
                     tag: tag,
                     x: x,
                     y: y,
                     z: z,
-                    physicalTags: physicalTags
+                    physicalNames: physicalNames
                 })
                 i++
             }
@@ -290,7 +298,8 @@ export class GmshParser {
                         x: xyz.x,
                         y: xyz.y,
                         z: xyz.z,
-                        entity: entity!
+                        entity: entity!,
+                        entityDim: entityDim as (0|1|2)
                     }
                     this.nodes.set(tag, node)
                 }
@@ -344,6 +353,15 @@ export class GmshParser {
                 }
             }
         }
-        console.log(this.elements)
+
+        // Build nodesFromPhysicalName
+        for (const [, physicalName] of this.physicalNames) {
+            this.nodesFromPhysicalName.set(physicalName.name, [])
+        }
+        for (const [, n] of this.nodes) {
+            for (const physicalName of n.entity.physicalNames) {
+                this.nodesFromPhysicalName.get(physicalName.name)!.push(n)
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 import { GmshParser } from '../models/gmshParser'
+import { SolidElementProperties } from '../models/solidElementProperties'
 import { StaticProblem } from '../models/staticProblem'
 
 export async function Solid () {
@@ -6,7 +7,8 @@ export async function Solid () {
 
     const p = new StaticProblem()
     const g = new GmshParser(p)
-    g.readMshFile('./plate.msh', 1)
+    const properties: SolidElementProperties = { E: 29 * 1000000, v: 0.3 }
+    g.readMshFile('./plate.msh', 1, properties)
 
     console.log('ok')
 }

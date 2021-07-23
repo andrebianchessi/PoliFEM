@@ -84,35 +84,44 @@ export class StiffnessMatrix {
                 const v = element.properties.v
                 const t = element.properties.t
 
-                const c1 = E / (1 - v * v)
-                const C = math.matrix!([
-                    [c1, c1 * v, 0],
-                    [c1 * v, c1, 0],
-                    [0, 0, (1 - v) / 2]
-                ])
+                const C = mult([E / (1 - v * v), math.matrix!([
+                    [1, 1 * v, 0],
+                    [1 * v, 1, 0],
+                    [0, 0, 1 * (1 - v) / 2]
+                ])]) as Matrix
 
-                const xi = element.n1.x
-                const xj = element.n2.x
-                const xk = element.n3.x
-                const yi = element.n1.y
-                const yj = element.n2.y
-                const yk = element.n3.y
-                const A = 0.5 * math.det!(
+                const x1 = element.n1.x
+                const x2 = element.n2.x
+                const x3 = element.n3.x
+                const y1 = element.n1.y
+                const y2 = element.n2.y
+                const y3 = element.n3.y
+                const A = math.abs!(0.5 * math.det!(
                     math.matrix!([
-                        [1, xi, yi],
-                        [1, xj, yj],
-                        [1, xk, yk]
+                        [1, x1, y1],
+                        [1, x2, y2],
+                        [1, x3, y3]
                     ])
-                )
+                ))
 
-                const b1 = 1 / (2 * A)
-                const B = math.matrix!([
-                    [b1 * (yj - yk), 0, b1 * (yk - yi), 0, b1 * (yi - yj), 0],
-                    [0, b1 * (xk - xj), 0, b1 * (xi - xk), 0, b1 * (xj - xi)],
-                    [b1 * (xk - xj), b1 * (yi - yk), b1 * (xi - xk), b1 * (yk - yi), b1 * (xj - xi), b1 * (yi - yk)]
-                ])
+                // const a1 = x2 * y3 - x3 * y2
+                // const a2 = x3 * y1 - x1 * y3
+                // const a3 = x1 * y2 - x2 * y1
+                const b1 = y2 - y3
+                const b2 = y3 - y1
+                const b3 = y1 - y2
+                const c1 = x3 - x2
+                const c2 = x1 - x3
+                const c3 = x2 - x1
+                const k = 1 / (2 * A)
+                const B = mult([k, math.matrix!([
+                    [b1, 0, b2, 0, b3, 0],
+                    [0, c1, 0, c2, 0, c3],
+                    [c1, b1, c2, b2, c3, b3]
+                ])]) as Matrix
                 const BT = math.transpose!(B)
-                this.k = mult([t, BT, C, B, A]) as Matrix
+
+                this.k = mult([t * A, BT, C, B]) as Matrix
             }
             }
         }

@@ -81,7 +81,7 @@ export class Problem {
             let localIndices: number[] = []
             let globalIndices: number[] = []
             localIndices = [0, 1, 2, 3, 4, 5]
-            globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!, e.n3.uIndex!, e.n2.vIndex!]
+            globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!, e.n3.uIndex!, e.n3.vIndex!]
             addToMatrix(localIndices, globalIndices, e, this)
         }
     }

@@ -12,6 +12,7 @@ import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 import { BeamStaticDiagram3 } from './beamStaticDiagram3'
 import { SolidGmsh } from './solidGmsh'
 import { SolidGmsh2 } from './solidGmsh2'
+import { Solid } from './solid'
 
 // Tests
 const showPlots = true
@@ -26,5 +27,6 @@ const showPlots = true
 // BeamStaticDiagram1(showPlots)
 // BeamStaticDiagram2(showPlots)
 // BeamStaticDiagram3(showPlots)
-SolidGmsh()
-SolidGmsh2()
+Solid()
+// SolidGmsh()
+// SolidGmsh2()

@@ -3,7 +3,7 @@ import { Node } from '../models/node'
 import { SolidElementProperties } from '../models/solidElementProperties'
 import { StaticProblem } from '../models/staticProblem'
 
-export function SolidGmsh2 () {
+export function FlatPlateHole () {
     console.log('Solid gmsh test 2')
 
     Node.firstNodeIndex = 1
@@ -16,6 +16,6 @@ export function SolidGmsh2 () {
     g.createBoundaryConditions('Right', 'RollerY')
     g.createLoads('Top', 0, 100000)
     p.solve()
-    g.saveStaticProblemToMsh('solid2.msh', 0)
+    g.saveStaticProblemToMsh('flatPlateHoleSolution.msh', 0)
     console.log('ok')
 }

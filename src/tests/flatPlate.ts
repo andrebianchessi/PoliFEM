@@ -3,7 +3,7 @@ import { Node } from '../models/node'
 import { SolidElementProperties } from '../models/solidElementProperties'
 import { StaticProblem } from '../models/staticProblem'
 
-export function SolidGmsh () {
+export function FlatPlate () {
     console.log('Solid gmsh test')
 
     Node.firstNodeIndex = 1
@@ -15,6 +15,6 @@ export function SolidGmsh () {
     g.createBoundaryConditions('Bottom', 'Fix')
     g.createLoads('Top', 0, 1)
     p.solve()
-    g.saveStaticProblemToMsh('solid.msh', 0)
+    g.saveStaticProblemToMsh('flatPlateSolution.msh', 0)
     console.log('ok')
 }

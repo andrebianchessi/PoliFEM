@@ -4,8 +4,8 @@ import { Node } from '../models/node'
 import { SolidElementProperties } from '../models/solidElementProperties'
 import { StaticProblem } from '../models/staticProblem'
 
-export async function Solid () {
-    console.log('Solid test')
+export async function Solid2 () {
+    console.log('Solid test2')
 
     Node.firstNodeIndex = 1
     const p = new StaticProblem()
@@ -17,14 +17,6 @@ export async function Solid () {
     g.createBoundaryConditions('Right', 'RollerY')
     g.createLoads('Top', 0, 100000)
     p.solve()
-    // console.log(p.U?.get([Node.get(0, 0, p).uIndex!, 0]))
-    // console.log(p.U?.get([Node.get(3, 0, p).uIndex!, 0]))
-    // console.log(p.U?.get([Node.get(0, 10, p).uIndex!, 0]))
-    // console.log(p.U?.get([Node.get(5, 10, p).uIndex!, 0]))
-    // console.log(p.U?.get([Node.get(0, 0, p).vIndex!, 0]))
-    // console.log(p.U?.get([Node.get(3, 0, p).vIndex!, 0]))
-    // console.log(p.U?.get([Node.get(0, 10, p).vIndex!, 0]))
-    // console.log(p.U?.get([Node.get(5, 10, p).vIndex!, 0]))
-    g.saveStaticProblemToMsh('test.msh', 0)
+    g.saveStaticProblemToMsh('solid2.msh', 0)
     console.log('ok')
 }

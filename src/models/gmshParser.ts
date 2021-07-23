@@ -4,6 +4,8 @@ import * as SolverNode from '../models/node'
 import { SolidElement } from './solidElement'
 import { BoundaryCondition } from './boundaryCondition'
 import { Load } from './load'
+import Matrix from 'ml-matrix'
+import { StaticProblem } from './staticProblem'
 
 type PhysicalName = {
     tag: number
@@ -415,6 +417,39 @@ export class GmshParser {
                 new SolidElement(n1, n2, n3, this.properties!, this.p)
             }
         }
+    }
+
+    saveStaticProblemToMsh (filePath: string, displacementFactor: number) {
+        let s: string = ''
+        s += '$MeshFormat\n'
+        s += '4.1 0 8\n'
+        s += '$EndMeshFormat\n'
+        s += '$Nodes\n'
+        const nNodes = this.p.nodeCount
+        const minNodeTag = SolverNode.Node.firstNodeIndex
+        const maxNodeTag = minNodeTag + nNodes - 1
+        s += `1 ${nNodes} ${minNodeTag} ${maxNodeTag}\n`
+        s += `0 1 0 ${nNodes}\n`
+        for (const map of this.p.nodes.values()) {
+            for (const node of map.values()) {
+                s += `${node.index}\n`
+            }
+        }
+        for (const map of this.p.nodes.values()) {
+            for (const node of map.values()) {
+                const dx = (this.p as StaticProblem).U!.get([node.uIndex!, 0]) * displacementFactor
+                const x = node.x + dx
+                const dy = (this.p as StaticProblem).U!.get([node.vIndex!, 0]) * displacementFactor
+                const y = node.y + dy
+                s += `${x} ${y} 0\n`
+            }
+        }
+        s += '$EndNodes\n'
+
+        require('fs').writeFile(filePath, s, function (err: any) {
+            if (err) return console.log(err)
+            console.log('Saving complete!\nFile:' + filePath)
+        })
     }
 
     createBoundaryConditions (physicalName: string,

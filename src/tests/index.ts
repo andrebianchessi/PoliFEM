@@ -10,7 +10,8 @@ import { StaticTruss } from './staticTruss'
 import { TrussAxialImpact } from './trussAxialImpact'
 import { BeamStaticDiagram2 } from './beamStaticDiagram2'
 import { BeamStaticDiagram3 } from './beamStaticDiagram3'
-import { Solid } from './solid'
+import { SolidGmsh } from './solidGmsh'
+import { SolidGmsh2 } from './solidGmsh2'
 
 // Tests
 const showPlots = true
@@ -25,5 +26,5 @@ const showPlots = true
 // BeamStaticDiagram1(showPlots)
 // BeamStaticDiagram2(showPlots)
 // BeamStaticDiagram3(showPlots)
-// Solid()
-Solid()
+SolidGmsh()
+SolidGmsh2()

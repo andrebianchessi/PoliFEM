@@ -100,20 +100,11 @@ export class GmshParser {
         this.nodeFromXY = new Map<number, Map<number, Node>>()
     }
 
-    /**
-     * Reads msh file
-     * @param p
-     * @param mshFilePath
-     */
-    readMshFile (mshFilePath: string, domainProperties: SolidElementProperties) {
-        this.properties = domainProperties
-
+    private buildLineArrays (mshFilePath: string, domainProperties: SolidElementProperties) {
         const numberRegex = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g
-        const stringRegex = /".*"/g
         const lines = require('fs').readFileSync(mshFilePath, 'utf-8').split('\n').filter(Boolean)
         let region: ''|'MeshFormat'|'PhysicalNames'|'Entities'|'Nodes'|'Elements' = ''
         const regions = ['MeshFormat', 'PhysicalNames', 'Entities', 'Nodes', 'Elements']
-
         // Build lines arrays
         for (const [lineIndex, line] of lines.entries()) {
             // Find current region of the file
@@ -146,6 +137,20 @@ export class GmshParser {
                 this.elementsLines.push(line)
             }
         }
+    }
+
+    /**
+     * Reads msh file
+     * @param p
+     * @param mshFilePath
+     */
+    readMshFile (mshFilePath: string, domainProperties: SolidElementProperties) {
+        this.properties = domainProperties
+
+        const numberRegex = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g
+        const stringRegex = /".*"/g
+
+        this.buildLineArrays(mshFilePath, domainProperties)
 
         // Parse PhysicalNames
         if (this.physicalNamesLines.length > 0) {

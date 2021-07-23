@@ -9,7 +9,7 @@ import { BeamStaticDiagram1 } from './beamStaticDiagram1'
 import { StaticTruss } from './staticTruss'
 import { TrussAxialImpact } from './trussAxialImpact'
 import { BeamStaticDiagram2 } from './beamStaticDiagram2'
-import { Solid } from './solid'
+import { Solid } from './solid2'
 import { BeamStaticDiagram3 } from './beamStaticDiagram3'
 
 // Tests

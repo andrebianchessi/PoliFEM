@@ -13,7 +13,7 @@ export function SolidGmsh () {
     g.readMshFile('./plate.msh', properties)
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'Fix')
-    g.createLoads('Top', 0, 100000)
+    g.createLoads('Top', 0, 1)
     p.solve()
     g.saveStaticProblemToMsh('solid.msh', 0)
     console.log('ok')

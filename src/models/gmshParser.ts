@@ -495,7 +495,7 @@ export class GmshParser {
         s += '$EndNodeData\n'
 
         // Von Mises Element
-        s += '$NodeData\n'
+        s += '$ElementData\n'
         s += '1\n'
         s += '"Von Mises Stress"\n'
         s += '1\n'
@@ -507,7 +507,7 @@ export class GmshParser {
         for (const e of this.p.solidElements.values()) {
             s += `${e.index} ${e.getVonMises()}\n`
         }
-        s += '$EndNodeData\n'
+        s += '$EndElementData\n'
 
         require('fs').writeFile(filePath, s, function (err: any) {
             if (err) return console.log(err)

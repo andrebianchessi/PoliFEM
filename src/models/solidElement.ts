@@ -117,7 +117,7 @@ export class SolidElement {
             [u3],
             [v3]
         ])
-        const stresses = mult([this.properties.E, this.getB(), U]) as Matrix
+        const stresses = mult([this.getC(), this.getB(), U]) as Matrix
         return new StressState(stresses.get([0, 0]), stresses.get([1, 0]), stresses.get([2, 0]))
     }
 

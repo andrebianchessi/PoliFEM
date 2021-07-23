@@ -4,7 +4,6 @@ import * as SolverNode from '../models/node'
 import { SolidElement } from './solidElement'
 import { BoundaryCondition } from './boundaryCondition'
 import { Load } from './load'
-import Matrix from 'ml-matrix'
 import { StaticProblem } from './staticProblem'
 
 type PhysicalName = {
@@ -492,6 +491,21 @@ export class GmshParser {
                 const dy = (this.p as StaticProblem).U!.get([node.vIndex!, 0])
                 s += `${node.index} ${dy}\n`
             }
+        }
+        s += '$EndNodeData\n'
+
+        // Von Mises Element
+        s += '$NodeData\n'
+        s += '1\n'
+        s += '"Von Mises Stress"\n'
+        s += '1\n'
+        s += '0.0\n'
+        s += '3\n'
+        s += '0\n'
+        s += '1\n'
+        s += `${this.p.solidElementCount}\n`
+        for (const e of this.p.solidElements.values()) {
+            s += `${e.index} ${e.getVonMises()}\n`
         }
         s += '$EndNodeData\n'
 

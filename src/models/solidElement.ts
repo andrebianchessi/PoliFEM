@@ -6,6 +6,7 @@ import { Node } from './node'
 import { Problem } from './problem'
 import { SolidElementProperties } from './solidElementProperties'
 import { StiffnessMatrix } from './stiffnessMatrix'
+import { StressState } from './stressState'
 
 export class SolidElement {
     static firstIndex = 1
@@ -17,7 +18,9 @@ export class SolidElement {
     properties: SolidElementProperties
     K: StiffnessMatrix
     M?: MassMatrix
+    p: Problem
     constructor (n1: Node, n2: Node, n3: Node, properties: SolidElementProperties, p: Problem) {
+        this.p = p
         this.index = SolidElement.count + SolidElement.firstIndex
         SolidElement.count += 1
 
@@ -92,11 +95,33 @@ export class SolidElement {
         const c1 = x3 - x2
         const c2 = x1 - x3
         const c3 = x2 - x1
-        const k = 1 / (2 * A)
-        return mult([k, math.matrix!([
+        return mult([1 / (2 * A), math.matrix!([
             [b1, 0, b2, 0, b3, 0],
             [0, c1, 0, c2, 0, c3],
             [c1, b1, c2, b2, c3, b3]
         ])]) as Matrix
+    }
+
+    getStressState (): StressState {
+        const u1 = (this.p.U as Matrix).get([this.n1.uIndex!, 0])
+        const v1 = (this.p.U as Matrix).get([this.n1.vIndex!, 0])
+        const u2 = (this.p.U as Matrix).get([this.n2.uIndex!, 0])
+        const v2 = (this.p.U as Matrix).get([this.n2.vIndex!, 0])
+        const u3 = (this.p.U as Matrix).get([this.n3.uIndex!, 0])
+        const v3 = (this.p.U as Matrix).get([this.n3.vIndex!, 0])
+        const U = math.matrix!([
+            [u1],
+            [v1],
+            [u2],
+            [v2],
+            [u3],
+            [v3]
+        ])
+        const stresses = mult([this.properties.E, this.getB(), U]) as Matrix
+        return new StressState(stresses.get([0, 0]), stresses.get([1, 0]), stresses.get([2, 0]))
+    }
+
+    getVonMises (): number {
+        return this.getStressState().getVonMises()
     }
 }

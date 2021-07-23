@@ -421,15 +421,17 @@ export class GmshParser {
 
     saveStaticProblemToMsh (filePath: string, displacementFactor: number) {
         let s: string = ''
+        // Msh version
         s += '$MeshFormat\n'
         s += '4.1 0 8\n'
         s += '$EndMeshFormat\n'
+
+        // Nodes
         s += '$Nodes\n'
         const nNodes = this.p.nodeCount
-        const minNodeTag = SolverNode.Node.firstNodeIndex
-        const maxNodeTag = minNodeTag + nNodes - 1
-        s += `1 ${nNodes} ${minNodeTag} ${maxNodeTag}\n`
-        s += `0 1 0 ${nNodes}\n`
+        const maxNodeTag = SolverNode.Node.firstNodeIndex + nNodes - 1
+        s += `1 ${nNodes} ${SolverNode.Node.firstNodeIndex} ${maxNodeTag}\n`
+        s += `2 1 0 ${nNodes}\n`
         for (const map of this.p.nodes.values()) {
             for (const node of map.values()) {
                 s += `${node.index}\n`
@@ -445,6 +447,17 @@ export class GmshParser {
             }
         }
         s += '$EndNodes\n'
+
+        // Elements
+        s += '$Elements\n'
+        const nElements = this.p.solidElementCount
+        const maxElementTag = SolidElement.firstIndex + nElements - 1
+        s += `1 ${nElements} ${SolidElement.firstIndex} ${maxElementTag}\n`
+        s += `2 1 2 ${nElements}\n`
+        for (const [, e] of this.p.solidElements) {
+            s += `${e.index} ${e.n1.index} ${e.n2.index} ${e.n3.index}\n`
+        }
+        s += '$EndElements\n'
 
         require('fs').writeFile(filePath, s, function (err: any) {
             if (err) return console.log(err)

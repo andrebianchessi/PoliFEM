@@ -5,6 +5,7 @@ import { SolidElementProperties } from './solidElementProperties'
 import { StiffnessMatrix } from './stiffnessMatrix'
 
 export class SolidElement {
+    static firstIndex = 1
     static count = 0
     index: number
     n1: Node
@@ -14,8 +15,8 @@ export class SolidElement {
     K: StiffnessMatrix
     M?: MassMatrix
     constructor (n1: Node, n2: Node, n3: Node, properties: SolidElementProperties, p: Problem) {
+        this.index = SolidElement.count + SolidElement.firstIndex
         SolidElement.count += 1
-        this.index = SolidElement.count
 
         this.properties = properties
         this.n1 = n1

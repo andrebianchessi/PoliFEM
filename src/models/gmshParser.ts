@@ -419,7 +419,7 @@ export class GmshParser {
         }
     }
 
-    saveStaticProblemToMsh (filePath: string, displacementFactor: number) {
+    saveStaticProblemToMsh (filePath: string, displacementFactor: number = 0) {
         let s: string = ''
         // Msh version
         s += '$MeshFormat\n'

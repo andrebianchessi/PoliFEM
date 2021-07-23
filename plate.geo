@@ -1,4 +1,4 @@
-elementSize = 0.5;
+elementSize = 0.3;
 reductionFactor = 2.0;
 plateWidth = 5.0;
 plateHeight = 10.0;

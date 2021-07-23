@@ -25,6 +25,6 @@ export async function Solid () {
     // console.log(p.U?.get([Node.get(3, 0, p).vIndex!, 0]))
     // console.log(p.U?.get([Node.get(0, 10, p).vIndex!, 0]))
     // console.log(p.U?.get([Node.get(5, 10, p).vIndex!, 0]))
-    g.saveStaticProblemToMsh('test.msh', 1)
+    g.saveStaticProblemToMsh('test.msh', 0)
     console.log('ok')
 }

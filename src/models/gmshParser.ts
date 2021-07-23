@@ -509,6 +509,51 @@ export class GmshParser {
         }
         s += '$EndElementData\n'
 
+        // SigmaX
+        s += '$ElementData\n'
+        s += '1\n'
+        s += '"SigmaX"\n'
+        s += '1\n'
+        s += '0.0\n'
+        s += '3\n'
+        s += '0\n'
+        s += '1\n'
+        s += `${this.p.solidElementCount}\n`
+        for (const e of this.p.solidElements.values()) {
+            s += `${e.index} ${e.getStressState().sigmaX}\n`
+        }
+        s += '$EndElementData\n'
+
+        // SigmaY
+        s += '$ElementData\n'
+        s += '1\n'
+        s += '"SigmaY"\n'
+        s += '1\n'
+        s += '0.0\n'
+        s += '3\n'
+        s += '0\n'
+        s += '1\n'
+        s += `${this.p.solidElementCount}\n`
+        for (const e of this.p.solidElements.values()) {
+            s += `${e.index} ${e.getStressState().sigmaY}\n`
+        }
+        s += '$EndElementData\n'
+
+        // TauXY
+        s += '$ElementData\n'
+        s += '1\n'
+        s += '"TauXY"\n'
+        s += '1\n'
+        s += '0.0\n'
+        s += '3\n'
+        s += '0\n'
+        s += '1\n'
+        s += `${this.p.solidElementCount}\n`
+        for (const e of this.p.solidElements.values()) {
+            s += `${e.index} ${e.getStressState().tauXY}\n`
+        }
+        s += '$EndElementData\n'
+
         require('fs').writeFile(filePath, s, function (err: any) {
             if (err) return console.log(err)
             console.log('Saving complete!\nFile:' + filePath)

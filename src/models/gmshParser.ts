@@ -459,6 +459,42 @@ export class GmshParser {
         }
         s += '$EndElements\n'
 
+        // Horizontal displacements NodeData
+        s += '$NodeData\n'
+        s += '1\n'
+        s += '"Horizontal displacement"\n'
+        s += '1\n'
+        s += '0.0\n'
+        s += '3\n'
+        s += '0\n'
+        s += '1\n'
+        s += `${this.p.nodeCount}\n`
+        for (const map of this.p.nodes.values()) {
+            for (const node of map.values()) {
+                const dx = (this.p as StaticProblem).U!.get([node.uIndex!, 0])
+                s += `${node.index} ${dx}\n`
+            }
+        }
+        s += '$EndNodeData\n'
+
+        // Vertical Displacements Node Data
+        s += '$NodeData\n'
+        s += '1\n'
+        s += '"Vertical displacement"\n'
+        s += '1\n'
+        s += '0.0\n'
+        s += '3\n'
+        s += '0\n'
+        s += '1\n'
+        s += `${this.p.nodeCount}\n`
+        for (const map of this.p.nodes.values()) {
+            for (const node of map.values()) {
+                const dy = (this.p as StaticProblem).U!.get([node.vIndex!, 0])
+                s += `${node.index} ${dy}\n`
+            }
+        }
+        s += '$EndNodeData\n'
+
         require('fs').writeFile(filePath, s, function (err: any) {
             if (err) return console.log(err)
             console.log('Saving complete!\nFile:' + filePath)

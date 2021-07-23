@@ -15,7 +15,7 @@ export async function Solid () {
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'Fix')
     g.createBoundaryConditions('Right', 'RollerY')
-    g.createLoads('Top', 0, 10000)
+    g.createLoads('Top', 0, 100000)
     p.solve()
     // console.log(p.U?.get([Node.get(0, 0, p).uIndex!, 0]))
     // console.log(p.U?.get([Node.get(3, 0, p).uIndex!, 0]))
@@ -25,6 +25,6 @@ export async function Solid () {
     // console.log(p.U?.get([Node.get(3, 0, p).vIndex!, 0]))
     // console.log(p.U?.get([Node.get(0, 10, p).vIndex!, 0]))
     // console.log(p.U?.get([Node.get(5, 10, p).vIndex!, 0]))
-    g.saveStaticProblemToMsh('test.msh', 100)
+    g.saveStaticProblemToMsh('test.msh', 1)
     console.log('ok')
 }

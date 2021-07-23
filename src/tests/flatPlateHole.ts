@@ -10,12 +10,12 @@ export function FlatPlateHole () {
     const p = new StaticProblem()
     const g = new GmshParser(p)
     const properties: SolidElementProperties = { E: 29 * 1000000, v: 0.3, t: 1 }
-    g.readMshFile('./plateHole.msh', properties)
+    g.readMshFile('./flatPlateHole.msh', properties)
     g.addNodesAndElements()
-    g.createBoundaryConditions('Bottom', 'Fix')
+    g.createBoundaryConditions('Bottom', 'RollerX')
     g.createBoundaryConditions('Right', 'RollerY')
     g.createLoads('Top', 0, 100000)
     p.solve()
-    g.saveStaticProblemToMsh('flatPlateHoleSolution.msh', 0)
+    g.saveStaticProblemToMsh('flatPlateHoleSolution.msh', 20)
     console.log('ok')
 }

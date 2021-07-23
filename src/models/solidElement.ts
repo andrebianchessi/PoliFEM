@@ -1,4 +1,7 @@
+import { Matrix } from 'mathjs'
+import { mult } from '../functions/mult'
 import { MassMatrix } from './massMatrix'
+import { math } from './math'
 import { Node } from './node'
 import { Problem } from './problem'
 import { SolidElementProperties } from './solidElementProperties'
@@ -53,5 +56,47 @@ export class SolidElement {
         this.K = new StiffnessMatrix(this, 'PlaneStress')
         p.solidElements.set(p.solidElementCount, this)
         p.solidElementCount += 1
+    }
+
+    getArea () : number {
+        return math.abs!(0.5 * math.det!(
+            math.matrix!([
+                [1, this.n1.x, this.n1.y],
+                [1, this.n2.x, this.n2.y],
+                [1, this.n3.x, this.n3.y]
+            ])
+        ))
+    }
+
+    getC (): Matrix {
+        const E = this.properties.E
+        const v = this.properties.v
+        return mult([E / (1 - v * v), math.matrix!([
+            [1, 1 * v, 0],
+            [1 * v, 1, 0],
+            [0, 0, 1 * (1 - v) / 2]
+        ])]) as Matrix
+    }
+
+    getB (): Matrix {
+        const x1 = this.n1.x
+        const x2 = this.n2.x
+        const x3 = this.n3.x
+        const y1 = this.n1.y
+        const y2 = this.n2.y
+        const y3 = this.n3.y
+        const A = this.getArea()
+        const b1 = y2 - y3
+        const b2 = y3 - y1
+        const b3 = y1 - y2
+        const c1 = x3 - x2
+        const c2 = x1 - x3
+        const c3 = x2 - x1
+        const k = 1 / (2 * A)
+        return mult([k, math.matrix!([
+            [b1, 0, b2, 0, b3, 0],
+            [0, c1, 0, c2, 0, c3],
+            [c1, b1, c2, b2, c3, b3]
+        ])]) as Matrix
     }
 }

@@ -62,7 +62,6 @@ type xyz = {
 }
 export class GmshParser {
     p: Problem
-    thickness?: number
     properties?: SolidElementProperties
 
     // lists of msh file lines
@@ -106,8 +105,7 @@ export class GmshParser {
      * @param p
      * @param mshFilePath
      */
-    readMshFile (mshFilePath: string, domainThickness: number, domainProperties: SolidElementProperties) {
-        this.thickness = domainThickness
+    readMshFile (mshFilePath: string, domainProperties: SolidElementProperties) {
         this.properties = domainProperties
 
         const numberRegex = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g
@@ -426,7 +424,6 @@ export class GmshParser {
     createLoads (physicalName: string, x: number, y: number) {
         for (const n of this.nodesFromPhysicalName.get(physicalName)!) {
             const ns: SolverNode.Node = SolverNode.Node.get(n.x, n.y, this.p)
-            console.log(ns.x + '  ' + ns.y)
             new Load(x, y, 0, ns, this.p)
         }
     }

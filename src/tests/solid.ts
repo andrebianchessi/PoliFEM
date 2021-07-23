@@ -9,8 +9,8 @@ export async function Solid () {
     Node.firstNodeIndex = 1
     const p = new StaticProblem()
     const g = new GmshParser(p)
-    const properties: SolidElementProperties = { E: 29 * 1000000, v: 0.3 }
-    g.readMshFile('./plate.msh', 1, properties)
+    const properties: SolidElementProperties = { E: 29 * 1000000, v: 0.3, t: 1 }
+    g.readMshFile('./plate.msh', properties)
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'Fix')
     g.createLoads('Top', 0, 100)

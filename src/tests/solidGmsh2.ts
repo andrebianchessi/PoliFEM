@@ -3,7 +3,7 @@ import { Node } from '../models/node'
 import { SolidElementProperties } from '../models/solidElementProperties'
 import { StaticProblem } from '../models/staticProblem'
 
-export async function SolidGmsh2 () {
+export function SolidGmsh2 () {
     console.log('Solid gmsh test 2')
 
     Node.firstNodeIndex = 1

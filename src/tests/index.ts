@@ -29,4 +29,4 @@ const showPlots = true
 // BeamStaticDiagram3(showPlots)
 // Solid()
 SolidGmsh()
-// SolidGmsh2()
+SolidGmsh2()

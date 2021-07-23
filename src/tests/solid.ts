@@ -1,3 +1,4 @@
+import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 import { GmshParser } from '../models/gmshParser'
 import { Node } from '../models/node'
 import { SolidElementProperties } from '../models/solidElementProperties'
@@ -14,7 +15,6 @@ export async function Solid () {
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'Fix')
     g.createLoads('Top', 0, 100)
-    p.build()
     p.solve()
     console.log(p)
     console.log('ok')

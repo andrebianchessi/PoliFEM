@@ -50,7 +50,7 @@ export class SolidElement {
         }
 
         this.K = new StiffnessMatrix(this, 'PlaneStress')
-        p.solidElements.set(p.structuralElementCount, this)
+        p.solidElements.set(p.solidElementCount, this)
         p.solidElementCount += 1
     }
 }

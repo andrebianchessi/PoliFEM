@@ -9,7 +9,7 @@ import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 export function BeamStaticDiagram2 (showPlots: boolean) {
     console.log('Static beam diagram 2 test')
 
-    const properties = { E: 29 * 1000000, A: 20, I: 1800 }
+    const properties = { E: 29, A: 20, I: 1800 }
 
     const p = new StaticProblem()
 
@@ -29,7 +29,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     p.solve()
     showPlots = true
     if (showPlots) {
-        p.plotDisplacements('Ex2: Original and deformed structure', 10000)
+        p.plotDisplacements('Ex2: Original and deformed structure', 0.0000001)
         p.plotExternalLoads('Ex2: External loads', 1)
         // p.plotForcesDiagram('Ex2: Forces diagam on element A-B', e1)
         // p.plotForcesDiagram('Ex2: Forces diagam on element B-C', e2)

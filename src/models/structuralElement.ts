@@ -28,8 +28,8 @@ export class StructuralElement {
     angle: Angle
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
-        StructuralElement.count += 1
         this.index = StructuralElement.count
+        StructuralElement.count += 1
         this.distributedLoads = []
         if (type === 'Frame') {
             if ((properties as FrameProperties).I == null) {

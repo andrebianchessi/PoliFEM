@@ -50,7 +50,7 @@ export class StiffnessMatrix {
                 break
             }
             case 'Truss': {
-                t = t = getT_4x4(element.angle)
+                t = getT_4x4(element.angle)
 
                 const E = element.properties.E
                 const A = (element.properties as TrussProperties).A

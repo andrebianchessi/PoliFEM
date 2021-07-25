@@ -10,7 +10,6 @@ export class StaticProblem extends Problem {
     declare U?: Matrix
     solve () {
         this.build()
-
         // Solve linear system
         this.U = math.lusolve!(this.K!, this.F!) as Matrix
     }

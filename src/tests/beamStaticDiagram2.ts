@@ -9,14 +9,14 @@ import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 export function BeamStaticDiagram2 (showPlots: boolean) {
     console.log('Static beam diagram 2 test')
 
-    const properties = { E: 29 * 10000000, A: 20, I: 1800 }
+    const properties = { E: 29 * 1000000, A: 20, I: 1800 }
 
     const p = new StaticProblem()
 
     const nA = Node.get(0, 0, p)
     const nB = Node.get(10, 0, p)
-    const nC = Node.get(30, 0, p)
     const nD = Node.get(10, -15, p)
+    const nC = Node.get(30, 0, p)
     const e1 = new StructuralElement('Frame', nA, nB, properties, p)
     const e2 = new StructuralElement('Frame', nB, nC, properties, p)
     const e3 = new StructuralElement('Frame', nD, nB, properties, p)

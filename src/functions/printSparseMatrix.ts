@@ -17,7 +17,7 @@ export function PrintSparseMatrix (m:Matrix, showValues: boolean = true) {
                     value = 'x'
                 }
             }
-            row += math.format!(value, { precision: 2 }) + ' '
+            row += math.format!(value, { precision: 3 }) + ' '
         }
         row += ' ]'
         console.log(row)

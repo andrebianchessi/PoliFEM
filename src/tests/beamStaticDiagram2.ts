@@ -29,7 +29,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     p.solve()
     showPlots = true
     if (showPlots) {
-        p.plotDisplacements('Ex2: Original and deformed structure', 100000)
+        p.plotDisplacements('Ex2: Original and deformed structure', 10000)
         p.plotExternalLoads('Ex2: External loads', 1)
         // p.plotForcesDiagram('Ex2: Forces diagam on element A-B', e1)
         // p.plotForcesDiagram('Ex2: Forces diagam on element B-C', e2)

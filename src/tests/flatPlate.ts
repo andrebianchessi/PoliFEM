@@ -13,7 +13,7 @@ export function FlatPlate () {
     g.readMshFile('./flatPlate.msh', properties)
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'Fix')
-    g.createLoads('Top', 0, 1)
+    g.createDistributedLoad('Top', 0, 1)
     p.solve()
     g.saveStaticProblemToMsh('flatPlateSolution.msh', 0)
     console.log('ok')

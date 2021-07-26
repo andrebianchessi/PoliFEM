@@ -572,8 +572,8 @@ export class GmshParser {
     /**
      * Applies load equally distributed between nodes at region with physical name
      * @param physicalName
-     * @param x magnitude in x direction of the total load
-     * @param y magnitude in y direction of the total load
+     * @param x magnitude in x direction of force applied to region
+     * @param y magnitude in y direction of force applied to region
      */
     createDistributedLoad (physicalName: string, x: number, y: number) {
         const nNodes = this.nodesFromPhysicalName.get(physicalName)!.length

@@ -14,7 +14,7 @@ export function FlatPlateHole () {
     g.addNodesAndElements()
     g.createBoundaryConditions('Bottom', 'RollerX')
     g.createBoundaryConditions('Right', 'RollerY')
-    g.createLoads('Top', 0, 100000)
+    g.createDistributedLoad('Top', 0, 100000)
     p.solve()
     g.saveStaticProblemToMsh('flatPlateHoleSolution.msh', 0)
     console.log('ok')

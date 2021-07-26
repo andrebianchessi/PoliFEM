@@ -569,10 +569,17 @@ export class GmshParser {
         }
     }
 
-    createLoads (physicalName: string, x: number, y: number) {
+    /**
+     * Applies load equally distributed between nodes at region with physical name
+     * @param physicalName
+     * @param x magnitude in x direction of the total load
+     * @param y magnitude in y direction of the total load
+     */
+    createDistributedLoad (physicalName: string, x: number, y: number) {
+        const nNodes = this.nodesFromPhysicalName.get(physicalName)!.length
         for (const n of this.nodesFromPhysicalName.get(physicalName)!) {
             const ns: SolverNode.Node = SolverNode.Node.get(n.x, n.y, this.p)
-            new Load(x, y, 0, ns, this.p)
+            new Load(x / nNodes, y / nNodes, 0, ns, this.p)
         }
     }
 }

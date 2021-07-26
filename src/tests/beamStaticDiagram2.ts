@@ -9,17 +9,18 @@ import { PrintSparseMatrix } from '../functions/printSparseMatrix'
 export function BeamStaticDiagram2 (showPlots: boolean) {
     console.log('Static beam diagram 2 test')
 
-    const properties = { E: 29, A: 20, I: 1800 }
+    const properties = { E: 29 / 1000, A: 20, I: 1800 }
 
     const p = new StaticProblem()
 
+    const footInInches = 12
     const nA = Node.get(0, 0, p)
-    const nB = Node.get(10, 0, p)
-    const nD = Node.get(10, -15, p)
-    const nC = Node.get(30, 0, p)
+    const nB = Node.get(10 * footInInches, 0, p)
+    const nD = Node.get(10 * footInInches, -15 * footInInches, p)
+    const nC = Node.get(30 * footInInches, 0, p)
     const e1 = new StructuralElement('Frame', nA, nB, properties, p)
+    const e3 = new StructuralElement('Frame', nB, nD, properties, p)
     const e2 = new StructuralElement('Frame', nB, nC, properties, p)
-    const e3 = new StructuralElement('Frame', nD, nB, properties, p)
 
     new StructuralDistributedLoad(e2, 0, -1200, 0, -1200, p)
     new BoundaryCondition(nA, 'Pin', p)
@@ -27,6 +28,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
     new BoundaryCondition(nD, 'RollerX', p)
 
     p.solve()
+    PrintSparseMatrix(p.KWithoutBC!)
     showPlots = true
     if (showPlots) {
         p.plotDisplacements('Ex2: Original and deformed structure', 0.0000001)

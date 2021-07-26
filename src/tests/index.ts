@@ -29,4 +29,4 @@ const showPlots = false
 // BeamStaticDiagram3(showPlots)
 // Solid()
 FlatPlate()
-// FlatPlateHole()
+FlatPlateHole()

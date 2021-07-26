@@ -25,10 +25,10 @@ export function BeamStaticDiagram1 (showPlots: boolean) {
 
     p.solve()
     if (showPlots) {
-        p.plot('Problem description')
-        p.plotExternalLoads('Title', 0)
-        p.plotForcesDiagram('Title', e1)
-        p.plotForcesDiagram('Title', e2)
+        p.plot('Ex1: Problem description')
+        p.plotReactions('Ex1: External reactions', 0)
+        p.plotForcesDiagram('Ex1: Forces diagram on element 1-2', e1)
+        p.plotForcesDiagram('Ex1: Forces diagram on element 2-3', e2)
     }
 
     console.log('ok')

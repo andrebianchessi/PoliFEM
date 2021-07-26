@@ -30,7 +30,7 @@ export function BeamStaticDiagram3 (showPlots: boolean) {
     p.solve()
     if (showPlots) {
         p.plot('Problem description')
-        p.plotExternalLoads('Ex3: External Loads', 1)
+        p.plotReactions('Ex3: External Reactions', 1)
         p.plotDisplacements('Ex3: Original and deformed structure', 1000)
         p.plotForcesDiagram('Ex3: Forces on element A-L', e1)
         p.plotForcesDiagram('Ex3: Forces on element L-B', e2)

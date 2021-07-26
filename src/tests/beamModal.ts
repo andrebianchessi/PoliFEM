@@ -28,11 +28,11 @@ export function BeamModal (showPlots: boolean) {
     p.solveModal()
 
     if (showPlots) {
-        p.plot('Problem description')
-        p.plotModeOfVibration('Title', 0)
-        p.plotModeOfVibration('Title', 1)
-        p.plotModeOfVibration('Title', 2)
-        p.plotModeOfVibration('Title', 3)
+        p.plot('Pinned-Pinned Beam: Problem description')
+        p.plotModeOfVibration('Pinned-Pinned Beam', 0)
+        p.plotModeOfVibration('Pinned-Pinned Beam', 1)
+        p.plotModeOfVibration('Pinned-Pinned Beam', 2)
+        p.plotModeOfVibration('Pinned-Pinned Beam', 3)
     }
     console.log('ok')
 }

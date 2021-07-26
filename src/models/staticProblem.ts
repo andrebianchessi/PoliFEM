@@ -118,6 +118,93 @@ export class StaticProblem extends Problem {
         plot(data, layout)
     }
 
+    plotReactions (title: string, minMagnitude: number = 0) {
+        const arrowsLength = 100
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
+        const data = dataAndLayout[0]
+
+        const arrows:Partial<Annotations>[] = []
+        const momentsX = []
+        const momentsY = []
+        const momentsText = []
+
+        const externalLoads = this.getExternalNodalLoads()
+        for (const bc of this.boundaryConditions) {
+            const node = bc.node
+            let fx, fy, fw
+            if (node.uIndex != null) {
+                fx = externalLoads.get([node.uIndex!, 0])
+            } else {
+                fx = 0
+            }
+            if (node.vIndex != null) {
+                fy = externalLoads.get([node.vIndex!, 0])
+            } else {
+                fy = 0
+            }
+
+            for (const l of this.structuralDistributedLoads) {
+                if (node.index === l.e.n1.index) {
+                    fx -= l.l1.x
+                    fy -= l.l1.y
+                }
+                if (node.index === l.e.n2.index) {
+                    fx -= l.l2.x
+                    fy -= l.l2.y
+                }
+            }
+            if (Math.abs(fx) > minMagnitude || Math.abs(fy) > minMagnitude) {
+                const scalingFactor = arrowsLength / Math.sqrt(fx * fx + fy * fy)
+                const arrowX = -fx * scalingFactor
+                const arrowY = fy * scalingFactor
+
+                const magnitude = Math.sqrt(fx * fx + fy * fy).toString()
+                arrows.push(
+                    {
+                        text: magnitude,
+                        x: node.x,
+                        y: node.y,
+                        xref: 'x',
+                        yref: 'y',
+                        showarrow: true,
+                        arrowhead: 5,
+                        ax: arrowX,
+                        ay: arrowY,
+                        arrowcolor: 'red',
+                        font: { color: 'red', size: 17 }
+                    }
+                )
+            }
+            if (node.wIndex != null) {
+                fw = externalLoads.get([node.wIndex!, 0])
+                for (const l of this.structuralDistributedLoads) {
+                    if (node.index === l.e.n1.index) {
+                        fw -= l.l1.w
+                    }
+                    if (node.index === l.e.n2.index) {
+                        fw -= l.l2.w
+                    }
+                }
+            } else {
+                fw = 0
+            }
+            if (Math.abs(fw) > minMagnitude) {
+                momentsX.push(node.x)
+                momentsY.push(node.y)
+                momentsText.push(fw.toString())
+            }
+        }
+
+        const layout:Layout = {
+            hovermode: 'closest',
+            annotations: arrows,
+            title: title
+        }
+
+        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
+        plot(data, layout)
+    }
+
     plotForcesDiagram (title: string, e: StructuralElement) {
         const N: number[] = []
         const V: number[] = []

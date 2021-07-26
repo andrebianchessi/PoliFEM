@@ -1,4 +1,4 @@
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { Node } from '../models/node'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { DynamicProblem } from '../models/dynamicProblem'
@@ -7,7 +7,7 @@ import { StaticProblem } from '../models/staticProblem'
 /**
  * Test of modal analisys of a truss bridge
  */
-export function BridgeModal () {
+export function BridgeModal (showPlots: boolean) {
     console.log('Bridge modal test 2')
 
     const L = 1100 // bridge length
@@ -39,34 +39,36 @@ export function BridgeModal () {
 
         // Connect floor and arch elements
         for (let i = 0; i < floorNodes.length - 1; i++) {
-            new Element(elementType, floorNodes[i], floorNodes[i + 1], properties, p)
+            new StructuralElement(elementType, floorNodes[i], floorNodes[i + 1], properties, p)
         }
         for (let i = 0; i < archNodes.length - 1; i++) {
-            new Element(elementType, archNodes[i], archNodes[i + 1], properties, p)
+            new StructuralElement(elementType, archNodes[i], archNodes[i + 1], properties, p)
         }
 
         // Vertical elements between floor and arch
         for (let i = 1; i < floorNodes.length - 1; i++) {
-            new Element(elementType, floorNodes[i], archNodes[i - 1], properties, p)
+            new StructuralElement(elementType, floorNodes[i], archNodes[i - 1], properties, p)
         }
 
         // Diagonal elements between floor and arch
         for (let i = 0; i <= 2; i++) {
-            new Element(elementType, floorNodes[i], archNodes[i], properties, p)
+            new StructuralElement(elementType, floorNodes[i], archNodes[i], properties, p)
         }
         for (let i = 2; i <= 4; i++) {
-            new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
+            new StructuralElement(elementType, archNodes[i], floorNodes[i + 2], properties, p)
         }
         new BoundaryCondition(floorNodes[0], 'Pin', p)
         new BoundaryCondition(floorNodes[6], 'RollerX', p)
     }
 
     pDynamic.solveModal()
-    const displacementScale = 100
-    pDynamic.plotModeOfVibration(0, displacementScale)
-    pDynamic.plotModeOfVibration(1, displacementScale)
-    pDynamic.plotModeOfVibration(2, displacementScale)
-    pDynamic.plotModeOfVibration(3, displacementScale)
+    if (showPlots) {
+        const displacementScale = 100
+        pDynamic.plotModeOfVibration('Title', 0, displacementScale)
+        pDynamic.plotModeOfVibration('Title', 1, displacementScale)
+        pDynamic.plotModeOfVibration('Title', 2, displacementScale)
+        pDynamic.plotModeOfVibration('Title', 3, displacementScale)
+    }
 
     console.log('ok')
 }

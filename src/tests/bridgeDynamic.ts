@@ -1,4 +1,4 @@
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { Node } from '../models/node'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { DynamicProblem } from '../models/dynamicProblem'
@@ -7,7 +7,7 @@ import { Load } from '../models/load'
 /**
  * Test of dynamic analisys of a truss bridge
  */
-export function BridgeDynamic () {
+export function BridgeDynamic (showPlots: boolean) {
     console.log('Bridge dynamic test')
 
     const load = 100
@@ -40,23 +40,23 @@ export function BridgeDynamic () {
 
     // Connect floor and arch elements
     for (let i = 0; i < floorNodes.length - 1; i++) {
-        new Element(elementType, floorNodes[i], floorNodes[i + 1], properties, p)
+        new StructuralElement(elementType, floorNodes[i], floorNodes[i + 1], properties, p)
     }
     for (let i = 0; i < archNodes.length - 1; i++) {
-        new Element(elementType, archNodes[i], archNodes[i + 1], properties, p)
+        new StructuralElement(elementType, archNodes[i], archNodes[i + 1], properties, p)
     }
 
     // Vertical elements between floor and arch
     for (let i = 1; i < floorNodes.length - 1; i++) {
-        new Element(elementType, floorNodes[i], archNodes[i - 1], properties, p)
+        new StructuralElement(elementType, floorNodes[i], archNodes[i - 1], properties, p)
     }
 
     // Diagonal elements between floor and arch
     for (let i = 0; i <= 2; i++) {
-        new Element(elementType, floorNodes[i], archNodes[i], properties, p)
+        new StructuralElement(elementType, floorNodes[i], archNodes[i], properties, p)
     }
     for (let i = 2; i <= 4; i++) {
-        new Element(elementType, archNodes[i], floorNodes[i + 2], properties, p)
+        new StructuralElement(elementType, archNodes[i], floorNodes[i + 2], properties, p)
     }
 
     new BoundaryCondition(floorNodes[0], 'Pin', p)
@@ -64,9 +64,12 @@ export function BridgeDynamic () {
 
     new Load(0, -load, 0, archNodes[2], p)
 
-    p.plot()
     p.solveTimeHistory('Implicit')
-    p.plotNodeYDisplacement(floorNodes[3])
+
+    if (showPlots) {
+        p.plot('Problem description')
+        p.plotNodeYDisplacement('Title', floorNodes[3])
+    }
 
     console.log('ok')
 }

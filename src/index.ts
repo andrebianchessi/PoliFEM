@@ -7,11 +7,12 @@ import { FallingBeam } from './tests/fallingBeam'
 import { StaticTruss } from './tests/staticTruss'
 import { TrussAxialImpact } from './tests/trussAxialImpact'
 
-// StaticTruss()
-// TrussAxialImpact()
-// FallingBeam()
-// BeamModal()
-// BeamDynamic()
-BridgeModal()
-// BridgeStatic()
-// BridgeDynamic()
+const showPlots = true
+// StaticTruss(showPlots)
+// TrussAxialImpact(showPlots)
+// FallingBeam(showPlots)
+// BeamModal(showPlots)
+// BeamDynamic(showPlots)
+BridgeModal(showPlots)
+// BridgeStatic(showPlots)
+// BridgeDynamic(showPlots)

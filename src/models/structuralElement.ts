@@ -3,7 +3,7 @@ import { mult } from '../functions/mult'
 // eslint-disable-next-line camelcase
 import { getT_4x4, getT_6x6 } from '../functions/rotationalMatrix'
 import { Angle } from './angleInRadians'
-import { DistributedLoad } from './distributedLoad'
+import { StructuralDistributedLoad } from './structuralDistributedLoad'
 import { Forces } from './forces'
 import { FrameProperties } from './frameProperties'
 import { MassMatrix } from './massMatrix'
@@ -15,7 +15,7 @@ import { StaticProblem } from './staticProblem'
 import { StiffnessMatrix } from './stiffnessMatrix'
 import { TrussProperties } from './trussProperties'
 
-export class Element {
+export class StructuralElement {
     static count = 0
     index: number
     type: 'Frame' | 'Truss'
@@ -24,12 +24,12 @@ export class Element {
     properties: FrameProperties | TrussProperties
     K: StiffnessMatrix
     M?: MassMatrix
-    distributedLoads: DistributedLoad[]
+    distributedLoads: StructuralDistributedLoad[]
     angle: Angle
 
     constructor (type: 'Frame' | 'Truss', n1:Node, n2:Node, properties: FrameProperties | TrussProperties, p: Problem) {
-        Element.count += 1
-        this.index = Element.count
+        this.index = StructuralElement.count
+        StructuralElement.count += 1
         this.distributedLoads = []
         if (type === 'Frame') {
             if ((properties as FrameProperties).I == null) {
@@ -40,10 +40,20 @@ export class Element {
         this.n1 = n1
         this.n2 = n2
 
-        if (this.n2.x !== this.n1.x) {
-            this.angle = new Angle(Math.atan((this.n2.y - this.n1.y) / (this.n2.x - this.n1.x)))
+        if (this.n2.x === this.n1.x) {
+            if (n1.y < n2.y) {
+                this.angle = new Angle(Math.PI / 2)
+            } else {
+                this.angle = new Angle(-Math.PI / 2)
+            }
+        } else if (this.n2.y === this.n1.y) {
+            if (this.n1.x < this.n2.x) {
+                this.angle = new Angle(0)
+            } else {
+                this.angle = new Angle(Math.PI)
+            }
         } else {
-            this.angle = new Angle(-Math.PI / 2)
+            this.angle = new Angle(Math.atan((this.n2.y - this.n1.y) / (this.n2.x - this.n1.x)))
         }
 
         if (type === 'Frame') {
@@ -96,8 +106,8 @@ export class Element {
         this.properties = properties
         this.K = new StiffnessMatrix(this, type)
 
-        p.elements.set(p.elementCount, this)
-        p.elementCount += 1
+        p.structuralElements.set(p.structuralElementCount, this)
+        p.structuralElementCount += 1
     }
 
     length ():number {

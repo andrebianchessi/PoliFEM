@@ -1,4 +1,4 @@
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { Node } from './node'
 import { Load } from './load'
 import { BoundaryCondition } from './boundaryCondition'
@@ -9,16 +9,19 @@ import { getCol, replaceRowAndColByZeros } from '../functions/matrixUtils'
 import { Matrix } from 'mathjs'
 import { InitialSpeed } from './initialSpeed'
 import { bcColor, initSpeedColor, loadColor, distLoadColor } from '../constants'
-import { DistributedLoad } from './distributedLoad'
+import { StructuralDistributedLoad } from './structuralDistributedLoad'
+import { SolidElement } from './solidElement'
 
 export class Problem {
     dof: number // degrees of freedom
     nodes: Map<number, Map<number, Node>>
     nodeCount: number
-    elements: Map<number, Element>
-    elementCount: number
+    structuralElements: Map<number, StructuralElement>
+    solidElements: Map<number, SolidElement>
+    structuralElementCount: number
+    solidElementCount: number
     loads: Load[]
-    distributedLoads: DistributedLoad[]
+    structuralDistributedLoads: StructuralDistributedLoad[]
     boundaryConditions: BoundaryCondition[]
     initialSpeeds?: InitialSpeed[]
     K?: Matrix
@@ -30,10 +33,12 @@ export class Problem {
     constructor () {
         this.nodes = new Map<number, Map<number, Node>>()
         this.nodeCount = 0
-        this.elements = new Map<number, Element>()
-        this.elementCount = 0
+        this.structuralElements = new Map<number, StructuralElement>()
+        this.solidElements = new Map<number, SolidElement>()
+        this.structuralElementCount = 0
+        this.solidElementCount = 0
         this.loads = []
-        this.distributedLoads = []
+        this.structuralDistributedLoads = []
         this.boundaryConditions = []
         this.dof = 0
     }
@@ -49,8 +54,18 @@ export class Problem {
         // Initialize matrix
         this.K = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
 
+        function addToMatrix (localIndices: number[], globalIndices: number[],
+            e: StructuralElement|SolidElement, p: Problem) {
+            for (let i = 0; i < localIndices.length; i++) {
+                for (let j = 0; j < localIndices.length; j++) {
+                    const initialVal = p.K!.get([globalIndices[i]!, globalIndices[j]!])!
+                        p.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
+                }
+            }
+        }
+
         // Build stiffness matrix
-        for (const [, e] of this.elements) {
+        for (const e of this.structuralElements.values()) {
             let localIndices: number[] = []
             let globalIndices: number[] = []
             if (e.type === 'Frame') {
@@ -60,12 +75,14 @@ export class Problem {
                 localIndices = [0, 1, 2, 3]
                 globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!]
             }
-            for (let i = 0; i < localIndices.length; i++) {
-                for (let j = 0; j < localIndices.length; j++) {
-                    const initialVal = this.K!.get([globalIndices[i]!, globalIndices[j]!])!
-                    this.K!.set([globalIndices[i]!, globalIndices[j]!], initialVal + e.K.k.get([localIndices[i]!, localIndices[j]!]))
-                }
-            }
+            addToMatrix(localIndices, globalIndices, e, this)
+        }
+        for (const e of this.solidElements.values()) {
+            let localIndices: number[] = []
+            let globalIndices: number[] = []
+            localIndices = [0, 1, 2, 3, 4, 5]
+            globalIndices = [e.n1.uIndex!, e.n1.vIndex!, e.n2.uIndex!, e.n2.vIndex!, e.n3.uIndex!, e.n3.vIndex!]
+            addToMatrix(localIndices, globalIndices, e, this)
         }
     }
 
@@ -103,15 +120,15 @@ export class Problem {
         }
     }
 
-    plot () {
-        const dataAndLayout = this.problemDescriptionPlotData()
+    plot (title: string) {
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         plot(data, layout)
     }
 
-    problemDescriptionPlotData (): [Plot[], Layout] {
+    structuralProblemDescriptionPlotData (title: string): [Plot[], Layout] {
         const arrowsLength = 100
         const arrows:Partial<Annotations>[] = []
         const momentsX = []
@@ -152,7 +169,7 @@ export class Problem {
             }
         }
 
-        for (const l of this.distributedLoads) {
+        for (const l of this.structuralDistributedLoads) {
             const nDivs = 25
             const scalingFactor = arrowsLength / Math.max(Math.sqrt(l.l1PerLengthLocal.x * l.l1PerLengthLocal.x + l.l1PerLengthLocal.y * l.l1PerLengthLocal.y), Math.sqrt(l.l2PerLengthLocal.x * l.l2PerLengthLocal.x + l.l2PerLengthLocal.y * l.l2PerLengthLocal.y))
             for (let i = 0; i <= nDivs; i++) {
@@ -227,7 +244,7 @@ export class Problem {
         ]
 
         let first = true
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             const x = []
             const y = []
             const nodesText = []
@@ -243,7 +260,7 @@ export class Problem {
         const layout:Layout = {
             hovermode: 'closest',
             annotations: arrows,
-            title: 'Problem description'
+            title: title
         }
         return [data, layout]
     }

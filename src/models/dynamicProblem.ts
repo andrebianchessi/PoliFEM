@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
-import { plot } from 'nodeplotlib'
+import { Layout, plot } from 'nodeplotlib'
 import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { sum } from '../functions/sum'
 import { DynamicLoad } from './dynamicLoad'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 import { MassMatrix } from './massMatrix'
 import { math } from './math'
 import { Node } from './node'
@@ -17,13 +17,13 @@ import { StaticProblem } from './staticProblem'
 export class DynamicProblem extends Problem {
     dynamicLoads: DynamicLoad[]
     initialSpeeds: InitialSpeed[]
-    M?: Matrix
+    declare M?: Matrix
     Minv?: Matrix
     FDynamic?: (t:number) => Matrix
     timeStep?: number
     duration?: number
     t: number[]
-    U?: Matrix[]
+    declare U?: Matrix[]
     Udot?: Matrix[]
     Udotdot?: Matrix[]
     NaturalFrequencies: number[]
@@ -60,7 +60,7 @@ export class DynamicProblem extends Problem {
     buildM () {
         this.M = math.zeros!([this.dof, this.dof], 'sparse') as Matrix
         // Build mass matrix
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             e.M = new MassMatrix(e, e.type)
             let localIndices: number[] = []
             let globalIndices: number[] = []
@@ -243,41 +243,50 @@ export class DynamicProblem extends Problem {
         }
     }
 
-    plotNodeXDisplacement (node: Node) {
+    plotNodeXDisplacement (title: string, node: Node) {
         const uNodeI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
             uNodeI.push((this.U![i]).get([node.uIndex!, 0]))
         }
-        plot([{ x: this.t, y: uNodeI }])
+        const layout:Layout = {
+            title: title
+        }
+        plot([{ x: this.t, y: uNodeI }], layout)
     }
 
-    plotNodeYDisplacement (node: Node) {
+    plotNodeYDisplacement (title: string, node: Node) {
         const uNodeI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
             uNodeI.push((this.U![i]).get([node.vIndex!, 0]))
         }
-        plot([{ x: this.t, y: uNodeI }])
+        const layout:Layout = {
+            title: title
+        }
+        plot([{ x: this.t, y: uNodeI }], layout)
     }
 
-    plotElementTension (e: Element) {
+    plotStructuralElementTension (title: string, e: StructuralElement) {
         const sigmaElementI: number[] = []
         for (let i = 0; i < this.U!.length; i++) {
             sigmaElementI.push(e.getNormalTension(this.U![i], this as unknown as StaticProblem))
         }
-        plot([{ x: this.t, y: sigmaElementI }])
+        const layout:Layout = {
+            title: title
+        }
+        plot([{ x: this.t, y: sigmaElementI }], layout)
     }
 
-    plotModeOfVibration (i: number = 0, displacementScaleFactor: number = 10) {
+    plotModeOfVibration (titlePrefix:string, i: number = 0, displacementScaleFactor: number = 10) {
         if (i >= this.ModesOfVibration.length) {
             console.log('Only ' + this.ModesOfVibration.length + ' modes of vibration calculated')
             return
         }
-        const dataAndLayout = this.problemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData('')
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         let first = true
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             const xd = []
             const yd = []
             for (const n of [e.n1, e.n2]) {
@@ -289,7 +298,7 @@ export class DynamicProblem extends Problem {
             data.push({ x: xd, y: yd, name: 'Mode of vibration', hoverinfo: 'none', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
-        layout.title = 'Mode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i] + ' Hz'
+        layout.title = titlePrefix + '\nMode of vibration ' + i + ' (displacements scaled by ' + displacementScaleFactor + '). Frequency: ' + this.NaturalFrequencies[i] + ' Hz'
         plot(data, layout)
     }
 }

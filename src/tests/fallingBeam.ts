@@ -2,12 +2,12 @@ import { BoundaryCondition } from '../models/boundaryCondition'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
 import { InitialSpeed } from '../models/initialSpeed'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 
 /**
  * Simulates beam pinned at one end that falls into a support
  */
-export function FallingBeam () {
+export function FallingBeam (showPlots: boolean) {
     console.log('Falling beam test')
 
     const timeStep = 0.000001
@@ -27,14 +27,17 @@ export function FallingBeam () {
         n2 = Node.get((i + 1) * elementLength, 0, p)
         beamNodes.push(n1)
         beamNodes.push(n2)
-        new Element('Frame', n1, n2, properties, p)
+        new StructuralElement('Frame', n1, n2, properties, p)
         new InitialSpeed(n2, 'Y', -w * n2.x, p)
     }
     new BoundaryCondition(Node.get(0, 0, p), 'Pin', p)
     new BoundaryCondition(n2!, 'RollerX', p)
-    p.plot()
 
     p.solveTimeHistory('Implicit')
-    p.plotNodeYDisplacement(beamNodes[Math.floor(beamNodes.length / 2)])
-    p.plotNodeYDisplacement(beamNodes[3])
+
+    if (showPlots) {
+        p.plot('Problem description')
+        p.plotNodeYDisplacement('Title', beamNodes[Math.floor(beamNodes.length / 2)])
+        p.plotNodeYDisplacement('Title', beamNodes[3])
+    }
 }

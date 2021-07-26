@@ -6,7 +6,7 @@ Test of a truss bar structure
 
 import { checkResult } from '../functions/checkResult'
 import { BoundaryCondition } from '../models/boundaryCondition'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { Load } from '../models/load'
 import { Node } from '../models/node'
 import { StaticProblem } from '../models/staticProblem'
@@ -14,10 +14,9 @@ import { StaticProblem } from '../models/staticProblem'
 /**
  * Test of a truss bar structure
  */
-export function StaticTruss ():boolean {
+export function StaticTruss (showPlots: boolean) :boolean {
     console.log('Static truss test')
     const p = new StaticProblem()
-
     const properties = { E: 206000000000, A: 1 / 10000 }
 
     const n1 = Node.get(0, 0, p)
@@ -25,9 +24,9 @@ export function StaticTruss ():boolean {
     const n3 = Node.get(1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
     const n4 = Node.get(-1 * Math.cos(30 * Math.PI / 180), -1 * Math.sin(30 * Math.PI / 180), p)
 
-    const e1 = new Element('Truss', n3, n1, properties, p)
-    new Element('Truss', n1, n2, properties, p)
-    new Element('Truss', n4, n1, properties, p)
+    const e1 = new StructuralElement('Truss', n3, n1, properties, p)
+    new StructuralElement('Truss', n1, n2, properties, p)
+    new StructuralElement('Truss', n4, n1, properties, p)
 
     new Load(20000 * Math.cos(45 * Math.PI / 180), 20000 * Math.sin(45 * Math.PI / 180), 0, n1, p)
 
@@ -36,9 +35,11 @@ export function StaticTruss ():boolean {
     new BoundaryCondition(n4, 'Fix', p)
 
     p.solve()
-    p.plotDisplacements(10)
-    p.plotExternalLoads()
-    p.plotForcesDiagram(e1)
+    if (showPlots) {
+        p.plotDisplacements('Title', 10)
+        p.plotExternalLoads('Title')
+        p.plotForcesDiagram('Title', e1)
+    }
 
     return checkResult(p.U!, [[0], [0], [0.00045767429203012776], [0.0004576742920301279], [0], [0], [0], [0]])
 }

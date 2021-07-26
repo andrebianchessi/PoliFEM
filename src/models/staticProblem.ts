@@ -4,13 +4,12 @@ import { Problem } from './problem'
 import { Matrix } from 'mathjs'
 import { mult } from '../functions/mult'
 import { Annotations } from 'plotly.js'
-import { Element } from './element'
+import { StructuralElement } from './structuralElement'
 
 export class StaticProblem extends Problem {
     declare U?: Matrix
     solve () {
         this.build()
-
         // Solve linear system
         this.U = math.lusolve!(this.K!, this.F!) as Matrix
     }
@@ -19,13 +18,13 @@ export class StaticProblem extends Problem {
         return mult([this.KWithoutBC!, this.U!]) as Matrix
     }
 
-    plotDisplacements (displacementScaleFactor: number) {
-        const dataAndLayout = this.problemDescriptionPlotData()
+    plotDisplacements (title: string, displacementScaleFactor: number) {
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
 
         let first = true
-        for (const [, e] of this.elements) {
+        for (const [, e] of this.structuralElements) {
             const xd = []
             const yd = []
             const displacements = []
@@ -43,17 +42,16 @@ export class StaticProblem extends Problem {
             data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
-        layout.title = 'Original and deformed structure'
         plot(data, layout)
     }
 
     /**
-     *
+     * Plots all resulting nodal forces, including applied loads
      * @param minMagnitude Minimum load magnitude to be plotted
      */
-    plotExternalLoads (minMagnitude: number = 0) {
+    plotExternalLoads (title: string, minMagnitude: number = 0) {
         const arrowsLength = 100
-        const dataAndLayout = this.problemDescriptionPlotData()
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
 
         const arrows:Partial<Annotations>[] = []
@@ -113,14 +111,106 @@ export class StaticProblem extends Problem {
         const layout:Layout = {
             hovermode: 'closest',
             annotations: arrows,
-            title: 'External loads'
+            title: title
         }
 
         data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
         plot(data, layout)
     }
 
-    plotForcesDiagram (e: Element) {
+    /**
+     * Plots all reaction forces at boundary conditions
+     * @param title
+     * @param minMagnitude
+     */
+    plotReactions (title: string, minMagnitude: number = 0) {
+        const arrowsLength = 100
+        const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
+        const data = dataAndLayout[0]
+
+        const arrows:Partial<Annotations>[] = []
+        const momentsX = []
+        const momentsY = []
+        const momentsText = []
+
+        const externalLoads = this.getExternalNodalLoads()
+        for (const bc of this.boundaryConditions) {
+            const node = bc.node
+            let fx, fy, fw
+            if (node.uIndex != null) {
+                fx = externalLoads.get([node.uIndex!, 0])
+            } else {
+                fx = 0
+            }
+            if (node.vIndex != null) {
+                fy = externalLoads.get([node.vIndex!, 0])
+            } else {
+                fy = 0
+            }
+
+            for (const l of this.structuralDistributedLoads) {
+                if (node.index === l.e.n1.index) {
+                    fx -= l.l1.x
+                    fy -= l.l1.y
+                }
+                if (node.index === l.e.n2.index) {
+                    fx -= l.l2.x
+                    fy -= l.l2.y
+                }
+            }
+            if (Math.abs(fx) > minMagnitude || Math.abs(fy) > minMagnitude) {
+                const scalingFactor = arrowsLength / Math.sqrt(fx * fx + fy * fy)
+                const arrowX = -fx * scalingFactor
+                const arrowY = fy * scalingFactor
+
+                const magnitude = Math.sqrt(fx * fx + fy * fy).toString()
+                arrows.push(
+                    {
+                        text: magnitude,
+                        x: node.x,
+                        y: node.y,
+                        xref: 'x',
+                        yref: 'y',
+                        showarrow: true,
+                        arrowhead: 5,
+                        ax: arrowX,
+                        ay: arrowY,
+                        arrowcolor: 'red',
+                        font: { color: 'red', size: 17 }
+                    }
+                )
+            }
+            if (node.wIndex != null) {
+                fw = externalLoads.get([node.wIndex!, 0])
+                for (const l of this.structuralDistributedLoads) {
+                    if (node.index === l.e.n1.index) {
+                        fw -= l.l1.w
+                    }
+                    if (node.index === l.e.n2.index) {
+                        fw -= l.l2.w
+                    }
+                }
+            } else {
+                fw = 0
+            }
+            if (Math.abs(fw) > minMagnitude) {
+                momentsX.push(node.x)
+                momentsY.push(node.y)
+                momentsText.push(fw.toString())
+            }
+        }
+
+        const layout:Layout = {
+            hovermode: 'closest',
+            annotations: arrows,
+            title: title
+        }
+
+        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
+        plot(data, layout)
+    }
+
+    plotForcesDiagram (title: string, e: StructuralElement) {
         const N: number[] = []
         const V: number[] = []
         const M: number[] = []
@@ -134,6 +224,9 @@ export class StaticProblem extends Problem {
         }
         const data: any[] = [{ x: X, y: N, name: 'N', hoverinfo: 'y' }, { x: X, y: V, name: 'V', hoverinfo: 'y' }, { x: X, y: M, name: 'M', hoverinfo: 'y' }]
         data.push({ x: [0, 1], y: [N[0] * 1.01, N[0] * 1.01], text: ['x:' + e.n1.x + ' y:' + e.n1.y, 'x:' + e.n2.x + ' y:' + e.n2.y], hoverinfo: 'text', name: 'Nodes', mode: 'markers', type: 'scatter' })
-        plot(data)
+        const layout:Layout = {
+            title: title
+        }
+        plot(data, layout)
     }
 }

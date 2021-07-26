@@ -1,13 +1,13 @@
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { Node } from '../models/node'
 import { DynamicProblem } from '../models/dynamicProblem'
-import { Element } from '../models/element'
+import { StructuralElement } from '../models/structuralElement'
 import { DynamicLoad } from '../models/dynamicLoad'
 
 /**
  * Implicit dynamic analisys of beam fixed at one end
  */
-export function BeamDynamic () {
+export function BeamDynamic (showPlots: boolean) {
     console.log('Beam dynamic test')
 
     const timeStep = 0.00001
@@ -24,15 +24,17 @@ export function BeamDynamic () {
     for (let i = 0; i < nElements; i++) {
         n1 = Node.get(i * elementLength, 0, p)
         n2 = Node.get((i + 1) * elementLength, 0, p)
-        new Element('Frame', n1, n2, properties, p)
+        new StructuralElement('Frame', n1, n2, properties, p)
     }
 
     new BoundaryCondition(Node.get(0, 0, p), 'Fix', p)
 
     new DynamicLoad(function (t) { return 0 }, function (t) { return -1 }, function (t) { return 0 }, n2!, p)
 
-    p.plot()
-
-    p.solveTimeHistory('Implicit')
-    p.plotNodeYDisplacement(n2!)
+    if (showPlots) {
+        p.plot('Problem description')
+        p.solveTimeHistory('Implicit')
+        p.plotNodeYDisplacement('Title', n2!)
+    }
+    console.log('ok')
 }

@@ -15,7 +15,7 @@ import { FlatPlate } from './flatPlate'
 import { FlatPlateHole } from './flatPlateHole'
 
 // Tests
-const showPlots = true
+const showPlots = false
 // StaticTruss(showPlots)
 // TrussAxialImpact(showPlots)
 // FallingBeam(showPlots)
@@ -25,8 +25,9 @@ const showPlots = true
 // BridgeStatic(showPlots)
 // BridgeDynamic(showPlots)
 BeamStaticDiagram1(showPlots)
-BeamStaticDiagram2(showPlots)
-BeamStaticDiagram3(showPlots)
+// BeamStaticDiagram2(showPlots)
+// BeamStaticDiagram3(showPlots)
 // Solid()
 // FlatPlate()
 // FlatPlateHole()
+console.log('')

@@ -12,5 +12,4 @@ export function Solid () {
     const nj = Node.get(2.4, 1.65, p)
     new SolidElement(ni, nj, nk, properties, p)
     p.build()
-    PrintSparseMatrix(p.K!)
 }

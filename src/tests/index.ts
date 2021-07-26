@@ -16,8 +16,8 @@ import { FlatPlateHole } from './flatPlateHole'
 
 // Tests
 const showPlots = true
-TrussAxialImpact(showPlots)
-// FallingBeam(showPlots)
+// TrussAxialImpact(showPlots)
+FallingBeam(showPlots)
 // BeamModal(showPlots)
 // BeamDynamic(showPlots)
 // BridgeModal(showPlots)

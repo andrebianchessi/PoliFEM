@@ -36,8 +36,8 @@ export function FallingBeam (showPlots: boolean) {
     p.solveTimeHistory('Implicit')
 
     if (showPlots) {
-        p.plot('Problem description')
-        p.plotNodeYDisplacement('Title', beamNodes[Math.floor(beamNodes.length / 2)])
-        p.plotNodeYDisplacement('Title', beamNodes[3])
+        p.plot('Falling beam: Problem description')
+        p.plotNodeYDisplacement('Falling beam: Y displacement of central node', beamNodes[Math.floor(beamNodes.length / 2)])
+        p.plotNodeYDisplacement('Falling beam: Y displacement of node close to left support', beamNodes[3])
     }
 }

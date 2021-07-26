@@ -64,10 +64,10 @@ export function BridgeModal (showPlots: boolean) {
     pDynamic.solveModal()
     if (showPlots) {
         const displacementScale = 100
-        pDynamic.plotModeOfVibration('Title', 0, displacementScale)
-        pDynamic.plotModeOfVibration('Title', 1, displacementScale)
-        pDynamic.plotModeOfVibration('Title', 2, displacementScale)
-        pDynamic.plotModeOfVibration('Title', 3, displacementScale)
+        pDynamic.plotModeOfVibration('Bridge', 0, displacementScale)
+        pDynamic.plotModeOfVibration('Bridge', 1, displacementScale)
+        pDynamic.plotModeOfVibration('Bridge', 2, displacementScale)
+        pDynamic.plotModeOfVibration('Bridge', 3, displacementScale)
     }
 
     console.log('ok')

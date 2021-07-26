@@ -67,8 +67,8 @@ export function BridgeDynamic (showPlots: boolean) {
     p.solveTimeHistory('Implicit')
 
     if (showPlots) {
-        p.plot('Problem description')
-        p.plotNodeYDisplacement('Title', floorNodes[3])
+        p.plot('Bridge dynamic analysis: Problem description')
+        p.plotNodeYDisplacement('Bridge dynamic analysis: Central node vertical displacement', floorNodes[3])
     }
 
     console.log('ok')

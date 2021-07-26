@@ -46,7 +46,7 @@ export class StaticProblem extends Problem {
     }
 
     /**
-     *
+     * Plots all resulting nodal forces, including applied loads
      * @param minMagnitude Minimum load magnitude to be plotted
      */
     plotExternalLoads (title: string, minMagnitude: number = 0) {
@@ -118,6 +118,11 @@ export class StaticProblem extends Problem {
         plot(data, layout)
     }
 
+    /**
+     * Plots all reaction forces at boundary conditions
+     * @param title
+     * @param minMagnitude
+     */
     plotReactions (title: string, minMagnitude: number = 0) {
         const arrowsLength = 100
         const dataAndLayout = this.structuralProblemDescriptionPlotData(title)

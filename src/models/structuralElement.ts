@@ -247,10 +247,10 @@ export class StructuralElement {
         }
 
         const N = function (xAdim:number): number {
-            return -(N1 + (n(0) + n(xAdim)) * xAdim / l / 2)
+            return -(N1 + (n(0) + n(xAdim)) * x(xAdim) / 2)
         }
         const V = function (xAdim:number): number {
-            return V1 + (v(0) + v(xAdim)) * xAdim / l / 2
+            return V1 + (v(0) + v(xAdim)) * x(xAdim) / 2
         }
 
         const s1 = function (xAdim:number):number {

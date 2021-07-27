@@ -3,19 +3,22 @@ import { StructuralElement } from './structuralElement'
 import { FrameProperties } from './frameProperties'
 import { math } from './math'
 import { TrussProperties } from './trussProperties'
+import { SolidElement } from './solidElement'
+import { SolidElementProperties } from './solidElementProperties'
+import { mult } from '../functions/mult'
 
 export class MassMatrix {
     // TODO: add consistent matrix options
-    type: 'Truss' | 'Frame'
+    type: 'Truss' | 'Frame' | 'PlaneStress'
     m?: Matrix
 
-    constructor (element: StructuralElement, type: 'Truss' | 'Frame') {
+    constructor (element: StructuralElement | SolidElement, type: 'Truss' | 'Frame' | 'PlaneStress') {
         this.type = type
         switch (type) {
         case 'Truss': {
             const rho = (element.properties as TrussProperties).rho!
             const A = (element.properties as TrussProperties).A
-            const l = element.length()
+            const l = (element as StructuralElement).length()
 
             // Lumped
             this.m = math.multiply!(rho * A * l / 2, math.matrix!([
@@ -37,7 +40,7 @@ export class MassMatrix {
         case 'Frame': {
             const rho = (element.properties as FrameProperties).rho!
             const A = (element.properties as FrameProperties).A
-            const l = element.length()
+            const l = (element as StructuralElement).length()
 
             // Lumped
             const mLocal = math.multiply!(rho * A * l, math.matrix!([
@@ -69,6 +72,21 @@ export class MassMatrix {
             // this.m = mult([math.transpose!(t), mLocal, t]) as Matrix
 
             break
+        }
+        case 'PlaneStress': {
+            const rho = (element.properties as SolidElementProperties).rho!
+            const t = (element.properties as SolidElementProperties).t
+            const A = (element as SolidElement).getArea()
+
+            // Lumped
+            this.m = mult([rho * A * t / 3, math.matrix!([
+                [1, 0, 0, 0, 0, 0],
+                [0, 1, 0, 0, 0, 0],
+                [0, 0, 1, 0, 0, 0],
+                [0, 0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 1, 0],
+                [0, 0, 0, 0, 0, 1]
+            ])]) as Matrix
         }
         }
     }

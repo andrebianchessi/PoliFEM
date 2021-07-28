@@ -1,4 +1,3 @@
-import { BeamDynamic } from './tests/beamDynamic'
 import { BeamModal } from './tests/beamModal'
 import { BeamStaticDiagram1 } from './tests/beamStaticDiagram1'
 import { BeamStaticDiagram2 } from './tests/beamStaticDiagram2'

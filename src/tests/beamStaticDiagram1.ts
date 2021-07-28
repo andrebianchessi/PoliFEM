@@ -8,7 +8,7 @@ export function BeamStaticDiagram1 (showPlots: boolean) {
     console.log('Static beam diagram 1 test')
     const L = 1
     const w = 1
-    const properties = { E: 1, A: 1, I: 1, rho: 7.4 / 10000 }
+    const properties = { E: 1, A: 1, I: 1 }
 
     const p = new StaticProblem()
 
@@ -27,8 +27,8 @@ export function BeamStaticDiagram1 (showPlots: boolean) {
     if (showPlots) {
         p.plot('Ex1: Problem description')
         p.plotReactions('Ex1: External reactions', 0)
-        p.plotForcesDiagram('Ex1: Forces diagram on element 1-2', e1)
-        p.plotForcesDiagram('Ex1: Forces diagram on element 2-3', e2)
+        p.plotForcesDiagram('Ex1: Forces diagram on element A-B', e1)
+        p.plotForcesDiagram('Ex1: Forces diagram on element B-C', e2)
     }
 
     console.log('ok')

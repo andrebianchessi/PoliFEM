@@ -114,7 +114,7 @@ export class StaticProblem extends Problem {
             title: title
         }
 
-        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
+        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'text+markers', textfont: { color: 'red', size: 17 }, textposition: 'bottom right', type: 'scatter' })
         plot(data, layout)
     }
 
@@ -206,7 +206,7 @@ export class StaticProblem extends Problem {
             title: title
         }
 
-        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'markers', type: 'scatter' })
+        data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'text+markers', textfont: { color: 'red', size: 17 }, textposition: 'bottom right', type: 'scatter' })
         plot(data, layout)
     }
 

@@ -2,17 +2,20 @@ import { StructuralElement } from '../models/structuralElement'
 import { Node } from '../models/node'
 import { BoundaryCondition } from '../models/boundaryCondition'
 import { DynamicProblem } from '../models/dynamicProblem'
-import { Load } from '../models/load'
+import { DynamicLoad } from '../models/dynamicLoad'
 
 /**
  * Test of dynamic analisys of a truss bridge
  */
 export function BridgeDynamic (showPlots: boolean) {
     console.log('Bridge dynamic test')
-
-    const load = 100
-    const timeStep = 0.00001
-    const duration = 0.09
+    const f0 = 3.8498 // Hz
+    const f = function (t: number) {
+        const omega = f0 * 2 * Math.PI
+        return Math.sin(omega * t)
+    }
+    const timeStep = 0.001
+    const duration = 10 * 1 / f0
     const L = 100 // bridge length
     const H = 50 // bridge height
     const properties = { E: 200 * 1000000000, A: 0.003, rho: 8000 }
@@ -62,13 +65,13 @@ export function BridgeDynamic (showPlots: boolean) {
     new BoundaryCondition(floorNodes[0], 'Pin', p)
     new BoundaryCondition(floorNodes[6], 'RollerX', p)
 
-    new Load(0, -load, 0, archNodes[2], p)
+    // new Load(0, -load, 0, archNodes[2], p)
+    new DynamicLoad((t) => 0, f, (t) => 0, archNodes[2], p)
 
     p.solveTimeHistory('Implicit')
 
     if (showPlots) {
-        p.plot('Bridge dynamic analysis: Problem description')
-        p.plotNodeYDisplacement('Bridge dynamic analysis: Central node vertical displacement', floorNodes[3])
+        p.plotNodeYDisplacement('Bridge dynamic analysis: Central node vertical displacement for sinusoidal excitation of ' + f0 + ' Hz', floorNodes[3])
     }
 
     console.log('ok')

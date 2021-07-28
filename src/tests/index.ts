@@ -20,7 +20,7 @@ const showPlots = true
 // FallingBeam(showPlots)
 // BeamModal(showPlots)
 BridgeModal(showPlots)
-// BridgeStatic(showPlots)
+BridgeStatic(showPlots)
 BridgeDynamic(showPlots)
 // BeamStaticDiagram1(showPlots)
 // BeamStaticDiagram2(showPlots)

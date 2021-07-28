@@ -13,9 +13,9 @@ export function BridgeDynamic (showPlots: boolean) {
     const load = 100
     const timeStep = 0.00001
     const duration = 0.09
-    const L = 1100 // bridge length
-    const H = 213 // bridge height
-    const properties = { E: 30 * 1000000, A: 8, rho: 7.4 / 10000 }
+    const L = 100 // bridge length
+    const H = 50 // bridge height
+    const properties = { E: 200 * 1000000000, A: 0.003, rho: 8000 }
     const elementType = 'Truss'
 
     const elementLength = L / 6

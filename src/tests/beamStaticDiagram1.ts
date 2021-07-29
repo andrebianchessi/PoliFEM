@@ -25,7 +25,7 @@ export function BeamStaticDiagram1 (showPlots: boolean) {
 
     p.solve()
     if (showPlots) {
-        p.plot('Ex1: Problem description')
+        p.plotDisplacements('Ex1: Nodal displacements', 20)
         p.plotReactions('Ex1: External reactions', 0)
         p.plotForcesDiagram('Ex1: Forces diagram on element A-B', e1)
         p.plotForcesDiagram('Ex1: Forces diagram on element B-C', e2)

@@ -31,7 +31,7 @@ export function BeamStaticDiagram2 (showPlots: boolean) {
 
     showPlots = true
     if (showPlots) {
-        p.plotDisplacements('Ex2: Original and deformed structure', 100)
+        p.plotDisplacements('Ex2: Nodal displacements', 100)
         p.plotReactions('Ex2 Reactions', 1)
         p.plotExternalLoads('Ex2: External loads', 1)
         p.plotForcesDiagram('Ex2: Forces diagam on element A-B', e1)

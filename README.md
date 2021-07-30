@@ -4,7 +4,7 @@
 <img src="loads.png" width="800">
 
 ## About
-Static and dynamic (modal, implicit time history and explicit time history) Finite Element Solver for frames, beams and truss structures.
+Static and dynamic (modal, implicit time history and explicit time history) Finite Element Solver for frames, beams and truss structures. Solid elements also supported, but meshing must be done with `gmsh`
 
 ## Requirements
 - Node.js

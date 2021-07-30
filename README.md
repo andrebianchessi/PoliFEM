@@ -19,3 +19,4 @@ Static and dynamic (modal, implicit time history and explicit time history) Fini
 ## TODO
 - Docstrings
 - Publish to npm
+- Robust error handling

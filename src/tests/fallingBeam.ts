@@ -38,6 +38,6 @@ export function FallingBeam (showPlots: boolean) {
     if (showPlots) {
         p.plot('Falling beam: Problem description')
         p.plotNodeYDisplacement('Falling beam: Y displacement of central node', beamNodes[Math.floor(beamNodes.length / 2)])
-        p.plotNodeYDisplacement('Falling beam: Y displacement of node close to left support', beamNodes[3])
+        p.plotNodeYDisplacement('Falling beam: Y displacement of node close to left support', beamNodes[7])
     }
 }

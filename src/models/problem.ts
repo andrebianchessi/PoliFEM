@@ -253,7 +253,7 @@ export class Problem {
                 y.push(n.y)
                 nodesText.push(n.index.toString())
             }
-            data.push({ x, y, text: nodesText, name: 'Undeformed Structure', hoverinfo: 'text', marker: { color: 'black' }, showlegend: first })
+            data.push({ x, y, text: nodesText, name: 'Undeformed Structure', hoverinfo: 'x+y+text', marker: { color: 'black' }, showlegend: first })
             first = false
         }
 

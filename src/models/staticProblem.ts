@@ -18,7 +18,7 @@ export class StaticProblem extends Problem {
         return mult([this.KWithoutBC!, this.U!]) as Matrix
     }
 
-    plotDisplacements (title: string, displacementScaleFactor: number) {
+    plotDisplacements (title: string, displacementScaleFactor: number, sameXYScale?: boolean, height?: number, width?: number) {
         const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
         const layout = dataAndLayout[1]
@@ -42,6 +42,15 @@ export class StaticProblem extends Problem {
             data.push({ x: xd, y: yd, name: 'Deformed Structure (displacements scaled by ' + displacementScaleFactor + ')', text: displacements, hoverinfo: 'text', marker: { color: 'blue' }, showlegend: first })
             first = false
         }
+        if (sameXYScale) {
+            layout.xaxis = { scaleanchor: 'y', scaleratio: 1 }
+        }
+        if (width) {
+            layout.width = width
+        }
+        if (height) {
+            layout.height = height
+        }
         plot(data, layout)
     }
 
@@ -49,7 +58,7 @@ export class StaticProblem extends Problem {
      * Plots all resulting nodal forces, including applied loads
      * @param minMagnitude Minimum load magnitude to be plotted
      */
-    plotExternalLoads (title: string, minMagnitude: number = 0) {
+    plotExternalLoads (title: string, minMagnitude: number = 0, sameXYScale?:boolean, height?: number, width?: number) {
         const arrowsLength = 100
         const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
@@ -108,10 +117,18 @@ export class StaticProblem extends Problem {
             }
         }
 
-        const layout:Layout = {
-            hovermode: 'closest',
-            annotations: arrows,
-            title: title
+        const layout = dataAndLayout[1]
+        layout.hovermode = 'closest'
+        layout.annotations = arrows
+        layout.title = title
+        if (sameXYScale) {
+            layout.xaxis = { scaleanchor: 'y', scaleratio: 1 }
+        }
+        if (width) {
+            layout.width = width
+        }
+        if (height) {
+            layout.height = height
         }
 
         data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'text+markers', textfont: { color: 'red', size: 17 }, textposition: 'bottom right', type: 'scatter' })
@@ -123,7 +140,7 @@ export class StaticProblem extends Problem {
      * @param title
      * @param minMagnitude
      */
-    plotReactions (title: string, minMagnitude: number = 0) {
+    plotReactions (title: string, minMagnitude: number = 0, sameXYScale?:boolean, height?: number, width?: number) {
         const arrowsLength = 100
         const dataAndLayout = this.structuralProblemDescriptionPlotData(title)
         const data = dataAndLayout[0]
@@ -200,10 +217,18 @@ export class StaticProblem extends Problem {
             }
         }
 
-        const layout:Layout = {
-            hovermode: 'closest',
-            annotations: arrows,
-            title: title
+        const layout = dataAndLayout[1]
+        layout.hovermode = 'closest'
+        layout.annotations = arrows
+        layout.title = title
+        if (sameXYScale) {
+            layout.xaxis = { scaleanchor: 'y', scaleratio: 1 }
+        }
+        if (width) {
+            layout.width = width
+        }
+        if (height) {
+            layout.height = height
         }
 
         data.push({ x: momentsX, y: momentsY, name: 'Applied moments', text: momentsText, hoverinfo: 'text', marker: { size: 18, color: 'red' }, mode: 'text+markers', textfont: { color: 'red', size: 17 }, textposition: 'bottom right', type: 'scatter' })
